@@ -26,6 +26,7 @@ plugins:
 
 theme:
   name: 'material'
+  logo: images/icon.png
   custom_dir: overrides
   features:
       - navigation.tabs
@@ -44,10 +45,24 @@ theme:
       - content.code.copy
       - content.tabs.link
       - announce.dismiss
+      - header.autohide
       # - content.action.edit
+
   icon:
-    logo: github
     repo: fontawesome/brands/github
+    admonition:
+      note: fontawesome/solid/note-sticky
+      abstract: fontawesome/solid/book
+      info: fontawesome/solid/circle-info
+      tip: fontawesome/solid/bullhorn
+      success: fontawesome/solid/check
+      question: fontawesome/solid/circle-question
+      warning: fontawesome/solid/triangle-exclamation
+      failure: fontawesome/solid/bomb
+      danger: fontawesome/solid/skull
+      bug: fontawesome/solid/robot
+      example: fontawesome/solid/flask
+      quote: fontawesome/solid/quote-left
 
   palette:
     - media: "(prefers-color-scheme)"
@@ -75,7 +90,7 @@ extra:
     - icon: 'fontawesome/brands/github'
       link: 'https://github.com/rivenmedia/riven'
     - icon: 'fontawesome/solid/heart'
-      link: 'https://github.com/sponsors/rivenmedia'
+      link: 'https://github.com/sponsors/dreulavelle'
       text: 'Sponsor us on GitHub'
 
 markdown_extensions:
@@ -91,6 +106,7 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.details
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid

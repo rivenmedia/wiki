@@ -59,6 +59,9 @@ hide:
     </a>
 </div>
 
+!!! riven "Riven"
+    **Riven** is a powerful media management and streaming solution designed to integrate with various media servers and third-party services. It automates the process of finding, downloading, and organizing media content, making it instantly available for streaming through your preferred media server.
+
 <div class="grid cards" markdown="1" style="justify-content: center;" id="home-cards">
 
 -   :gear: __Easy Installation__
@@ -99,12 +102,9 @@ hide:
 
 ---
 
-
 # Getting Started
 
 ![step-5](images/onboard/final.png)
-
-**Riven** is an advanced media management and streaming solution designed to integrate with various media servers and third-party services. It automates the process of finding, downloading, and organizing media content, making it instantly available for streaming through your preferred media server.
 
 !!! note "Beta"
     Riven is under active development, we are constantly working on new features and fixing bugs.
@@ -163,6 +163,12 @@ Grab the `docker-compose.yml` file from the [installation guide](#installation) 
 ### Setup Directories
 
 For detailed information on the various services and configurations available in Riven, please refer to the [symlink](services/symlink/index.md) page. This page will help you understand how to configure and manage your media library using symlinks. It will help you understand why we map the Riven volumes to `/mnt` and how you can modify this in the `docker-compose.yml` file for the best outcome.
+
+!!! danger "Setup Rclone & Symlink Paths First! :fire:"
+
+    This is incredibly important and must be setup first! When configuring the rclone mount path and library path, you need to make sure that the paths are correct for your system. More information can be found at the [symlink](services/symlink/index.md) page.
+
+    If your debrid files are found in your rclone path, and you can successfully `ls -lh /mnt/zurg` your rclone path, you can skip this step.
 
 ---
 

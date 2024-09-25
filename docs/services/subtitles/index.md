@@ -36,9 +36,9 @@ OpenSubtitles is a popular subtitle provider.
 
 - **enabled** (boolean): Boolean value to enable or disable the provider. Default is false.
     - Example: `false`
-- **username** (string): The username for accessing OpenSubtitles.
+- **username** (string): The username for accessing OpenSubtitles. *(Optional)*
     - Example: `"your_username"`
-- **password** (string): The password for accessing OpenSubtitles.
+- **password** (string): The password for accessing OpenSubtitles. *(Optional)*
     - Example: `"your_password"`
 
 ### **OpenSubtitles.com**
@@ -47,10 +47,19 @@ OpenSubtitles.com is another popular subtitle provider.
 
 - **enabled** (boolean): Boolean value to enable or disable the provider. Default is false.
     - Example: `false`
-- **username** (string): The username for accessing OpenSubtitles.com.
+- **username** (string): The username for accessing OpenSubtitles.com. *(Optional)*
     - Example: `"your_username"`
-- **password** (string): The password for accessing OpenSubtitles.com.
+- **password** (string): The password for accessing OpenSubtitles.com. *(Optional)*
     - Example: `"your_password"`
+
+!!! riven "Optional Authentication"
+
+    OpenSubtitles and OpenSubtitles.com don't require additional authentication and can be used once enabled.
+
+!!! note "How Subliminal Works"
+
+    Subliminal is a powerful library that works by searching for subtitles in your media library and downloading them. It uses the configured providers to search for and download subtitles. You can find more information as to how providers work [here](https://subliminal.readthedocs.io/en/latest/user/how_it_works.html).
+
 
 ### **How Subtitles Work**
 
