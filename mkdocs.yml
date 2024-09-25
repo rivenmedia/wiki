@@ -1,24 +1,26 @@
-site_name: "Riven"
+site_name: "Riven Media"
 site_description: "Riven is a media manager service that handles all your media needs."
 site_author: "Riven Media"
 site_url: "https://rivenmedia.github.io/wiki"
 
-repo_name: "Riven"
-repo_url: "https://github.com/rivenmedia/wiki"
-
+repo_name: "rivenmedia/riven"
+repo_url: "https://github.com/rivenmedia/riven"
 
 nav:
   - Home: index.md
-  # - Getting Started: getting-started.md
-  # - Configuration: configuration.md
-  # - Contributing: contributing.md
-  # - License: license.md
+  - Services:
+    # - General: services/index.md
+    - Content: services/content/index.md
+    - Scrapers: services/scrapers/index.md
+    - Downloaders: services/downloaders/index.md
+  - Contributing: contribute.md
 
 plugins:
   - search
 
 theme:
   name: 'material'
+  custom_dir: overrides
   features:
       - navigation.tabs
       - navigation.tabs.sticky
@@ -35,27 +37,29 @@ theme:
       - content.code.annotate
       - content.code.copy
       - announce.dismiss
+      # - content.action.edit
   icon:
-    logo: logo
+    logo: github
+    repo: fontawesome/brands/github
 
   palette:
     - media: "(prefers-color-scheme)"
       scheme: slate
-      primary: indigo
-      accent: red
+      primary: black
+      accent: orange
       toggle:
         icon: material/brightness-4
         name: Follow system preferences
 
-  font:
-    text: 'Ubuntu'
-    code: 'Ubuntu Mono'
+  # font:
+  #   text: 'Ubuntu'
+  #   code: 'Ubuntu Mono'
 
 extra_css:
-  - extras/stylesheets/extra.css
+  - stylesheets/extra.css
 
 extra_javascript:
-  - extras/javascripts/extra.js
+  - javascripts/extra.js
 
 extra:
   social:
@@ -63,6 +67,9 @@ extra:
       link: 'https://discord.gg/rivenmedia' 
     - icon: 'fontawesome/brands/github'
       link: 'https://github.com/rivenmedia/riven'
+    - icon: 'fontawesome/solid/heart'
+      link: 'https://github.com/sponsors/rivenmedia'
+      text: 'Sponsor us on GitHub'
 
 markdown_extensions:
   - attr_list
@@ -75,4 +82,3 @@ markdown_extensions:
       permalink: true
       toc_depth: 2
   - pymdownx.superfences:
-

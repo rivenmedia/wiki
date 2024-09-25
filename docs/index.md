@@ -85,10 +85,11 @@ Whether you're a casual viewer or a media enthusiast, Riven offers a powerful, a
 Before installing Riven, ensure you have the following prerequisites:
 
 !!! note
-    * **Linux**: Riven only supports Linux-based operating systems and Windows Subsystem for Linux (WSL) in Windows.
-    * **Rclone**: Required to mount debrid service. Additionally, Zurg is preferred for Real-Debrid users. [Learn more](/docs/rclone)
-    * **Media Server**: Currently only Plex Media Server is supported.
-    * **Docker**: Required to run Riven in a containerized environment. [Learn more](/docs/docker)
+    * **Linux**: Riven only supports Linux-based operating systems.
+    * **Windows**: Riven only supports Windows Subsystem for Linux (WSL) in Windows.
+    * **Rclone**: Required to mount debrid service. Additionally, Zurg is preferred for Real-Debrid users. [Learn more](https://rclone.org/)
+    * **Media Server**: Plex, Jellyfin, and Emby are supported.
+    * **Docker**: Required to run Riven in a containerized environment. [Learn more](https://www.docker.com/)
 
 !!! warning "Debrid Support"
     Currently only **Real-Debrid**, **All-Debrid** and **Torbox** are supported. More
@@ -229,37 +230,47 @@ This command will start the Riven services in the background. You can access the
 
 Once Riven is running, you can configure it by accessing the web interface. You will be prompted with onboarding steps to set up your debrid service, media server, content services and scraper services.
 
-There are 4 steps in the onboarding process:
-
-### General Settings
-
-In this step you configure the downloaders (debrid services), rclone mount path, library path, subtitles, etc. See the image below for an example.
-
-![step-1](/images/onboard/step1.png)
-
-### Media Server
-
-In this step you configure the media server and updater settings. See the image below for an example.
-
-![step-2](/images/onboard/step2.png)
-
-### Content Services
-
-In this step you configure the content services like trakt, overseerr, etc. See the image below for an example.
-
-![step-3](/images/onboard/step3.png)
-
-### Scraper Services
-
-In this step you configure the scraper services like torrentio, zilean, prowlarr, jackett, etc. See the image below for an example.
-
-![step-4](/images/onboard/step4.png)
+There are 4 steps in the onboarding process.
 
 ---
 
+### Step 1: General Settings
+
+In this step you configure the downloaders (debrid services), rclone mount path, library path, subtitles, etc. See the image below for an example.
+
+![step-1](images/onboard/step1.png)
+
+---
+
+### Step 2: Media Server
+
+In this step you configure the media server and updater settings. See the image below for an example.
+
+![step-2](images/onboard/step2.png)
+
+---
+
+### Step 3: Content Services
+
+In this step you configure the content services like trakt, overseerr, etc. See the image below for an example.
+
+![step-3](images/onboard/step3.png)
+
+---
+
+### Step 4: Scraper Services
+
+In this step you configure the scraper services like torrentio, zilean, prowlarr, jackett, etc. See the image below for an example.
+
+![step-4](images/onboard/step4.png)
+
+---
+
+### Done!
+
 Once you have completed the onboarding process, you will be greeted with a beautiful dashboard where you can manage your media library, request items, settings and many more in the future.
 
-![step-5](/images/onboard/final.png)
+![step-5](images/onboard/final.png)
 
 ---
 
