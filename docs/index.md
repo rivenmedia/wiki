@@ -3,8 +3,6 @@ title: Riven
 description: Handle your media library with ease
 ---
 
-import { File, Folder, Files } from "fumadocs-ui/components/files";
-
 <div align="center">
     <a href="https://github.com/rivenmedia/riven">
         <picture>
@@ -67,9 +65,8 @@ import { File, Folder, Files } from "fumadocs-ui/components/files";
 
 ## Overview
 
-<Callout type="warn">
+!!! warning "Under Development"
     Riven is under active development, expect breaking changes and bugs.
-</Callout>
 
 Riven is an advanced media management and streaming solution designed to integrate with various media servers and third-party services. It automates the process of finding, downloading, and organizing media content, making it instantly available for streaming through your preferred media server.
 
@@ -87,33 +84,15 @@ Whether you're a casual viewer or a media enthusiast, Riven offers a powerful, a
 
 Before installing Riven, ensure you have the following prerequisites:
 
-<Cards>
-    <Card
-        href="/404"
-        title="Linux"
-        description="Riven only supports Linux-based operating systems and Windows Subsystem for Linux (WSL) in Windows"
-    />
-    <Card
-        href="/docs/rclone"
-        title="Rclone"
-        description="Required to mount debrid service. Additionally Zurg is preferred for Real-Debrid users"
-    />
-    <Card
-        href="/404"
-        title="Media Server"
-        description="Currently only Plex Media Server is supported"
-    />
-    <Card
-        href="/docs/docker"
-        title="Docker"
-        description="Required to run Riven in a containerized environment"
-    />
-</Cards>
+!!! note
+    * **Linux**: Riven only supports Linux-based operating systems and Windows Subsystem for Linux (WSL) in Windows.
+    * **Rclone**: Required to mount debrid service. Additionally, Zurg is preferred for Real-Debrid users. [Learn more](/docs/rclone)
+    * **Media Server**: Currently only Plex Media Server is supported.
+    * **Docker**: Required to run Riven in a containerized environment. [Learn more](/docs/docker)
 
-<Callout type="info">
-    Currently only Real-Debrid, All-Debrid and Torbox are supported. More
-    services will be added in the future.
-</Callout>
+!!! warning "Debrid Support"
+    Currently only **Real-Debrid**, **All-Debrid** and **Torbox** are supported. More
+    services will be added in the future!
 
 ## Setup
 
@@ -256,84 +235,44 @@ There are 4 steps in the onboarding process:
 
 In this step you configure the downloaders (debrid services), rclone mount path, library path, subtitles, etc. See the image below for an example.
 
-<ImageSection
-    width={700}
-    height={600}
-    className="mx-auto"
-    alt="step-1"
-    src="/img/riven/step1.png"
-/>
+![step-1](/images/onboard/step1.png)
 
 ### Media Server
 
 In this step you configure the media server and updater settings. See the image below for an example.
 
-<ImageSection
-    width={700}
-    height={600}
-    className="mx-auto"
-    alt="step-2"
-    src="/img/riven/step2.png"
-/>
+![step-2](/images/onboard/step2.png)
 
 ### Content Services
 
 In this step you configure the content services like trakt, overseerr, etc. See the image below for an example.
 
-<ImageSection
-    width={700}
-    height={600}
-    className="mx-auto"
-    alt="step-3"
-    src="/img/riven/step3.png"
-/>
+![step-3](/images/onboard/step3.png)
 
 ### Scraper Services
 
 In this step you configure the scraper services like torrentio, zilean, prowlarr, jackett, etc. See the image below for an example.
 
-<ImageSection
-    width={700}
-    height={600}
-    className="mx-auto"
-    alt="step-4"
-    src="/img/riven/step4.png"
-/>
+![step-4](/images/onboard/step4.png)
 
 ---
 
 Once you have completed the onboarding process, you will be greeted with a beautiful dashboard where you can manage your media library, request items, settings and many more in the future.
 
-<ImageSection
-    width={700}
-    height={600}
-    className="mx-auto"
-    alt="dashboard"
-    src="/img/riven/homepage.png"
-/>
+![step-5](/images/onboard/final.png)
 
 ---
 
 ## Frequently Asked Questions
 
-<Accordions>
-    <Accordion title="Cross-site POST form submissions are forbidden" id="cross-site-post-form-submission-are-forbidden">
-        The most common reason for this is that you may have not setup `ORIGIN`
-        correctly in the `docker-compose.yml` file. If you are running Riven
-        behind a reverse proxy, you can remove the `ORIGIN` environment variable
-        from the `riven-frontend` service.
-    </Accordion>
+!!! tip "Cross-site POST form submissions are forbidden"
+    The most common reason for this is that you may have not setup `ORIGIN`
+    correctly in the `docker-compose.yml` file. If you are running Riven
+    behind a reverse proxy, you can remove the `ORIGIN` environment variable
+    from the `riven-frontend` service.
 
-    <Accordion title="I am seeing error when trying to save changes" id="save-error">
-        If you are seeing an error when trying to save changes, it is most likely
-        due to incorrect configuration or backend failure. Please check the logs of the `riven` service
-        to see the error message. If you are unable to resolve the issue, feel free
-        to ask for help in the [Riven Discord server](https://discord.gg/wDgVdH8vNM).
-    </Accordion>
+!!! tip "I am seeing error when trying to save changes"
+    If you are seeing an error when trying to save changes, it is most likely due to incorrect configuration or backend failure. Please check the logs of the riven service to see the error message. If you are unable to resolve the issue, feel free to ask for help in the Riven Discord server.
 
-    <Accordion title="I am stuck in onboarding loop" id="onboarding-loop">
-        If you are stuck in the onboarding loop, it is most likely due to `symlink` settings being wrong.
-        Check your `library` path and `rclone` mount path. If they are correct, check the logs of the `riven` service.
-        If you are unable to resolve the issue, feel free to ask for help in the [Riven Discord server](https://discord.gg/wDgVdH8vNM).
-    </Accordion>
-</Accordions>
+!!! tip "I am stuck in onboarding loop"
+    If you are stuck in the onboarding loop, it is most likely due to symlink settings being wrong. Check your library path and rclone mount path. If they are correct, check the logs of the riven service. If you are unable to resolve the issue, feel free to ask for help in the Riven Discord server.
