@@ -12,13 +12,13 @@
         <meta name="author" content="Riven Media">
       
       
-        <link rel="canonical" href="https://rivenmedia.github.io/wiki/services/scrapers/">
+        <link rel="canonical" href="https://rivenmedia.github.io/wiki/services/updaters/">
       
       
-        <link rel="prev" href="../content/">
+        <link rel="prev" href="../symlink/">
       
       
-        <link rel="next" href="../downloaders/">
+        <link rel="next" href="../content/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -26,7 +26,7 @@
     
     
       
-        <title>Scrapers - Riven</title>
+        <title>Updaters - Riven</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#scrapers" class="md-skip">
+        <a href="#updater-services" class="md-skip">
           Skip to content
         </a>
       
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Scrapers
+              Updaters
             
           </span>
         </div>
@@ -488,10 +488,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../updaters/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Updaters
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -500,6 +520,71 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#available-updaters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Available Updaters
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plex" class="md-nav__link">
+    <span class="md-ellipsis">
+      Plex
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jellyfin" class="md-nav__link">
+    <span class="md-ellipsis">
+      Jellyfin
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#emby" class="md-nav__link">
+    <span class="md-ellipsis">
+      Emby
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#updater-interval" class="md-nav__link">
+    <span class="md-ellipsis">
+      Updater Interval
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -530,30 +615,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Scrapers
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../scrapers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -562,125 +627,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#available-scrapers" class="md-nav__link">
-    <span class="md-ellipsis">
-      Available Scrapers
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#torrentio" class="md-nav__link">
-    <span class="md-ellipsis">
-      Torrentio
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#knightcrawler" class="md-nav__link">
-    <span class="md-ellipsis">
-      Knightcrawler
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#jackett" class="md-nav__link">
-    <span class="md-ellipsis">
-      Jackett
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#prowlarr" class="md-nav__link">
-    <span class="md-ellipsis">
-      Prowlarr
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#orionoid" class="md-nav__link">
-    <span class="md-ellipsis">
-      Orionoid
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#annatar" class="md-nav__link">
-    <span class="md-ellipsis">
-      Annatar
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#torbox-scraper" class="md-nav__link">
-    <span class="md-ellipsis">
-      Torbox Scraper
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mediafusion" class="md-nav__link">
-    <span class="md-ellipsis">
-      Mediafusion
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#zilean" class="md-nav__link">
-    <span class="md-ellipsis">
-      Zilean
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#comet" class="md-nav__link">
-    <span class="md-ellipsis">
-      Comet
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -843,99 +789,45 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#available-scrapers" class="md-nav__link">
+  <a href="#available-updaters" class="md-nav__link">
     <span class="md-ellipsis">
-      Available Scrapers
+      Available Updaters
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#torrentio" class="md-nav__link">
+  <a href="#plex" class="md-nav__link">
     <span class="md-ellipsis">
-      Torrentio
+      Plex
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#knightcrawler" class="md-nav__link">
+  <a href="#jellyfin" class="md-nav__link">
     <span class="md-ellipsis">
-      Knightcrawler
+      Jellyfin
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#jackett" class="md-nav__link">
+  <a href="#emby" class="md-nav__link">
     <span class="md-ellipsis">
-      Jackett
+      Emby
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#prowlarr" class="md-nav__link">
+  <a href="#updater-interval" class="md-nav__link">
     <span class="md-ellipsis">
-      Prowlarr
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#orionoid" class="md-nav__link">
-    <span class="md-ellipsis">
-      Orionoid
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#annatar" class="md-nav__link">
-    <span class="md-ellipsis">
-      Annatar
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#torbox-scraper" class="md-nav__link">
-    <span class="md-ellipsis">
-      Torbox Scraper
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mediafusion" class="md-nav__link">
-    <span class="md-ellipsis">
-      Mediafusion
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#zilean" class="md-nav__link">
-    <span class="md-ellipsis">
-      Zilean
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#comet" class="md-nav__link">
-    <span class="md-ellipsis">
-      Comet
+      Updater Interval
     </span>
   </a>
   
@@ -959,275 +851,79 @@
   
 
 
-<h1 id="scrapers"><strong>Scrapers</strong><a class="headerlink" href="#scrapers" title="Permanent link">#</a></h1>
-<p>Riven supports various scrapers to help you gather metadata and other information for your media content. Below is a list of the supported scrapers, their configuration options, and examples of what to enter for each field.</p>
-<h3 id="available-scrapers"><strong>Available Scrapers</strong><a class="headerlink" href="#available-scrapers" title="Permanent link">#</a></h3>
+<h1 id="updater-services"><strong>Updater Services</strong><a class="headerlink" href="#updater-services" title="Permanent link">#</a></h1>
+<p>Riven supports various updaters to help you manage and update your media libraries. Below is a list of the supported updaters, their configuration options, and examples of what to enter for each field.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>We label them as "Updaters" here, which is just an alias for "Media Servers".</p>
+</div>
+<h3 id="available-updaters"><strong>Available Updaters</strong><a class="headerlink" href="#available-updaters" title="Permanent link">#</a></h3>
 <ul>
-<li><a href="#torrentio">Torrentio</a></li>
-<li><a href="#knightcrawler">Knightcrawler</a></li>
-<li><a href="#jackett">Jackett</a></li>
-<li><a href="#prowlarr">Prowlarr</a></li>
-<li><a href="#orionoid">Orionoid</a></li>
-<li><a href="#annatar">Annatar</a></li>
-<li><a href="#torbox-scraper">Torbox Scraper</a></li>
-<li><a href="#mediafusion">Mediafusion</a></li>
-<li><a href="#zilean">Zilean</a></li>
-<li><a href="#comet">Comet</a></li>
+<li><a href="#plex">Plex</a></li>
+<li><a href="#jellyfin">Jellyfin</a></li>
+<li><a href="#emby">Emby</a></li>
 </ul>
-<div class="admonition warning">
-<p class="admonition-title">Atleast one scraper must be enabled</p>
-<p>Atleast one scraper must be enabled to leverage the scrapers.</p>
+<div class="admonition note">
+<p class="admonition-title">How it works</p>
+<p>After an item has been added to your library, we update the corresponding media library.</p>
 </div>
 <hr />
-<h2 id="torrentio"><strong>Torrentio</strong><a class="headerlink" href="#torrentio" title="Permanent link">#</a></h2>
-<p>Torrentio is a scraper that provides high-quality torrent links.</p>
+<h2 id="plex"><strong>Plex</strong><a class="headerlink" href="#plex" title="Permanent link">#</a></h2>
+<p>Plex is a media server that organizes your media and streams it to your devices.</p>
 <ul>
-<li><strong>enabled</strong> (boolean): Boolean value to enable or disable the service. Default is true.<ul>
+<li><strong>enabled</strong> (boolean): Boolean value to enable or disable the updater. Default is true.<ul>
 <li>Example: <code>true</code></li>
 </ul>
 </li>
-<li><strong>filter</strong> (string): Filter to apply to the results. Default is "qualityfilter=other,scr,cam".<ul>
-<li>Example: <code>"qualityfilter=other,scr,cam"</code></li>
+<li><strong>token</strong> (string): The token for accessing Plex.<ul>
+<li>Example: <code>"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"</code></li>
 </ul>
 </li>
-<li><strong>url</strong> (string): The URL of the Torrentio instance. Default is "<a href="http://torrentio.strem.fun">http://torrentio.strem.fun</a>".<ul>
-<li>Example: <code>"http://torrentio.strem.fun"</code></li>
-</ul>
-</li>
-<li><strong>timeout</strong> (integer): The timeout in seconds for the scraper. Default is 30 seconds.<ul>
-<li>Example: <code>30</code></li>
-</ul>
-</li>
-<li><strong>ratelimit</strong> (boolean): Boolean value to enable or disable rate limiting. Default is false.<ul>
-<li>Example: <code>false</code></li>
+<li><strong>url</strong> (string): The URL of your Plex server. Default is "<a href="http://localhost:32400">http://localhost:32400</a>".<ul>
+<li>Example: <code>"http://localhost:32400"</code></li>
 </ul>
 </li>
 </ul>
 <hr />
-<h2 id="knightcrawler"><strong>Knightcrawler</strong><a class="headerlink" href="#knightcrawler" title="Permanent link">#</a></h2>
-<p>Knightcrawler is a scraper that provides high-quality torrent links.</p>
+<h2 id="jellyfin"><strong>Jellyfin</strong><a class="headerlink" href="#jellyfin" title="Permanent link">#</a></h2>
+<p>Jellyfin is a free software media system that puts you in control of managing and streaming your media.</p>
 <ul>
-<li><strong>enabled</strong> (boolean): Boolean value to enable or disable the service. Default is false.<ul>
+<li><strong>enabled</strong> (boolean): Boolean value to enable or disable the updater. Default is false.<ul>
 <li>Example: <code>false</code></li>
 </ul>
 </li>
-<li><strong>filter</strong> (string): Filter to apply to the results. Default is "sort=qualitysize%7Cqualityfilter=480p,scr,cam,unknown".<ul>
-<li>Example: <code>"sort=qualitysize%7Cqualityfilter=480p,scr,cam,unknown"</code></li>
+<li><strong>api_key</strong> (string): The API key for accessing Jellyfin.<ul>
+<li>Example: <code>"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"</code></li>
 </ul>
 </li>
-<li><strong>url</strong> (string): The URL of the Knightcrawler instance. Default is "<a href="https://knightcrawler.elfhosted.com/">https://knightcrawler.elfhosted.com/</a>".<ul>
-<li>Example: <code>"https://knightcrawler.elfhosted.com/"</code></li>
-</ul>
-</li>
-<li><strong>timeout</strong> (integer): The timeout in seconds for the scraper. Default is 30 seconds.<ul>
-<li>Example: <code>30</code></li>
-</ul>
-</li>
-<li><strong>ratelimit</strong> (boolean): Boolean value to enable or disable rate limiting. Default is false.<ul>
-<li>Example: <code>false</code></li>
+<li><strong>url</strong> (string): The URL of your Jellyfin server. Default is "<a href="http://localhost:8096">http://localhost:8096</a>".<ul>
+<li>Example: <code>"http://localhost:8096"</code></li>
 </ul>
 </li>
 </ul>
 <hr />
-<h2 id="jackett"><strong>Jackett</strong><a class="headerlink" href="#jackett" title="Permanent link">#</a></h2>
-<p>Jackett is a scraper that provides high-quality torrent links.</p>
+<h2 id="emby"><strong>Emby</strong><a class="headerlink" href="#emby" title="Permanent link">#</a></h2>
+<p>Emby is a media server designed to organize, play, and stream audio and video to a variety of devices.</p>
 <ul>
-<li><strong>enabled</strong> (boolean): Boolean value to enable or disable the service. Default is false.<ul>
+<li><strong>enabled</strong> (boolean): Boolean value to enable or disable the updater. Default is false.<ul>
 <li>Example: <code>false</code></li>
 </ul>
 </li>
-<li><strong>url</strong> (string): The URL of the Jackett instance. Default is "<a href="http://localhost:9117">http://localhost:9117</a>".<ul>
-<li>Example: <code>"http://localhost:9117"</code></li>
+<li><strong>api_key</strong> (string): The API key for accessing Emby.<ul>
+<li>Example: <code>"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"</code></li>
 </ul>
 </li>
-<li><strong>api_key</strong> (string): The API key for accessing Jackett.<ul>
-<li>Example: <code>"xxxxxxxxxxxxxxxxxxxxxxxxx"</code></li>
-</ul>
-</li>
-<li><strong>timeout</strong> (integer): The timeout in seconds for the scraper. Default is 10 seconds.<ul>
-<li>Example: <code>10</code></li>
-</ul>
-</li>
-<li><strong>ratelimit</strong> (boolean): Boolean value to enable or disable rate limiting. Default is false.<ul>
-<li>Example: <code>false</code></li>
+<li><strong>url</strong> (string): The URL of your Emby server. Default is "<a href="http://localhost:8096">http://localhost:8096</a>".<ul>
+<li>Example: <code>"http://localhost:8096"</code></li>
 </ul>
 </li>
 </ul>
 <hr />
-<h2 id="prowlarr"><strong>Prowlarr</strong><a class="headerlink" href="#prowlarr" title="Permanent link">#</a></h2>
-<p>Prowlarr is a scraper that provides high-quality torrent links.</p>
+<h2 id="updater-interval"><strong>Updater Interval</strong><a class="headerlink" href="#updater-interval" title="Permanent link">#</a></h2>
+<p>The interval in seconds at which the updaters will check for updates. Default is 120 seconds.</p>
 <ul>
-<li><strong>enabled</strong> (boolean): Boolean value to enable or disable the service. Default is false.<ul>
-<li>Example: <code>false</code></li>
-</ul>
-</li>
-<li><strong>url</strong> (string): The URL of the Prowlarr instance. Default is "<a href="http://localhost:9696">http://localhost:9696</a>".<ul>
-<li>Example: <code>"http://localhost:9696"</code></li>
-</ul>
-</li>
-<li><strong>api_key</strong> (string): The API key for accessing Prowlarr.<ul>
-<li>Example: <code>"xxxxxxxxxxxxxxxxxxxxxxxxx"</code></li>
-</ul>
-</li>
-<li><strong>timeout</strong> (integer): The timeout in seconds for the scraper. Default is 10 seconds.<ul>
-<li>Example: <code>10</code></li>
-</ul>
-</li>
-<li><strong>ratelimit</strong> (boolean): Boolean value to enable or disable rate limiting. Default is false.<ul>
-<li>Example: <code>false</code></li>
-</ul>
-</li>
-<li><strong>limiter_seconds</strong> (integer): The number of seconds to wait between requests. Default is 60 seconds.<ul>
-<li>Example: <code>60</code></li>
-</ul>
-</li>
-</ul>
-<hr />
-<h2 id="orionoid"><strong>Orionoid</strong><a class="headerlink" href="#orionoid" title="Permanent link">#</a></h2>
-<p>Orionoid is a scraper that provides high-quality torrent links.</p>
-<ul>
-<li><strong>enabled</strong> (boolean): Boolean value to enable or disable the service. Default is true.<ul>
-<li>Example: <code>true</code></li>
-</ul>
-</li>
-<li><strong>api_key</strong> (string): The API key for accessing Orionoid.<ul>
-<li>Example: <code>"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"</code></li>
-</ul>
-</li>
-<li><strong>cached_results_only</strong> (boolean): Boolean value to enable or disable cached results only. Default is false.<ul>
-<li>Example: <code>false</code></li>
-</ul>
-</li>
-<li><strong>parameters</strong> (object): Additional parameters for the scraper. (Optional)<ul>
-<li><strong>video3d</strong> (string): Whether to include 3D videos. Default is "false".<ul>
-<li>Example: <code>"false"</code></li>
-</ul>
-</li>
-<li><strong>videoquality</strong> (string): The quality of the videos to include. Default is "sd_hd8k".<ul>
-<li>Example: <code>"sd_hd8k"</code></li>
-</ul>
-</li>
-<li><strong>limitcount</strong> (integer): The maximum number of results to return. Default is 5.<ul>
-<li>Example: <code>5</code></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>timeout</strong> (integer): The timeout in seconds for the scraper. Default is 30 seconds.<ul>
-<li>Example: <code>30</code></li>
-</ul>
-</li>
-<li><strong>ratelimit</strong> (boolean): Boolean value to enable or disable rate limiting. Default is true.<ul>
-<li>Example: <code>true</code></li>
-</ul>
-</li>
-</ul>
-<hr />
-<h2 id="annatar"><strong>Annatar</strong><a class="headerlink" href="#annatar" title="Permanent link">#</a></h2>
-<p>Annatar is a scraper that provides high-quality torrent links.</p>
-<ul>
-<li><strong>enabled</strong> (boolean): Boolean value to enable or disable the service. Default is false.<ul>
-<li>Example: <code>false</code></li>
-</ul>
-</li>
-<li><strong>url</strong> (string): The URL of the Annatar instance. Default is "<a href="https://annatar.elfhosted.com">https://annatar.elfhosted.com</a>".<ul>
-<li>Example: <code>"https://annatar.elfhosted.com"</code></li>
-</ul>
-</li>
-<li><strong>limit</strong> (integer): The maximum number of results to return. Default is 2000.<ul>
-<li>Example: <code>2000</code></li>
-</ul>
-</li>
-<li><strong>timeout</strong> (integer): The timeout in seconds for the scraper. Default is 10 seconds.<ul>
-<li>Example: <code>10</code></li>
-</ul>
-</li>
-<li><strong>ratelimit</strong> (boolean): Boolean value to enable or disable rate limiting. Default is false.<ul>
-<li>Example: <code>false</code></li>
-</ul>
-</li>
-</ul>
-<hr />
-<h2 id="torbox-scraper"><strong>Torbox Scraper</strong><a class="headerlink" href="#torbox-scraper" title="Permanent link">#</a></h2>
-<p>Torbox Scraper is a scraper that provides high-quality torrent links.</p>
-<ul>
-<li><strong>enabled</strong> (boolean): Boolean value to enable or disable the service. Default is false.<ul>
-<li>Example: <code>false</code></li>
-</ul>
-</li>
-<li><strong>timeout</strong> (integer): The timeout in seconds for the scraper. Default is 30 seconds.<ul>
-<li>Example: <code>30</code></li>
-</ul>
-</li>
-</ul>
-<hr />
-<h2 id="mediafusion"><strong>Mediafusion</strong><a class="headerlink" href="#mediafusion" title="Permanent link">#</a></h2>
-<p>Mediafusion is a scraper that provides high-quality torrent links.</p>
-<ul>
-<li><strong>enabled</strong> (boolean): Boolean value to enable or disable the service. Default is false.<ul>
-<li>Example: <code>false</code></li>
-</ul>
-</li>
-<li><strong>url</strong> (string): The URL of the Mediafusion instance. Default is "<a href="https://mediafusion.elfhosted.com">https://mediafusion.elfhosted.com</a>".<ul>
-<li>Example: <code>"https://mediafusion.elfhosted.com"</code></li>
-</ul>
-</li>
-<li><strong>timeout</strong> (integer): The timeout in seconds for the scraper. Default is 10 seconds.<ul>
-<li>Example: <code>10</code></li>
-</ul>
-</li>
-<li><strong>ratelimit</strong> (boolean): Boolean value to enable or disable rate limiting. Default is false.<ul>
-<li>Example: <code>false</code></li>
-</ul>
-</li>
-<li><strong>catalogs</strong> (list of strings): A list of catalogs to include.<ul>
-<li>Example: <code>[]</code></li>
-</ul>
-</li>
-</ul>
-<hr />
-<h2 id="zilean"><strong>Zilean</strong><a class="headerlink" href="#zilean" title="Permanent link">#</a></h2>
-<p>Zilean is a scraper that provides high-quality torrent links.</p>
-<ul>
-<li><strong>enabled</strong> (boolean): Boolean value to enable or disable the service. Default is true.<ul>
-<li>Example: <code>true</code></li>
-</ul>
-</li>
-<li><strong>url</strong> (string): The URL of the Zilean instance. Default is "<a href="http://localhost:8181">http://localhost:8181</a>".<ul>
-<li>Example: <code>"http://localhost:8181"</code></li>
-</ul>
-</li>
-<li><strong>timeout</strong> (integer): The timeout in seconds for the scraper. Default is 30 seconds.<ul>
-<li>Example: <code>30</code></li>
-</ul>
-</li>
-<li><strong>ratelimit</strong> (boolean): Boolean value to enable or disable rate limiting. Default is true.<ul>
-<li>Example: <code>true</code></li>
-</ul>
-</li>
-</ul>
-<hr />
-<h2 id="comet"><strong>Comet</strong><a class="headerlink" href="#comet" title="Permanent link">#</a></h2>
-<p>Comet is a scraper that provides high-quality torrent links.</p>
-<ul>
-<li><strong>enabled</strong> (boolean): Boolean value to enable or disable the service. Default is false.<ul>
-<li>Example: <code>false</code></li>
-</ul>
-</li>
-<li><strong>url</strong> (string): The URL of the Comet instance. Default is "<a href="http://localhost:8000">http://localhost:8000</a>".<ul>
-<li>Example: <code>"http://localhost:8000"</code></li>
-</ul>
-</li>
-<li><strong>indexers</strong> (list of strings): A list of indexers to include.<ul>
-<li>Example: <code>[]</code></li>
-</ul>
-</li>
-<li><strong>timeout</strong> (integer): The timeout in seconds for the scraper. Default is 30 seconds.<ul>
-<li>Example: <code>30</code></li>
-</ul>
-</li>
-<li><strong>ratelimit</strong> (boolean): Boolean value to enable or disable rate limiting. Default is false.<ul>
-<li>Example: <code>false</code></li>
+<li><strong>updater_interval</strong> (integer): The interval in seconds.<ul>
+<li>Example: <code>120</code></li>
 </ul>
 </li>
 </ul>

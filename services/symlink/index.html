@@ -12,13 +12,13 @@
         <meta name="author" content="Riven Media">
       
       
-        <link rel="canonical" href="https://rivenmedia.github.io/wiki/services/scrapers/">
+        <link rel="canonical" href="https://rivenmedia.github.io/wiki/services/symlink/">
       
       
-        <link rel="prev" href="../content/">
+        <link rel="prev" href="../">
       
       
-        <link rel="next" href="../downloaders/">
+        <link rel="next" href="../updaters/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -26,7 +26,7 @@
     
     
       
-        <title>Scrapers - Riven</title>
+        <title>Symlink - Riven</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#scrapers" class="md-skip">
+        <a href="#symlink-services" class="md-skip">
           Skip to content
         </a>
       
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Scrapers
+              Symlink
             
           </span>
         </div>
@@ -467,10 +467,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../symlink/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Symlink
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -479,6 +499,68 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#symlink-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Symlink Configuration
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rclone-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rclone (required)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#zurg-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      Zurg (optional)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Zurg (optional)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuring-zurg-with-riven-symlinks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuring Zurg with Riven Symlinks
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -530,30 +612,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Scrapers
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../scrapers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -562,125 +624,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#available-scrapers" class="md-nav__link">
-    <span class="md-ellipsis">
-      Available Scrapers
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#torrentio" class="md-nav__link">
-    <span class="md-ellipsis">
-      Torrentio
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#knightcrawler" class="md-nav__link">
-    <span class="md-ellipsis">
-      Knightcrawler
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#jackett" class="md-nav__link">
-    <span class="md-ellipsis">
-      Jackett
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#prowlarr" class="md-nav__link">
-    <span class="md-ellipsis">
-      Prowlarr
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#orionoid" class="md-nav__link">
-    <span class="md-ellipsis">
-      Orionoid
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#annatar" class="md-nav__link">
-    <span class="md-ellipsis">
-      Annatar
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#torbox-scraper" class="md-nav__link">
-    <span class="md-ellipsis">
-      Torbox Scraper
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mediafusion" class="md-nav__link">
-    <span class="md-ellipsis">
-      Mediafusion
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#zilean" class="md-nav__link">
-    <span class="md-ellipsis">
-      Zilean
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#comet" class="md-nav__link">
-    <span class="md-ellipsis">
-      Comet
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -843,101 +786,44 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#available-scrapers" class="md-nav__link">
+  <a href="#symlink-configuration" class="md-nav__link">
     <span class="md-ellipsis">
-      Available Scrapers
+      Symlink Configuration
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#torrentio" class="md-nav__link">
+  <a href="#rclone-required" class="md-nav__link">
     <span class="md-ellipsis">
-      Torrentio
+      Rclone (required)
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#knightcrawler" class="md-nav__link">
+  <a href="#zurg-optional" class="md-nav__link">
     <span class="md-ellipsis">
-      Knightcrawler
+      Zurg (optional)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Zurg (optional)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuring-zurg-with-riven-symlinks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuring Zurg with Riven Symlinks
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#jackett" class="md-nav__link">
-    <span class="md-ellipsis">
-      Jackett
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#prowlarr" class="md-nav__link">
-    <span class="md-ellipsis">
-      Prowlarr
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#orionoid" class="md-nav__link">
-    <span class="md-ellipsis">
-      Orionoid
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#annatar" class="md-nav__link">
-    <span class="md-ellipsis">
-      Annatar
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#torbox-scraper" class="md-nav__link">
-    <span class="md-ellipsis">
-      Torbox Scraper
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mediafusion" class="md-nav__link">
-    <span class="md-ellipsis">
-      Mediafusion
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#zilean" class="md-nav__link">
-    <span class="md-ellipsis">
-      Zilean
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#comet" class="md-nav__link">
-    <span class="md-ellipsis">
-      Comet
-    </span>
-  </a>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -959,278 +845,134 @@
   
 
 
-<h1 id="scrapers"><strong>Scrapers</strong><a class="headerlink" href="#scrapers" title="Permanent link">#</a></h1>
-<p>Riven supports various scrapers to help you gather metadata and other information for your media content. Below is a list of the supported scrapers, their configuration options, and examples of what to enter for each field.</p>
-<h3 id="available-scrapers"><strong>Available Scrapers</strong><a class="headerlink" href="#available-scrapers" title="Permanent link">#</a></h3>
-<ul>
-<li><a href="#torrentio">Torrentio</a></li>
-<li><a href="#knightcrawler">Knightcrawler</a></li>
-<li><a href="#jackett">Jackett</a></li>
-<li><a href="#prowlarr">Prowlarr</a></li>
-<li><a href="#orionoid">Orionoid</a></li>
-<li><a href="#annatar">Annatar</a></li>
-<li><a href="#torbox-scraper">Torbox Scraper</a></li>
-<li><a href="#mediafusion">Mediafusion</a></li>
-<li><a href="#zilean">Zilean</a></li>
-<li><a href="#comet">Comet</a></li>
-</ul>
-<div class="admonition warning">
-<p class="admonition-title">Atleast one scraper must be enabled</p>
-<p>Atleast one scraper must be enabled to leverage the scrapers.</p>
+<h1 id="symlink-services"><strong>Symlink Services</strong><a class="headerlink" href="#symlink-services" title="Permanent link">#</a></h1>
+<p>Riven supports various symlink configurations to help you manage and organize your media libraries within the docker container. Below is a list of the supported symlink configurations, their options, and examples of what to enter for each field.</p>
+<div class="admonition note">
+<p class="admonition-title">How it works</p>
+<p>We symlink the files after they have been downloaded, so we can stream them directly from the remote storage.</p>
 </div>
 <hr />
-<h2 id="torrentio"><strong>Torrentio</strong><a class="headerlink" href="#torrentio" title="Permanent link">#</a></h2>
-<p>Torrentio is a scraper that provides high-quality torrent links.</p>
+<h2 id="symlink-configuration"><strong>Symlink Configuration</strong><a class="headerlink" href="#symlink-configuration" title="Permanent link">#</a></h2>
+<p>This section is for setting up your symlinks in regards to how they match inside the docker container. Users will need to be extra careful as to make sure that the rclone path and library paths are owned by the user, and exist.</p>
 <ul>
-<li><strong>enabled</strong> (boolean): Boolean value to enable or disable the service. Default is true.<ul>
-<li>Example: <code>true</code></li>
+<li><strong>rclone_path</strong> (string): The path where rclone mounts your remote storage. If you are using Zurg, point this to the <code>__all__</code> directory, which is always created by default and displays all files collectively.<ul>
+<li>Example with Zurg: <code>"/mnt/zurg/__all__"</code></li>
+<li>Example without Zurg: <code>"/mnt/zurg"</code></li>
 </ul>
 </li>
-<li><strong>filter</strong> (string): Filter to apply to the results. Default is "qualityfilter=other,scr,cam".<ul>
-<li>Example: <code>"qualityfilter=other,scr,cam"</code></li>
+<li>
+<p><strong>library_path</strong> (string): The path to your local media library.</p>
+<ul>
+<li>Example: <code>"/mnt/library"</code></li>
 </ul>
+<div class="admonition warning">
+<p class="admonition-title">Availability and Permissions</p>
+<p>Before starting the docker container, ensure that both the <code>rclone_path</code> and <code>library_path</code> exist and have the correct permissions.</p>
+<p>These paths must be compatible with the Riven application and the media player you are using. For instance, if Riven runs with user ID 1000, then both paths should be owned by user ID 1000, and this applies to Plex as well.</p>
+</div>
 </li>
-<li><strong>url</strong> (string): The URL of the Torrentio instance. Default is "<a href="http://torrentio.strem.fun">http://torrentio.strem.fun</a>".<ul>
-<li>Example: <code>"http://torrentio.strem.fun"</code></li>
-</ul>
-</li>
-<li><strong>timeout</strong> (integer): The timeout in seconds for the scraper. Default is 30 seconds.<ul>
-<li>Example: <code>30</code></li>
-</ul>
-</li>
-<li><strong>ratelimit</strong> (boolean): Boolean value to enable or disable rate limiting. Default is false.<ul>
+<li>
+<p><strong>separate_anime_dirs</strong> (boolean): Boolean value to enable or disable separate directories for anime</p>
+<ul>
 <li>Example: <code>false</code></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Set this during initial setup!</p>
+<p>This is very important to set during initial setup, as it will ensure that your media libraries are organized correctly.</p>
+</div>
+</li>
+<li>
+<p><strong>repair_symlinks</strong> (boolean): Boolean value to enable or disable automatic repair of broken symlinks</p>
+<ul>
+<li>Example: <code>false</code></li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Use often, but not too often!</p>
+<p>This can be useful as symlinks can sometimes get broken, and this will help you fix them.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">How it works</p>
+<p>We will crawl the library path, and if a symlink is broken (no longer points to a valid file), we will try to search for the file and create a new symlink. If we cannot find the file, we will remove the symlink, and update the item in the database. Causing it to get re-scraped.</p>
+</div>
+</li>
+<li>
+<p><strong>repair_interval</strong> (float): The interval in hours at which the symlinks will be checked and repaired if necessary.</p>
+<ul>
+<li>Example: <code>72.0</code></li>
 </ul>
 </li>
 </ul>
 <hr />
-<h2 id="knightcrawler"><strong>Knightcrawler</strong><a class="headerlink" href="#knightcrawler" title="Permanent link">#</a></h2>
-<p>Knightcrawler is a scraper that provides high-quality torrent links.</p>
-<ul>
-<li><strong>enabled</strong> (boolean): Boolean value to enable or disable the service. Default is false.<ul>
-<li>Example: <code>false</code></li>
-</ul>
-</li>
-<li><strong>filter</strong> (string): Filter to apply to the results. Default is "sort=qualitysize%7Cqualityfilter=480p,scr,cam,unknown".<ul>
-<li>Example: <code>"sort=qualitysize%7Cqualityfilter=480p,scr,cam,unknown"</code></li>
-</ul>
-</li>
-<li><strong>url</strong> (string): The URL of the Knightcrawler instance. Default is "<a href="https://knightcrawler.elfhosted.com/">https://knightcrawler.elfhosted.com/</a>".<ul>
-<li>Example: <code>"https://knightcrawler.elfhosted.com/"</code></li>
-</ul>
-</li>
-<li><strong>timeout</strong> (integer): The timeout in seconds for the scraper. Default is 30 seconds.<ul>
-<li>Example: <code>30</code></li>
-</ul>
-</li>
-<li><strong>ratelimit</strong> (boolean): Boolean value to enable or disable rate limiting. Default is false.<ul>
-<li>Example: <code>false</code></li>
-</ul>
-</li>
-</ul>
+<h2 id="rclone-required"><strong>Rclone</strong> <em>(required)</em><a class="headerlink" href="#rclone-required" title="Permanent link">#</a></h2>
+<p>We have seen that running this as a systemd service is the most reliable way to ensure that the symlinks are created and maintained correctly.</p>
+<p>Open up your favorite text editor, and add the following configuration:</p>
+<div class="highlight"><span class="filename">/etc/systemd/system/rclone.service</span><pre><span></span><code>[Unit]
+Description=Rclone Mount Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/rclone mount zurg:__all__ /mnt/zurg --allow-other --dir-cache-time 10s --vfs-cache-mode full --vfs-read-chunk-size 8M --vfs-read-chunk-size-limit 2G --buffer-size 16M --vfs-cache-max-age 150h --vfs-cache-max-size 20G --vfs-fast-fingerprint --uid 1000 --gid 1000
+ExecStop=/bin/fusermount -u /mnt/zurg
+Restart=always
+User=riven
+Group=riven
+
+[Install]
+WantedBy=default.target
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Permissions</p>
+<p>Ensure that the user and group are correct for your setup. This example uses <code>riven</code> as the user and group. Also be sure to adjust the <code>uid</code> and <code>gid</code> to your own user and group.</p>
+</div>
+<p>These settings have worked well for me, but consider testing with your own setup.</p>
+<p>After adding the configuration, restart the service with the following command:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>rclone<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>rclone
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Validate the setup</p>
+<p>You can validate the setup by running the following command:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>rclone
+</code></pre></div>
+<p>And making sure that files are properly loaded into the mount point. In this example, it would be <code>/mnt/zurg</code> if you are using Zurg.</p>
+<div class="highlight"><pre><span></span><code>ls<span class="w"> </span>-al<span class="w"> </span>/mnt/zurg
+</code></pre></div>
+</div>
 <hr />
-<h2 id="jackett"><strong>Jackett</strong><a class="headerlink" href="#jackett" title="Permanent link">#</a></h2>
-<p>Jackett is a scraper that provides high-quality torrent links.</p>
-<ul>
-<li><strong>enabled</strong> (boolean): Boolean value to enable or disable the service. Default is false.<ul>
-<li>Example: <code>false</code></li>
-</ul>
-</li>
-<li><strong>url</strong> (string): The URL of the Jackett instance. Default is "<a href="http://localhost:9117">http://localhost:9117</a>".<ul>
-<li>Example: <code>"http://localhost:9117"</code></li>
-</ul>
-</li>
-<li><strong>api_key</strong> (string): The API key for accessing Jackett.<ul>
-<li>Example: <code>"xxxxxxxxxxxxxxxxxxxxxxxxx"</code></li>
-</ul>
-</li>
-<li><strong>timeout</strong> (integer): The timeout in seconds for the scraper. Default is 10 seconds.<ul>
-<li>Example: <code>10</code></li>
-</ul>
-</li>
-<li><strong>ratelimit</strong> (boolean): Boolean value to enable or disable rate limiting. Default is false.<ul>
-<li>Example: <code>false</code></li>
-</ul>
-</li>
-</ul>
+<h2 id="zurg-optional"><strong>Zurg</strong> <em>(optional)</em><a class="headerlink" href="#zurg-optional" title="Permanent link">#</a></h2>
+<p>When using Zurg, ensure that your <code>rclone_path</code> points to the <code>__all__</code> directory (<code>/mnt/zurg/__all__</code>) to leverage Zurg's capabilities effectively. This directory aggregates all files, providing a unified view.</p>
+<h3 id="configuring-zurg-with-riven-symlinks">Configuring Zurg with Riven Symlinks<a class="headerlink" href="#configuring-zurg-with-riven-symlinks" title="Permanent link">#</a></h3>
+<ol>
+<li><strong>Set the <code>rclone_path</code> to <code>/mnt/zurg/__all__</code></strong> in your symlink configuration. This ensures that all media files are accessible through the aggregated <code>__all__</code> directory.</li>
+<li><strong>Ensure Zurg is configured correctly</strong> by following the <a href="https://github.com/debridmediamanager/zurg-testing/wiki/Config-v0.10">Zurg Configuration Documentation</a>, which includes setting up the <code>config.yaml</code> with appropriate filters and directory definitions.</li>
+<li><strong>Verify Permissions:</strong> Make sure that both the <code>rclone</code> mount point and the library paths are owned by the user running the docker container to avoid permission issues.</li>
+<li><strong>Restart Services:</strong> After configuration, restart the Riven and Zurg services to apply the changes.</li>
+</ol>
 <hr />
-<h2 id="prowlarr"><strong>Prowlarr</strong><a class="headerlink" href="#prowlarr" title="Permanent link">#</a></h2>
-<p>Prowlarr is a scraper that provides high-quality torrent links.</p>
+<div class="admonition note">
+<p class="admonition-title">Zurg Configuration</p>
+<p>When configuring Zurg, ensure that the following settings are included in your <code>config.yaml</code> to maintain proper folder and torrent naming conventions:</p>
 <ul>
-<li><strong>enabled</strong> (boolean): Boolean value to enable or disable the service. Default is false.<ul>
-<li>Example: <code>false</code></li>
+<li><strong>retain_folder_name_extension</strong> (boolean): This setting should be set to <code>true</code> to retain the folder name extension.<ul>
+<li>Example: <code>retain_folder_name_extension: true</code></li>
 </ul>
 </li>
-<li><strong>url</strong> (string): The URL of the Prowlarr instance. Default is "<a href="http://localhost:9696">http://localhost:9696</a>".<ul>
-<li>Example: <code>"http://localhost:9696"</code></li>
-</ul>
-</li>
-<li><strong>api_key</strong> (string): The API key for accessing Prowlarr.<ul>
-<li>Example: <code>"xxxxxxxxxxxxxxxxxxxxxxxxx"</code></li>
-</ul>
-</li>
-<li><strong>timeout</strong> (integer): The timeout in seconds for the scraper. Default is 10 seconds.<ul>
-<li>Example: <code>10</code></li>
-</ul>
-</li>
-<li><strong>ratelimit</strong> (boolean): Boolean value to enable or disable rate limiting. Default is false.<ul>
-<li>Example: <code>false</code></li>
-</ul>
-</li>
-<li><strong>limiter_seconds</strong> (integer): The number of seconds to wait between requests. Default is 60 seconds.<ul>
-<li>Example: <code>60</code></li>
+<li><strong>retain_rd_torrent_name</strong> (boolean): This setting should be set to <code>true</code> to retain the Real-Debrid torrent name.<ul>
+<li>Example: <code>retain_rd_torrent_name: true</code></li>
 </ul>
 </li>
 </ul>
-<hr />
-<h2 id="orionoid"><strong>Orionoid</strong><a class="headerlink" href="#orionoid" title="Permanent link">#</a></h2>
-<p>Orionoid is a scraper that provides high-quality torrent links.</p>
-<ul>
-<li><strong>enabled</strong> (boolean): Boolean value to enable or disable the service. Default is true.<ul>
-<li>Example: <code>true</code></li>
-</ul>
-</li>
-<li><strong>api_key</strong> (string): The API key for accessing Orionoid.<ul>
-<li>Example: <code>"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"</code></li>
-</ul>
-</li>
-<li><strong>cached_results_only</strong> (boolean): Boolean value to enable or disable cached results only. Default is false.<ul>
-<li>Example: <code>false</code></li>
-</ul>
-</li>
-<li><strong>parameters</strong> (object): Additional parameters for the scraper. (Optional)<ul>
-<li><strong>video3d</strong> (string): Whether to include 3D videos. Default is "false".<ul>
-<li>Example: <code>"false"</code></li>
-</ul>
-</li>
-<li><strong>videoquality</strong> (string): The quality of the videos to include. Default is "sd_hd8k".<ul>
-<li>Example: <code>"sd_hd8k"</code></li>
-</ul>
-</li>
-<li><strong>limitcount</strong> (integer): The maximum number of results to return. Default is 5.<ul>
-<li>Example: <code>5</code></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>timeout</strong> (integer): The timeout in seconds for the scraper. Default is 30 seconds.<ul>
-<li>Example: <code>30</code></li>
-</ul>
-</li>
-<li><strong>ratelimit</strong> (boolean): Boolean value to enable or disable rate limiting. Default is true.<ul>
-<li>Example: <code>true</code></li>
-</ul>
-</li>
-</ul>
-<hr />
-<h2 id="annatar"><strong>Annatar</strong><a class="headerlink" href="#annatar" title="Permanent link">#</a></h2>
-<p>Annatar is a scraper that provides high-quality torrent links.</p>
-<ul>
-<li><strong>enabled</strong> (boolean): Boolean value to enable or disable the service. Default is false.<ul>
-<li>Example: <code>false</code></li>
-</ul>
-</li>
-<li><strong>url</strong> (string): The URL of the Annatar instance. Default is "<a href="https://annatar.elfhosted.com">https://annatar.elfhosted.com</a>".<ul>
-<li>Example: <code>"https://annatar.elfhosted.com"</code></li>
-</ul>
-</li>
-<li><strong>limit</strong> (integer): The maximum number of results to return. Default is 2000.<ul>
-<li>Example: <code>2000</code></li>
-</ul>
-</li>
-<li><strong>timeout</strong> (integer): The timeout in seconds for the scraper. Default is 10 seconds.<ul>
-<li>Example: <code>10</code></li>
-</ul>
-</li>
-<li><strong>ratelimit</strong> (boolean): Boolean value to enable or disable rate limiting. Default is false.<ul>
-<li>Example: <code>false</code></li>
-</ul>
-</li>
-</ul>
-<hr />
-<h2 id="torbox-scraper"><strong>Torbox Scraper</strong><a class="headerlink" href="#torbox-scraper" title="Permanent link">#</a></h2>
-<p>Torbox Scraper is a scraper that provides high-quality torrent links.</p>
-<ul>
-<li><strong>enabled</strong> (boolean): Boolean value to enable or disable the service. Default is false.<ul>
-<li>Example: <code>false</code></li>
-</ul>
-</li>
-<li><strong>timeout</strong> (integer): The timeout in seconds for the scraper. Default is 30 seconds.<ul>
-<li>Example: <code>30</code></li>
-</ul>
-</li>
-</ul>
-<hr />
-<h2 id="mediafusion"><strong>Mediafusion</strong><a class="headerlink" href="#mediafusion" title="Permanent link">#</a></h2>
-<p>Mediafusion is a scraper that provides high-quality torrent links.</p>
-<ul>
-<li><strong>enabled</strong> (boolean): Boolean value to enable or disable the service. Default is false.<ul>
-<li>Example: <code>false</code></li>
-</ul>
-</li>
-<li><strong>url</strong> (string): The URL of the Mediafusion instance. Default is "<a href="https://mediafusion.elfhosted.com">https://mediafusion.elfhosted.com</a>".<ul>
-<li>Example: <code>"https://mediafusion.elfhosted.com"</code></li>
-</ul>
-</li>
-<li><strong>timeout</strong> (integer): The timeout in seconds for the scraper. Default is 10 seconds.<ul>
-<li>Example: <code>10</code></li>
-</ul>
-</li>
-<li><strong>ratelimit</strong> (boolean): Boolean value to enable or disable rate limiting. Default is false.<ul>
-<li>Example: <code>false</code></li>
-</ul>
-</li>
-<li><strong>catalogs</strong> (list of strings): A list of catalogs to include.<ul>
-<li>Example: <code>[]</code></li>
-</ul>
-</li>
-</ul>
-<hr />
-<h2 id="zilean"><strong>Zilean</strong><a class="headerlink" href="#zilean" title="Permanent link">#</a></h2>
-<p>Zilean is a scraper that provides high-quality torrent links.</p>
-<ul>
-<li><strong>enabled</strong> (boolean): Boolean value to enable or disable the service. Default is true.<ul>
-<li>Example: <code>true</code></li>
-</ul>
-</li>
-<li><strong>url</strong> (string): The URL of the Zilean instance. Default is "<a href="http://localhost:8181">http://localhost:8181</a>".<ul>
-<li>Example: <code>"http://localhost:8181"</code></li>
-</ul>
-</li>
-<li><strong>timeout</strong> (integer): The timeout in seconds for the scraper. Default is 30 seconds.<ul>
-<li>Example: <code>30</code></li>
-</ul>
-</li>
-<li><strong>ratelimit</strong> (boolean): Boolean value to enable or disable rate limiting. Default is true.<ul>
-<li>Example: <code>true</code></li>
-</ul>
-</li>
-</ul>
-<hr />
-<h2 id="comet"><strong>Comet</strong><a class="headerlink" href="#comet" title="Permanent link">#</a></h2>
-<p>Comet is a scraper that provides high-quality torrent links.</p>
-<ul>
-<li><strong>enabled</strong> (boolean): Boolean value to enable or disable the service. Default is false.<ul>
-<li>Example: <code>false</code></li>
-</ul>
-</li>
-<li><strong>url</strong> (string): The URL of the Comet instance. Default is "<a href="http://localhost:8000">http://localhost:8000</a>".<ul>
-<li>Example: <code>"http://localhost:8000"</code></li>
-</ul>
-</li>
-<li><strong>indexers</strong> (list of strings): A list of indexers to include.<ul>
-<li>Example: <code>[]</code></li>
-</ul>
-</li>
-<li><strong>timeout</strong> (integer): The timeout in seconds for the scraper. Default is 30 seconds.<ul>
-<li>Example: <code>30</code></li>
-</ul>
-</li>
-<li><strong>ratelimit</strong> (boolean): Boolean value to enable or disable rate limiting. Default is false.<ul>
-<li>Example: <code>false</code></li>
-</ul>
-</li>
-</ul>
+</div>
+<p>Be sure to add the configuration file to setup Zurg. More information can be found <a href="https://github.com/debridmediamanager/zurg-testing/wiki/Config-v0.10">here</a>.</p>
+<div class="highlight"><span class="filename">~/.config/rclone/rclone.conf</span><pre><span></span><code>[zurg]
+type = webdav
+url = http://172.21.0.2:9999/dav
+vendor = other
+pacer_min_sleep = 0
+</code></pre></div>
+<p>The latest configuration file for Zurg can be found <a href="https://raw.githubusercontent.com/debridmediamanager/zurg-testing/main/config.yml">here</a>.</p>
 
 
 

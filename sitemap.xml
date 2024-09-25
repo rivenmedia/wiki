@@ -13,6 +13,10 @@
          <lastmod>2024-09-25</lastmod>
     </url>
     <url>
+         <loc>https://rivenmedia.github.io/wiki/services/extras/</loc>
+         <lastmod>2024-09-25</lastmod>
+    </url>
+    <url>
          <loc>https://rivenmedia.github.io/wiki/services/content/</loc>
          <lastmod>2024-09-25</lastmod>
     </url>
@@ -21,7 +25,23 @@
          <lastmod>2024-09-25</lastmod>
     </url>
     <url>
+         <loc>https://rivenmedia.github.io/wiki/services/notifications/</loc>
+         <lastmod>2024-09-25</lastmod>
+    </url>
+    <url>
          <loc>https://rivenmedia.github.io/wiki/services/scrapers/</loc>
+         <lastmod>2024-09-25</lastmod>
+    </url>
+    <url>
+         <loc>https://rivenmedia.github.io/wiki/services/subtitles/</loc>
+         <lastmod>2024-09-25</lastmod>
+    </url>
+    <url>
+         <loc>https://rivenmedia.github.io/wiki/services/symlink/</loc>
+         <lastmod>2024-09-25</lastmod>
+    </url>
+    <url>
+         <loc>https://rivenmedia.github.io/wiki/services/updaters/</loc>
          <lastmod>2024-09-25</lastmod>
     </url>
 </urlset>
