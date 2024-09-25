@@ -1,0 +1,78 @@
+site_name: "Riven"
+site_description: "Riven is a media manager service that handles all your media needs."
+site_author: "Riven Media"
+site_url: "https://rivenmedia.github.io/wiki"
+
+repo_name: "Riven"
+repo_url: "https://github.com/rivenmedia/wiki"
+
+
+nav:
+  - Home: index.md
+  # - Getting Started: getting-started.md
+  # - Configuration: configuration.md
+  # - Contributing: contributing.md
+  # - License: license.md
+
+plugins:
+  - search
+
+theme:
+  name: 'material'
+  features:
+      - navigation.tabs
+      - navigation.tabs.sticky
+      - navigation.tracking
+      - navigation.instant
+      - navigation.instant.progress
+      - navigation.sections
+      - navigation.indexes
+      - navigation.top
+      - navigation.pruning
+      - navigation.path
+      - search.suggest
+      - search.share
+      - content.code.annotate
+      - content.code.copy
+      - announce.dismiss
+  icon:
+    logo: logo
+
+  palette:
+    - media: "(prefers-color-scheme)"
+      scheme: slate
+      primary: indigo
+      accent: red
+      toggle:
+        icon: material/brightness-4
+        name: Follow system preferences
+
+  font:
+    text: 'Ubuntu'
+    code: 'Ubuntu Mono'
+
+extra_css:
+  - extras/stylesheets/extra.css
+
+extra_javascript:
+  - extras/javascripts/extra.js
+
+extra:
+  social:
+    - icon: 'fontawesome/brands/discord'
+      link: 'https://discord.gg/rivenmedia' 
+    - icon: 'fontawesome/brands/github'
+      link: 'https://github.com/rivenmedia/riven'
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - admonition
+  - tables
+  - codehilite:
+      linenums: false
+  - toc:
+      permalink: true
+      toc_depth: 2
+  - pymdownx.superfences:
+
