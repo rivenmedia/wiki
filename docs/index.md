@@ -106,7 +106,7 @@ hide:
 
 ![step-5](images/onboard/final.png)
 
-!!! note "Beta"
+!!! warning "**Beta**"
     Riven is under active development, we are constantly working on new features and fixing bugs.
 
 Riven streamlines your media consumption experience by:
