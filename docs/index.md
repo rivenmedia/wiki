@@ -131,7 +131,7 @@ Whether you're a casual viewer or a media enthusiast, Riven offers a powerful, a
     [Riven](https://elfhosted.com/app/riven/) is an "Elf-icial" app in the [ElfHosted app catalogue](https://elfhosted.com/apps/) - A whopping 100% of your subscription goes directly to Riven developers, who can usually be found in the [#elf-riven](https://discord.com/channels/396055506072109067/1253110932062601276) channel in the [ElfHosted Discord Server](https://discord.elfhosted.com).
 
 !!! tip "ElfHosted "Infinite Streaming" bundles"
-    Riven is pre-packaged with Plex, Zurg, and symlinks, and ready-to-go, in these convenient bundles:
+    Riven comes pre-packaged with Zurg and your choice of Plex, Jellyfin, or Emby, and is available in the following convenient bundles:
 
     * [Starter Kit](https://store.elfhosted.com/product-category/streaming-bundles/starter) (*quick and easy setup*)
     * [Hobbit Bundle](https://store.elfhosted.com/product-category/streaming-bundles/hobbit) (*12.5% dedicated node, GPU transcoding, 250Mbps shared, extra bundled apps, 22% off non-bundled*)
