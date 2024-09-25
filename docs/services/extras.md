@@ -19,7 +19,7 @@ To reset the Postgres database by dropping and recreating the `riven` table, you
 
     ```bash
     docker exec -it postgres psql -U postgres -c "DROP TABLE IF EXISTS riven;"
-    docker exec -it postgres psql -U postgres -c "CREATE DATABASE riven_db;"
+    docker exec -it postgres psql -U postgres -c "CREATE DATABASE riven;"
     ```
 
 === "Env Variable"
