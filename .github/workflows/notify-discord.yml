@@ -1,0 +1,23 @@
+on:
+  push:
+    branches:
+      - gh-pages
+  workflow_dispatch:
+
+jobs:
+  github-releases-to-discord:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Github Releases To Discord
+        uses: SethCohen/github-releases-to-discord@v1.13.1
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
+          color: "5373985"
+          username: "Riven Media"
+          avatar_url: "https://avatars.githubusercontent.com/u/172203452?s=200&v=4"
+        #   content: "||@everyone||"
+          footer_title: "Wiki Update!"
+          footer_icon_url: "https://avatars.githubusercontent.com/u/172203452?s=200&v=4"
+          footer_timestamp: true
