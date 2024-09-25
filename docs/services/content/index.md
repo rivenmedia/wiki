@@ -1,12 +1,18 @@
+# **Content Services**
+
 Riven supports various content services to help you manage and update your media library. Below is a list of the supported services, their configuration options, and examples of what to enter for each field.
 
-### Available Services
+### **Available Services**
 
 - [Overseerr](#overseerr)
 - [Plex Watchlist](#plex-watchlist)
 - [Mdblist](#mdblist)
 - [Listrr](#listrr)
 - [Trakt](#trakt)
+
+!!! warning "Atleast one service must be enabled"
+
+    Atleast one service must be enabled to leverage the content services.
 
 ---
 
@@ -78,6 +84,17 @@ Listrr is a service for managing movie and show lists.
 ## **Trakt**
 
 Trakt is a service that helps you keep track of what you're watching and discover new content.
+
+!!! note "Trakt Client ID Required"
+
+    You need to create an API app within your Trakt Profile.
+
+    1. Navigate to https://trakt.tv/oauth/applications/new
+    2. Name it whatever you like.
+    3. For `Redirect uri:` use the default value of `urn:ietf:wg:oauth:2.0:oob`.
+    4. `Description:`, `Javascript (cors) origins:`, and `Permissions:` can be left blank/default.
+    5. Click on `SAVE APP`.
+    6. Use the `Client ID:` provided as your `Trakt Api Key` in the Riven settings, found in the `Content` section.
 
 - **enabled** (boolean): Boolean value to enable or disable the service. Default is false.
     - Example: `false`

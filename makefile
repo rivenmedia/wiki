@@ -6,10 +6,15 @@ help:
 	@echo "  install   Install the dependencies"
 	@echo "  serve     Start the MkDocs server"
 	@echo "  deploy    Deploy the MkDocs site to GitHub Pages"
+	@echo "  update    Update python dependencies"
 
 install:
 	@echo "Installing dependencies..."
 	@poetry install --no-root
+
+update:
+	@echo "Updating python dependencies..."
+	@poetry update
 
 serve:
 	@echo "Starting MkDocs server..."

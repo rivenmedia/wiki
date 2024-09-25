@@ -1,8 +1,8 @@
-# Scrapers
+# **Scrapers**
 
 Riven supports various scrapers to help you gather metadata and other information for your media content. Below is a list of the supported scrapers, their configuration options, and examples of what to enter for each field.
 
-### Available Scrapers
+### **Available Scrapers**
 
 - [Torrentio](#torrentio)
 - [Knightcrawler](#knightcrawler)
@@ -14,6 +14,10 @@ Riven supports various scrapers to help you gather metadata and other informatio
 - [Mediafusion](#mediafusion)
 - [Zilean](#zilean)
 - [Comet](#comet)
+
+!!! warning "Atleast one scraper must be enabled"
+
+    Atleast one scraper must be enabled to leverage the scrapers.
 
 ---
 

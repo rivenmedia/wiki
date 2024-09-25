@@ -1,6 +1,8 @@
+# **Downloaders**
+
 Riven supports various downloaders to help you manage and download your media content. Below is a list of the supported downloaders, their configuration options, and examples of what to enter for each field.
 
-### Available Downloaders
+### **Available Downloaders**
 
 - [Real Debrid](#real-debrid)
 - [All Debrid](#all-debrid)
@@ -10,6 +12,10 @@ Riven supports various downloaders to help you manage and download your media co
     Some settings have lists that support multiple values. These are noted in the description of the setting.
 
     - Example: `["value1", "value2"]`
+
+!!! warning "Atleast one downloader must be enabled"
+
+    Atleast one downloader must be enabled to leverage the downloaders.
 
 ---
 

@@ -1,18 +1,14 @@
 ---
 hide:
-  - title
+  - navigation
 ---
 
 <div align="center">
     <a href="https://github.com/rivenmedia/riven">
         <picture>
-            <source
-                media="(prefers-color-scheme: dark)"
-                srcSet="https://raw.githubusercontent.com/rivenmedia/riven/main/assets/riven-light.png"
-            ></source>
             <img
                 alt="Riven"
-                src="https://raw.githubusercontent.com/dreulavelle/rivenmedia/riven/assets/riven-dark.png"
+                src="https://raw.githubusercontent.com/rivenmedia/wiki/refs/heads/main/docs/images/logo.png"
             ></img>
         </picture>
     </a>
@@ -55,7 +51,7 @@ hide:
             src="https://img.shields.io/github/contributors/rivenmedia/riven"
         />
     </a>
-    <a href="https://discord.gg/wDgVdH8vNM" style={{ display: "inline-block" }}>
+    <a href="https://discord.gg/rivenmedia" style={{ display: "inline-block" }}>
         <img
             alt="Discord"
             src="https://img.shields.io/badge/Join%20discord-8A2BE2"
@@ -63,12 +59,55 @@ hide:
     </a>
 </div>
 
-## Overview
+<div class="grid cards" markdown="1" style="justify-content: center;" id="home-cards">
 
-!!! warning "Under Development"
-    Riven is under active development, expect breaking changes and bugs.
+-   :gear: __Easy Installation__
 
-Riven is an advanced media management and streaming solution designed to integrate with various media servers and third-party services. It automates the process of finding, downloading, and organizing media content, making it instantly available for streaming through your preferred media server.
+    ---
+
+    Get Riven up and running quickly with our comprehensive installation guide. Whether you're using Docker or running natively, we've got you covered.
+
+    [:gear: Installation Guide](#installation)
+
+-   :wrench: __Powerful Configuration__
+
+    ---
+
+    Customize Riven to fit your media management needs. Configure debrid services, media servers, and more with our user-friendly interface.
+
+    [:wrench: Configuration Options](#configuration)
+
+-   :cloud: __ElfHosted ❤️__
+
+    ---
+
+    [ElfHosted](https://elfhosted.com) is a PaaS that takes care of all the technical details like hosting, security, and updates for your self-hosted apps.
+
+    - :party_popper: **Sponsored**: Your subscription goes directly to Riven developers!
+
+    [:cloud: Check out ElfHosted](#elfhosted)
+
+-   :fontawesome-brands-discord: __Active Community__
+
+    ---
+
+    Join our vibrant community for support, updates, and contributions. Collaborate with other users and developers to make Riven even better.
+
+    [:fontawesome-brands-discord: Join the Discord](https://discord.gg/rivenmedia)
+
+</div>
+
+---
+
+
+# Getting Started
+
+![step-5](images/onboard/final.png)
+
+**Riven** is an advanced media management and streaming solution designed to integrate with various media servers and third-party services. It automates the process of finding, downloading, and organizing media content, making it instantly available for streaming through your preferred media server.
+
+!!! note "Beta"
+    Riven is under active development, we are constantly working on new features and fixing bugs.
 
 Riven streamlines your media consumption experience by:
 
@@ -80,9 +119,33 @@ Riven streamlines your media consumption experience by:
 
 Whether you're a casual viewer or a media enthusiast, Riven offers a powerful, automated solution to keep your media library up-to-date and easily accessible.
 
-## Prerequisites
+---
+## <img src="https://elfhosted.com/images/logo.svg" width="100"> ElfHosted
 
-Before installing Riven, ensure you have the following prerequisites:
+[ElfHosted](https://elfhosted.com) is a geeky [open-source](https://elfhosted.com/open/) PaaS which provides all the "plumbing" (_hosting, security, updates, etc_) for your self-hosted apps.
+
+**Curious how it works? Here's an [explainer video](https://www.youtube.com/watch?v=ZHZAEhLuJqk)!** :fire:
+
+!!! important "**ElfHosted ❤️ Riven 100%**"
+
+    [Riven](https://elfhosted.com/app/riven/) is an "Elf-icial" app in the [ElfHosted app catalogue](https://elfhosted.com/apps/) - A whopping 100% of your subscription goes directly to Riven developers, who can usually be found in the [#elf-riven](https://discord.com/channels/396055506072109067/1253110932062601276) channel in the [ElfHosted Discord Server](https://discord.elfhosted.com).
+
+!!! tip "ElfHosted "Infinite Streaming" bundles"
+    Riven is pre-packaged with Plex, Zurg, and symlinks, and ready-to-go, in these convenient bundles:
+
+    * [Starter Kit](https://store.elfhosted.com/product-category/streaming-bundles/starter) (*quick and easy setup*)
+    * [Hobbit Bundle](https://store.elfhosted.com/product-category/streaming-bundles/hobbit) (*12.5% dedicated node, GPU transcoding, 250Mbps shared, extra bundled apps, 22% off non-bundled*)
+    * [Ranger Bundle](https://store.elfhosted.com/product-category/streaming-bundles/ranger) (*25% dedicated node, GPU transcoding, 500Mbps shared, extra bundled apps, 44% off non-bundled*)
+    * [Halfling Bundle](https://store.elfhosted.com/product-category/streaming-bundles/halfling) (*50% dedicated node, GPU transcoding, 1Gbps shared, extra bundled apps, 66% off non-bundled*)
+    * [Nazgul Bundle](https://store.elfhosted.com/product-category/streaming-bundles/nazgul) (*100% dedicated node, GPU transcoding, 1Gbps dedicated, extra bundled apps, 88% off non-bundled*)
+
+---
+
+## Setup
+
+Before we begin, we need to set up the required folders and files for Riven.
+
+Grab the `docker-compose.yml` file from the [installation guide](#installation) and then `docker-compose up -d` to start the services.
 
 !!! note
     * **Linux**: Riven only supports Linux-based operating systems.
@@ -91,57 +154,25 @@ Before installing Riven, ensure you have the following prerequisites:
     * **Media Server**: Plex, Jellyfin, and Emby are supported.
     * **Docker**: Required to run Riven in a containerized environment. [Learn more](https://www.docker.com/)
 
-!!! warning "Debrid Support"
+!!! tip "Debrid Support"
     Currently only **Real-Debrid**, **All-Debrid** and **Torbox** are supported. More
     services will be added in the future!
 
-## Setup
+---
 
-Before we begin, we need to set up the required folders and files for Riven.
+### Setup Directories
 
-### Clone repository and create folders
+For detailed information on the various services and configurations available in Riven, please refer to the [symlink](services/symlink/index.md) page. This page will help you understand how to configure and manage your media library using symlinks. It will help you understand why we map the Riven volumes to `/mnt` and how you can modify this in the `docker-compose.yml` file for the best outcome.
 
-```bash
-git clone https://github.com/rivenmedia/riven
-cd riven
-mkdir data
-```
-
-`riven` folder consists of `data` folder and `docker-compose.yml` file which will be used later.
-
-<Files>
-    <Folder name="data" defaultOpen />
-    <File name="docker-compose.yml" />
-    <File name="...other files and folders" />
-</Files>
-
-### Setup Library folder
-
-#### What is Library folder?
-
-Library folder is the folder where Riven will store movie/show files and [symlinks](https://en.wikipedia.org/wiki/Symbolic_link).
-These point to the actual files on the rclone mount
-
-For this example, we are assuming `/mnt/zurg` is the rclone mount path.
-
-```bash
-sudo mkdir -p /mnt/library
-```
-
-<Files>
-  <Folder name="/mnt" defaultOpen>
-    <Folder name="/library" />
-    <Folder name="/zurg" />
-  </Folder>
-</Files>
+---
 
 ## Installation
 
 `docker-compose.yml` file is used to run Riven in a containerized environment. It consists of three services:
 
-1. `riven`: The main Riven application.
-2. `riven-frontend`: The web interface for Riven.
-3. `riven-db`: The database for Riven.
+1. `riven`: The main application (backend).
+2. `riven-frontend`: The web interface (frontend).
+3. `riven-db`: The database.
 
 ```yml title="docker-compose.yml"
 services:
@@ -224,7 +255,13 @@ To run Riven, execute the following command:
 docker-compose up -d && docker-compose logs -f
 ```
 
-This command will start the Riven services in the background. You can access the Riven web interface by navigating to the specified `ORIGIN` URL or reverse proxy URL.
+!!! note "Accessing the web interface"
+
+    You can access the Riven web interface by navigating to the specified `ORIGIN` URL you entered in the `docker-compose.yml` file or your reverse proxy URL.
+
+    - Example: `http://localhost:3000`
+
+--- 
 
 ## Configuration
 
@@ -232,9 +269,7 @@ Once Riven is running, you can configure it by accessing the web interface. You 
 
 There are 4 steps in the onboarding process.
 
----
-
-### Step 1: General Settings
+### **Step 1**: General Settings
 
 In this step you configure the downloaders (debrid services), rclone mount path, library path, subtitles, etc. See the image below for an example.
 
@@ -242,7 +277,7 @@ In this step you configure the downloaders (debrid services), rclone mount path,
 
 ---
 
-### Step 2: Media Server
+### **Step 2**: Media Server
 
 In this step you configure the media server and updater settings. See the image below for an example.
 
@@ -250,7 +285,7 @@ In this step you configure the media server and updater settings. See the image 
 
 ---
 
-### Step 3: Content Services
+### **Step 3**: Content Services
 
 In this step you configure the content services like trakt, overseerr, etc. See the image below for an example.
 
@@ -258,7 +293,7 @@ In this step you configure the content services like trakt, overseerr, etc. See 
 
 ---
 
-### Step 4: Scraper Services
+### **Step 4**: Scraper Services
 
 In this step you configure the scraper services like torrentio, zilean, prowlarr, jackett, etc. See the image below for an example.
 
@@ -266,11 +301,13 @@ In this step you configure the scraper services like torrentio, zilean, prowlarr
 
 ---
 
-### Done!
+**Done!**
 
 Once you have completed the onboarding process, you will be greeted with a beautiful dashboard where you can manage your media library, request items, settings and many more in the future.
 
 ![step-5](images/onboard/final.png)
+
+At this point you can take a look at the [services](services/index.md) page to learn more about the various services and how to configure them.
 
 ---
 

@@ -34,3 +34,40 @@
         display: none;
     }
 }
+
+
+/* Style links with a hover effect */
+a {
+    /* color: #EF233C; */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+
+/* Add a box shadow to cards */
+.grid.cards > div {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.grid.cards > div:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Add a subtle animation to headers */
+h1, h2, h3, h4, h5, h6 {
+    animation: fadeIn 1.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

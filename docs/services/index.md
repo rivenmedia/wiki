@@ -1,4 +1,4 @@
-# Services Overview
+# **Services Overview**
 
 Riven Media offers a variety of services to help you manage and enhance your media library. Below is a brief overview of the services we provide:
 
@@ -9,7 +9,7 @@ Riven Media offers a variety of services to help you manage and enhance your med
 
 ---
 
-## Content Services
+## **Content Services**
 
 Our content services help you manage and update your media library with ease. These services include:
 
@@ -23,7 +23,7 @@ For more details, visit the [Content Services](content/index.md) page.
 
 ---
 
-## Downloaders
+## **Downloaders**
 
 Our downloaders assist you in managing and downloading your media content efficiently. The supported downloaders include:
 
@@ -35,7 +35,7 @@ For more details, visit the [Downloaders](downloaders/index.md) page.
 
 ---
 
-## Scrapers
+## **Scrapers**
 
 Our scrapers help you gather metadata and other information for your media content. These tools ensure your media library is well-organized and up-to-date.
 
@@ -43,7 +43,7 @@ For more details, visit the [Scrapers](scrapers/index.md) page.
 
 ---
 
-## General Services
+## **General Services**
 
 In addition to the specific services mentioned above, we offer general settings and configurations that apply to all services, ensuring a seamless and customizable experience.
 
