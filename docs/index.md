@@ -293,7 +293,7 @@ In this step you configure the media server and updater settings. See the image 
 
 ### **Step 3**: Content Services
 
-In this step you configure the content services like trakt, overseerr, etc. See the image below for an example.
+In this step you configure the content services like Trakt, Overseerr, etc. See the image below for an example.
 
 ![step-3](images/onboard/step3.png)
 
@@ -301,7 +301,7 @@ In this step you configure the content services like trakt, overseerr, etc. See 
 
 ### **Step 4**: Scraper Services
 
-In this step you configure the scraper services like torrentio, zilean, prowlarr, jackett, etc. See the image below for an example.
+In this step you configure the scraper services like Torrentio, Zilean, Prowlarr, Jackett, etc. See the image below for an example.
 
 ![step-4](images/onboard/step4.png)
 
