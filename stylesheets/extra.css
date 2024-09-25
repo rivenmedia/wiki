@@ -9,6 +9,17 @@
     }
 }
 
+@keyframes slide-in {
+    from {
+      opacity: 0;
+      transform: translateX(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
 /* body {
     background-color: #2B2D42;
 } */
@@ -21,7 +32,7 @@
 .md-header__button.md-logo {
     /* color: #2B2D42; */
     font-size: 1.125em;
-    animation: beat-fade 1s infinite;
+    /* animation: beat-fade 1s infinite; */
 }
 
 
@@ -80,7 +91,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 :root {
-    --md-admonition-icon--riven: url('../images/icon.png');
+    --md-admonition-icon--riven: url('/wiki/images/icon.png');
   }
   .md-typeset .admonition.riven,
   .md-typeset details.riven {
