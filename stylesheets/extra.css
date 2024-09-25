@@ -20,7 +20,7 @@
 
 .md-header__button.md-logo {
     /* color: #2B2D42; */
-    font-size: 1.125em; /* Equivalent to fa-lg */
+    font-size: 1.125em;
     animation: beat-fade 1s infinite;
 }
 

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Handle your media library with ease">
+        <meta name="description" content="Riven is a media manager service that handles all your media needs.">
       
       
         <meta name="author" content="Riven Media">
@@ -16,19 +16,19 @@
       
       
       
-        <link rel="next" href="services/content/">
+        <link rel="next" href="services/">
       
       
       <link rel="icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.36">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.37">
     
     
       
-        <title>Riven - Riven Media</title>
+        <title>Riven</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.06209087.min.css">
+      <link rel="stylesheet" href="assets/stylesheets/main.8c3ca2c6.min.css">
       
         
         <link rel="stylesheet" href="assets/stylesheets/palette.06af60db.min.css">
@@ -94,7 +94,7 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="Riven Media" class="md-header__button md-logo" aria-label="Riven Media" data-md-component="logo">
+    <a href="." title="Riven" class="md-header__button md-logo" aria-label="Riven" data-md-component="logo">
       
   
   <svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -110,13 +110,13 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Riven Media
+            Riven
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Riven
+              Home
             
           </span>
         </div>
@@ -235,7 +235,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="services/content/" class="md-tabs__link">
+        <a href="services/" class="md-tabs__link">
           
   
     
@@ -245,6 +245,23 @@
         </a>
       </li>
     
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://dreulavelle.github.io/rank-torrent-name/users/faq/" class="md-tabs__link">
+        
+  
+    
+  
+  Ranking
+
+      </a>
+    </li>
   
 
       
@@ -282,6 +299,8 @@
           
             
               
+                
+              
               <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
@@ -293,7 +312,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="Riven Media" class="md-nav__button md-logo" aria-label="Riven Media" data-md-component="logo">
+    <a href="." title="Riven" class="md-nav__button md-logo" aria-label="Riven" data-md-component="logo">
       
   
   <svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -301,7 +320,7 @@
 </svg>
 
     </a>
-    Riven Media
+    Riven
   </label>
   
     <div class="md-nav__source">
@@ -458,6 +477,10 @@
           
         
       
+        
+          
+        
+      
     
     
       
@@ -475,7 +498,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="services/content/" class="md-nav__link ">
+            <a href="services/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -499,6 +522,27 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="services/content/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Content
+  </span>
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -557,6 +601,26 @@
   
   
     <li class="md-nav__item">
+      <a href="https://dreulavelle.github.io/rank-torrent-name/users/faq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ranking
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="contribute/" class="md-nav__link">
         
   
@@ -577,6 +641,8 @@
               </div>
             
             
+              
+                
               
               <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
                 <div class="md-sidebar__scrollwrap">
@@ -875,7 +941,7 @@ These point to the actual files on the rclone mount</p>
 </ol>
 <h2 id="running-riven">Running Riven<a class="headerlink" href="#running-riven" title="Permanent link">&para;</a></h2>
 <p>To run Riven, execute the following command:</p>
-<div class="highlight"><pre><span></span><code>docker-compose<span class="w"> </span>up<span class="w"> </span>-d
+<div class="highlight"><pre><span></span><code>docker-compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>docker-compose<span class="w"> </span>logs<span class="w"> </span>-f
 </code></pre></div>
 <p>This command will start the Riven services in the background. You can access the Riven web interface by navigating to the specified <code>ORIGIN</code> URL or reverse proxy URL.</p>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
@@ -903,20 +969,20 @@ These point to the actual files on the rclone mount</p>
 <p><img alt="step-5" src="images/onboard/final.png" /></p>
 <hr />
 <h2 id="frequently-asked-questions">Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permanent link">&para;</a></h2>
-<div class="admonition tip">
+<div class="admonition warning">
 <p class="admonition-title">Cross-site POST form submissions are forbidden</p>
-<p>The most common reason for this is that you may have not setup <code>ORIGIN</code>
+<p>The most common reason for this is that you may not have set up <code>ORIGIN</code>
 correctly in the <code>docker-compose.yml</code> file. If you are running Riven
 behind a reverse proxy, you can remove the <code>ORIGIN</code> environment variable
 from the <code>riven-frontend</code> service.</p>
 </div>
-<div class="admonition tip">
-<p class="admonition-title">I am seeing error when trying to save changes</p>
-<p>If you are seeing an error when trying to save changes, it is most likely due to incorrect configuration or backend failure. Please check the logs of the riven service to see the error message. If you are unable to resolve the issue, feel free to ask for help in the Riven Discord server.</p>
+<div class="admonition warning">
+<p class="admonition-title">I am seeing an error when trying to save changes</p>
+<p>If you are seeing an error when trying to save changes, it is most likely due to incorrect configuration or backend failure. Please check the logs of the Riven service to see the error message. If you are unable to resolve the issue, feel free to ask for help in the Riven Discord server.</p>
 </div>
-<div class="admonition tip">
-<p class="admonition-title">I am stuck in onboarding loop</p>
-<p>If you are stuck in the onboarding loop, it is most likely due to symlink settings being wrong. Check your library path and rclone mount path. If they are correct, check the logs of the riven service. If you are unable to resolve the issue, feel free to ask for help in the Riven Discord server.</p>
+<div class="admonition warning">
+<p class="admonition-title">I am stuck in an onboarding loop</p>
+<p>If you are stuck in the onboarding loop, it is most likely due to incorrect symlink settings. Check your library path and rclone mount path. If they are correct, check the logs of the Riven service. If you are unable to resolve the issue, feel free to ask for help in the Riven Discord server.</p>
 </div>
 
 
@@ -930,6 +996,8 @@ from the <code>riven-frontend</code> service.</p>
 
 
 
+
+  
 
 
 
@@ -1015,7 +1083,7 @@ from the <code>riven-frontend</code> service.</p>
     <script id="__config" type="application/json">{"base": ".", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.tracking", "navigation.instant", "navigation.instant.progress", "navigation.sections", "navigation.indexes", "navigation.top", "navigation.pruning", "navigation.path", "search.suggest", "search.share", "content.code.annotate", "content.code.copy", "announce.dismiss"], "search": "assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="assets/javascripts/bundle.56dfad97.min.js"></script>
+      <script src="assets/javascripts/bundle.d6f25eb3.min.js"></script>
       
         <script src="javascripts/extra.js"></script>
       
