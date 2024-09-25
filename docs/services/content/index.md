@@ -8,11 +8,6 @@ Riven supports various content services to help you manage and update your media
 - [Listrr](#listrr)
 - [Trakt](#trakt)
 
-!!! note "Lists support multiple values"
-    Some settings have lists that support multiple values. These are noted in the description of the setting.
-
-    - Example: `["value1", "value2"]`
-
 ---
 
 ## **Overseerr**

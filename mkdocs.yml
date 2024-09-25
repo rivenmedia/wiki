@@ -1,4 +1,4 @@
-site_name: "Riven Media"
+site_name: "Riven"
 site_description: "Riven is a media manager service that handles all your media needs."
 site_author: "Riven Media"
 site_url: "https://rivenmedia.github.io/wiki"
@@ -9,10 +9,11 @@ repo_url: "https://github.com/rivenmedia/riven"
 nav:
   - Home: index.md
   - Services:
-    # - General: services/index.md
+    - General: services/index.md
     - Content: services/content/index.md
     - Scrapers: services/scrapers/index.md
     - Downloaders: services/downloaders/index.md
+  - Ranking: https://dreulavelle.github.io/rank-torrent-name/users/faq/
   - Contributing: contribute.md
 
 plugins:

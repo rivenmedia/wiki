@@ -1,6 +1,6 @@
 ---
-title: Riven
-description: Handle your media library with ease
+hide:
+  - title
 ---
 
 <div align="center">
@@ -221,7 +221,7 @@ Now this won't work as is, you need to modify the `docker-compose.yml` file to m
 To run Riven, execute the following command:
 
 ```bash
-docker-compose up -d
+docker-compose up -d && docker-compose logs -f
 ```
 
 This command will start the Riven services in the background. You can access the Riven web interface by navigating to the specified `ORIGIN` URL or reverse proxy URL.
@@ -276,14 +276,14 @@ Once you have completed the onboarding process, you will be greeted with a beaut
 
 ## Frequently Asked Questions
 
-!!! tip "Cross-site POST form submissions are forbidden"
-    The most common reason for this is that you may have not setup `ORIGIN`
+!!! warning "Cross-site POST form submissions are forbidden"
+    The most common reason for this is that you may not have set up `ORIGIN`
     correctly in the `docker-compose.yml` file. If you are running Riven
     behind a reverse proxy, you can remove the `ORIGIN` environment variable
     from the `riven-frontend` service.
 
-!!! tip "I am seeing error when trying to save changes"
-    If you are seeing an error when trying to save changes, it is most likely due to incorrect configuration or backend failure. Please check the logs of the riven service to see the error message. If you are unable to resolve the issue, feel free to ask for help in the Riven Discord server.
+!!! warning "I am seeing an error when trying to save changes"
+    If you are seeing an error when trying to save changes, it is most likely due to incorrect configuration or backend failure. Please check the logs of the Riven service to see the error message. If you are unable to resolve the issue, feel free to ask for help in the Riven Discord server.
 
-!!! tip "I am stuck in onboarding loop"
-    If you are stuck in the onboarding loop, it is most likely due to symlink settings being wrong. Check your library path and rclone mount path. If they are correct, check the logs of the riven service. If you are unable to resolve the issue, feel free to ask for help in the Riven Discord server.
+!!! warning "I am stuck in an onboarding loop"
+    If you are stuck in the onboarding loop, it is most likely due to incorrect symlink settings. Check your library path and rclone mount path. If they are correct, check the logs of the Riven service. If you are unable to resolve the issue, feel free to ask for help in the Riven Discord server.
