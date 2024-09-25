@@ -36,9 +36,9 @@ jobs:
           path: |
             ~/.cache/pip
             .cache
-          key: mkdocs-material-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+          key: rivenmedia-docs-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
           restore-keys: |
-            mkdocs-material-${{ runner.os }}-
+            rivenmedia-docs-${{ runner.os }}-
 
       - name: Build and Deploy MkDocs
         env:

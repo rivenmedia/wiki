@@ -5,12 +5,12 @@ description = "The Official documentation for Riven!"
 authors = ["RivenMedia"]
 license = "MIT"
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.11"
 mkdocs = "^1.6.1"
 mkdocs-material = "^9.5.36"
-
 
 [build-system]
 requires = ["poetry-core"]
