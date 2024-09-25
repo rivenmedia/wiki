@@ -1,4 +1,4 @@
-name: Deploy MkDocs to GitHub Pages
+name: Update Docs
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
   id-token: write
 
 jobs:
-  deploy:
+  update-docs:
     runs-on: ubuntu-latest
 
     steps:
