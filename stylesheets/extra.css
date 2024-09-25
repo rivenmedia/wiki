@@ -71,3 +71,28 @@ h1, h2, h3, h4, h5, h6 {
         transform: translateY(0);
     }
 }
+
+/* Remove border from admonitions */
+.md-typeset .admonition,
+.md-typeset details {
+  /* border-width: 0; */
+  border-left-width: 4px;
+}
+
+:root {
+    --md-admonition-icon--riven: url('../images/icon.png');
+  }
+  .md-typeset .admonition.riven,
+  .md-typeset details.riven {
+    border-color: rgb(43, 155, 70);
+  }
+  .md-typeset .riven > .admonition-title,
+  .md-typeset .riven > summary {
+    background-color: rgba(43, 155, 70, 0.1);
+  }
+  .md-typeset .riven > .admonition-title::before,
+  .md-typeset .riven > summary::before {
+    background-color: rgb(255, 255, 255);
+    -webkit-mask-image: var(--md-admonition-icon--riven);
+            mask-image: var(--md-admonition-icon--riven);
+  }
