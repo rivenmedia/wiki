@@ -164,15 +164,15 @@ Grab the `docker-compose.yml` file from the [installation guide](#installation) 
 
 For detailed information on the various services and configurations available in Riven, please refer to the [symlink](services/symlink/index.md) page. This page will help you understand how to configure and manage your media library using symlinks. It will help you understand why we map the Riven volumes to `/mnt` and how you can modify this in the `docker-compose.yml` file for the best outcome.
 
+---
+
+## Installation
+
 !!! danger "Setup Rclone & Symlink Paths First! :fire:"
 
     This is incredibly important and must be setup first! When configuring the rclone mount path and library path, you need to make sure that the paths are correct for your system. More information can be found at the [symlink](services/symlink/index.md) page.
 
     If your debrid files are found in your rclone path, and you can successfully `ls -lh /mnt/zurg` your rclone path, you can skip this step.
-
----
-
-## Installation
 
 `docker-compose.yml` file is used to run Riven in a containerized environment. It consists of three services:
 
@@ -253,19 +253,31 @@ Now this won't work as is, you need to modify the `docker-compose.yml` file to m
 5. Change `DIALECT` and `DATABASE_URL` to use the same database as the backend. This is not required here as we are running both backend and database in the same network (stack).
 6. Change `volumes` to match your setup. Riven requires access to the library folder and rclone mount path.
 
+---
+
 ## Running Riven
 
-To run Riven, execute the following command:
+Depending on how you installed Riven, execute the following command:
 
-```bash
-docker-compose up -d && docker-compose logs -f
-```
+=== "Docker"
 
-!!! note "Accessing the web interface"
+    ```bash
+    docker-compose up -d && docker-compose logs -f
+    ```
 
-    You can access the Riven web interface by navigating to the specified `ORIGIN` URL you entered in the `docker-compose.yml` file or your reverse proxy URL.
+=== "Local"
 
-    - Example: `http://localhost:3000`
+    !!! warning "Python Version"
+        Riven requires Python 3.11 or higher and `poetry` to be installed.
+
+    ```bash
+    poetry install --without dev
+    poetry run python /src/main.py
+    ```
+
+You can access the Riven web interface by navigating to the specified `ORIGIN` URL you entered in the `docker-compose.yml` file or your reverse proxy URL.
+
+- Example: `http://localhost:3000`
 
 --- 
 
