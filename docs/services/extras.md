@@ -11,7 +11,7 @@ To reset the Postgres database by dropping and recreating the `riven` table, you
 
 !!! danger
 
-    This will cause ==all of the data== in your database to be lost. To include metadata and other data that's needed to run Riven.
+    This will cause ==all of the data== in your database to be lost. To include metadata, scraped times, and other data that's needed to run Riven.
 
 === "Docker"
 
@@ -46,6 +46,8 @@ To reset the Postgres database by dropping and recreating the `riven` table, you
     From the Riven backend (via the button on your Dashboard), press ++ctrl+c++ **twice** to restart Riven. Once it does, you will see the following instructions:
 
     - 💥 For the option to reset your database, press the ++x++ key within 10 seconds...
+
+After the database is reset, upon restarting Riven, we will load back in the symlinks and re-index your library.
 
 ---
 
@@ -89,7 +91,4 @@ To trigger a symlink repair, you can use one of the following methods:
 
     Then, restart Riven. Be sure to set `FIX_SYMLINKS` back to `false` after the repair is complete.
 
-
 Alternatively, you can also set the symlink repair option from the Riven settings, and just lower the interval to 1 hour.
-
-----
