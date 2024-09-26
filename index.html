@@ -1258,13 +1258,13 @@ services will be added in the future!</p>
 <hr />
 <h3 id="setup-directories">Setup Directories<a class="headerlink" href="#setup-directories" title="Permanent link">#</a></h3>
 <p>For detailed information on the various services and configurations available in Riven, please refer to the <a href="services/symlink/">symlink</a> page. This page will help you understand how to configure and manage your media library using symlinks. It will help you understand why we map the Riven volumes to <code>/mnt</code> and how you can modify this in the <code>docker-compose.yml</code> file for the best outcome.</p>
+<hr />
+<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">#</a></h2>
 <div class="admonition danger">
 <p class="admonition-title">Setup Rclone &amp; Symlink Paths First! <img alt="🔥" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/1f525.svg" title=":fire:" /></p>
 <p>This is incredibly important and must be setup first! When configuring the rclone mount path and library path, you need to make sure that the paths are correct for your system. More information can be found at the <a href="services/symlink/">symlink</a> page.</p>
 <p>If your debrid files are found in your rclone path, and you can successfully <code>ls -lh /mnt/zurg</code> your rclone path, you can skip this step.</p>
 </div>
-<hr />
-<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">#</a></h2>
 <p><code>docker-compose.yml</code> file is used to run Riven in a containerized environment. It consists of three services:</p>
 <ol>
 <li><code>riven</code>: The main application (backend).</li>
@@ -1342,17 +1342,30 @@ services will be added in the future!</p>
 <li>Change <code>DIALECT</code> and <code>DATABASE_URL</code> to use the same database as the backend. This is not required here as we are running both backend and database in the same network (stack).</li>
 <li>Change <code>volumes</code> to match your setup. Riven requires access to the library folder and rclone mount path.</li>
 </ol>
+<hr />
 <h2 id="running-riven">Running Riven<a class="headerlink" href="#running-riven" title="Permanent link">#</a></h2>
-<p>To run Riven, execute the following command:</p>
+<p>Depending on how you installed Riven, execute the following command:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="running-riven-docker" name="__tabbed_1" type="radio" /><input id="running-riven-local" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="running-riven-docker">Docker</label><label for="running-riven-local">Local</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>docker-compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>docker-compose<span class="w"> </span>logs<span class="w"> </span>-f
 </code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Accessing the web interface</p>
+</div>
+<div class="tabbed-block">
+<div class="admonition warning">
+<p class="admonition-title">Python Version</p>
+<p>Riven requires Python 3.11 or higher and <code>poetry</code> to be installed.</p>
+</div>
+<div class="highlight"><pre><span></span><code>poetry<span class="w"> </span>install<span class="w"> </span>--without<span class="w"> </span>dev
+poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>/src/main.py
+</code></pre></div>
+</div>
+</div>
+</div>
 <p>You can access the Riven web interface by navigating to the specified <code>ORIGIN</code> URL you entered in the <code>docker-compose.yml</code> file or your reverse proxy URL.</p>
 <ul>
 <li>Example: <code>http://localhost:3000</code></li>
 </ul>
-</div>
 <hr />
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">#</a></h2>
 <p>Once Riven is running, you can configure it by accessing the web interface. You will be prompted with onboarding steps to set up your debrid service, media server, content services and scraper services.</p>

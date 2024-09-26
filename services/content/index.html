@@ -703,6 +703,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Overseerr">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setting-up-overseerr-webhook" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setting up Overseerr Webhook
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -943,6 +958,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Overseerr">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setting-up-overseerr-webhook" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setting up Overseerr Webhook
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1033,11 +1063,30 @@
 <li>Example: <code>"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"</code></li>
 </ul>
 </li>
-<li><strong>use_webhook</strong> (boolean): Boolean value to enable or disable the use of webhooks. Default is true.<ul>
-<li>Example: <code>true</code></li>
+<li><strong>use_webhook</strong> (boolean): Boolean value to enable or disable the use of webhooks. Default is false.<ul>
+<li>Example: <code>false</code></li>
 </ul>
 </li>
 </ul>
+<h3 id="setting-up-overseerr-webhook">Setting up Overseerr Webhook<a class="headerlink" href="#setting-up-overseerr-webhook" title="Permanent link">#</a></h3>
+<ul>
+<li>Go to the settings page on Overseerr</li>
+<li>Click on <code>Notifications</code></li>
+<li>Click on <code>Webhook</code> on the end</li>
+<li>Toggle <code>Enable Agent</code> so that it's enabled</li>
+<li>For the Webhook URL:</li>
+<li>Enter the FQDN, IP or <code>localhost</code> to your Riven instance, and then be sure to add <code>/webhook/overseerr</code> at the end of it</li>
+<li>Leave the rest of the settings default, however you'll want to enable these Notification types:</li>
+<li><code>Request Automatically Approved</code></li>
+<li><code>Request Approved</code></li>
+</ul>
+<p>So that only approved requests will get sent from the webhook from Overseerr. Adjust this based on your needs. Any of the following examples might be correct depending on your setup.</p>
+<ul>
+<li>Example 1: <code>http://localhost:8080/webhook/overseerr</code></li>
+<li>Example 2: <code>http://riven:8080/webhook/overseerr</code></li>
+</ul>
+<p>After all that's setup, you should be good to go. If you experience any issues, double check the ip/port you're using to access the backend of Riven is correct. The backend port of Riven is <code>8080</code> by default. </p>
+<p><img alt="overseerr" src="../../images/overseerr.png" /></p>
 <hr />
 <h2 id="plex-watchlist"><strong>Plex Watchlist</strong><a class="headerlink" href="#plex-watchlist" title="Permanent link">#</a></h2>
 <p>Plex Watchlist allows you to keep track of your desired media content.</p>
