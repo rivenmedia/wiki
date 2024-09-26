@@ -949,9 +949,9 @@
 <p>To reset the Postgres database by dropping and recreating the <code>riven</code> table, you can use the following commands:</p>
 <div class="admonition danger">
 <p class="admonition-title">Danger</p>
-<p>This will cause <mark>all of the data</mark> in your database to be lost. To include metadata and other data that's needed to run Riven.</p>
+<p>This will cause <mark>all of the data</mark> in your database to be lost. To include metadata, scraped times, and other data that's needed to run Riven.</p>
 </div>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Docker</label><label for="__tabbed_1_2">Env Variable</label><label for="__tabbed_1_3">Local</label><label for="__tabbed_1_4">Elfhosted</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="resetting-the-database-docker" name="__tabbed_1" type="radio" /><input id="resetting-the-database-env-variable" name="__tabbed_1" type="radio" /><input id="resetting-the-database-local" name="__tabbed_1" type="radio" /><input id="resetting-the-database-elfhosted" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="resetting-the-database-docker">Docker</label><label for="resetting-the-database-env-variable">Env Variable</label><label for="resetting-the-database-local">Local</label><label for="resetting-the-database-elfhosted">Elfhosted</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p>Make sure you have the postgres container running, and you should <code>docker stop riven</code> before running the following commands.</p>
@@ -979,6 +979,7 @@ poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> 
 </div>
 </div>
 </div>
+<p>After the database is reset, upon restarting Riven, we will load back in the symlinks and re-index your library.</p>
 <hr />
 <h2 id="resetting-the-subtitles-database"><strong>Resetting the Subtitles Database</strong><a class="headerlink" href="#resetting-the-subtitles-database" title="Permanent link">#</a></h2>
 <p>To reset the Subtitles database by deleting the <code>subliminal.dbm*</code> files, you can use the following command:</p>
@@ -996,7 +997,7 @@ poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> 
 <hr />
 <h2 id="trigger-symlink-repair"><strong>Trigger Symlink Repair</strong><a class="headerlink" href="#trigger-symlink-repair" title="Permanent link">#</a></h2>
 <p>To trigger a symlink repair, you can use one of the following methods:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Local</label><label for="__tabbed_2_2">Env Variable</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="trigger-symlink-repair-local" name="__tabbed_2" type="radio" /><input id="trigger-symlink-repair-env-variable" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="trigger-symlink-repair-local">Local</label><label for="trigger-symlink-repair-env-variable">Env Variable</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>/src/main.py<span class="w"> </span>--fix_symlinks
@@ -1011,7 +1012,6 @@ poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> 
 </div>
 </div>
 <p>Alternatively, you can also set the symlink repair option from the Riven settings, and just lower the interval to 1 hour.</p>
-<hr />
 
 
 
