@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.37">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.38">
     
     
       
@@ -1098,7 +1098,7 @@ sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w
 <p>Be sure to add the configuration file to setup Zurg. More information can be found <a href="https://github.com/debridmediamanager/zurg-testing/wiki/Config-v0.10">here</a>.</p>
 <div class="highlight"><span class="filename">~/.config/rclone/rclone.conf</span><pre><span></span><code>[zurg]
 type = webdav
-url = http://172.21.0.2:9999/dav
+url = http://localhost:9999/dav  # Change this to your Zurg URL with `/dav` at the end
 vendor = other
 pacer_min_sleep = 0
 </code></pre></div>
