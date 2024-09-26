@@ -127,7 +127,7 @@ Be sure to add the configuration file to setup Zurg. More information can be fou
 ```conf title="~/.config/rclone/rclone.conf"
 [zurg]
 type = webdav
-url = http://172.21.0.2:9999/dav
+url = http://localhost:9999/dav  # Change this to your Zurg URL with `/dav` at the end
 vendor = other
 pacer_min_sleep = 0
 ```
