@@ -18,6 +18,8 @@ nav:
     - Subtitles: services/subtitles/index.md
     - Notifications: services/notifications/index.md
   - Ranking: https://dreulavelle.github.io/rank-torrent-name/users/faq/
+  - Frontend:
+    - Item Page: frontend/item_page.md
   - Extras: services/extras.md
   - Contributing: contribute.md
 
