@@ -84,9 +84,10 @@ hide:
 
     ---
 
-    [ElfHosted](https://elfhosted.com) is a PaaS that takes care of all the technical details like hosting, security, and updates for your self-hosted apps.
+    [ElfHosted](https://elfhosted.com) is an [open-source](https://elfhosted.com/open/) PaaS that provides all the "plumbing" (*hosting, security, and updates, etc*) for your self-hosted apps, leaving the fun stuff for you!
 
-    - :party_popper: **Sponsored**: Your subscription goes directly to Riven developers!
+    !!! tip ":party_popper: **Sponsored**"
+        100% of your Riven subscription revenue goes directly to Riven developers! :heart:
 
     [:cloud: Check out ElfHosted](#elfhosted)
 
