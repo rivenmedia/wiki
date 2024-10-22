@@ -122,13 +122,16 @@ Trakt is a service that helps you keep track of what you're watching and discove
 - **update_interval** (integer): The interval in seconds at which the service will check for updates. Default is 60 seconds.
     - Example: `60`
 - **api_key** (string): The API key for accessing Trakt.
-    - Example: `"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"`
-- **watchlist** (list of strings): A list of Trakt usernames.
-    - Example: `["username1", "username2"]`
-- **user_lists** (list of strings): A list of Trakt user list URLs.
-    - Example: `["https://trakt.tv/users/username/lists/xxxxxxxx"]`
-- **collection** (list of strings): A list of Trakt collection usernames.
-    - Example: `["username1", "username2"]`
+    - Example: `xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
+- **watchlist** (comma seperated usernames): Trakt username(s).
+    - Example: `username1, username2`
+- **user_lists** (comma seperated usernames): Trakt user list URL(s). 
+    - Example: `https://trakt.tv/users/username/lists/xxxxxxxx`
+!!! warning "A user's default Trakt watchlist URL **cannot** be used as a user list url."
+    - To use a created watchlist, copy the URL up to the end of your list's name, omitting the sort queries: 
+        - **<span>https:</span>//trakt.tv/users/username/lists/xxxxxxxx <strike>~~?sort=rank,asc~~</strike>**
+- **collection** (comma seperated usernames): Trakt collection username(s).
+    - Example: `username1, username2`
 - **fetch_trending** (boolean): Boolean value to enable or disable fetching trending content. Default is true.
     - Example: `true`
 - **trending_count** (integer): The number of trending items to fetch. Default is 10.
