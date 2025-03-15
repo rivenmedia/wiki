@@ -38,15 +38,15 @@ Overseerr is a request management and media discovery tool. It helps you manage 
 - Click on `Webhook` on the end
 - Toggle `Enable Agent` so that it's enabled
 - For the Webhook URL:
-  - Enter the FQDN, IP or `localhost` to your Riven instance, and then be sure to add `/webhook/overseerr` at the end of it
+  - Enter the FQDN, IP or `localhost` to your Riven instance, and then be sure to add `/api/v1/webhook/overseerr` at the end of it
 - Leave the rest of the settings default, however you'll want to enable these Notification types:
   - `Request Automatically Approved`
   - `Request Approved`
 
 So that only approved requests will get sent from the webhook from Overseerr. Adjust this based on your needs. Any of the following examples might be correct depending on your setup.
 
-- Example 1: `http://localhost:8080/webhook/overseerr`
-- Example 2: `http://riven:8080/webhook/overseerr`
+- Example 1: `http://localhost:8080/api/v1/webhook/overseerr`
+- Example 2: `http://riven:8080/api/v1/webhook/overseerr`
 
 After all that's setup, you should be good to go. If you experience any issues, double check the ip/port you're using to access the backend of Riven is correct. The backend port of Riven is `8080` by default. 
 
