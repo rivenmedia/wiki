@@ -87,7 +87,7 @@ To trigger a symlink repair, you can use one of the following methods:
 === "Local"
 
     ```bash
-    poetry run python /src/main.py --fix_symlinks
+    poetry run python ./src/main.py --fix_symlinks
     ```
 
 === "Env Variable"
