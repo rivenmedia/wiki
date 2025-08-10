@@ -201,6 +201,8 @@ services:
         depends_on:
             riven:
                 condition: service_healthy
+        volumes:
+            - ./riven-frontend/config:/riven/config
 
     riven:
         image: spoked/riven:latest
@@ -224,10 +226,10 @@ services:
             - ./data:/riven/data
             - /mnt:/mnt
         depends_on:
-            riven_postgres:
+            riven-db:
                 condition: service_healthy
 
-    riven_postgres:
+    riven-db:
         image: postgres:16.3-alpine3.20
         container_name: riven-db
         environment:
