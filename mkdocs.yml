@@ -25,6 +25,10 @@ nav:
 
 plugins:
   - search
+  - redirects
+
+redirects:
+  'index.md': 'wiki/index.md'
 
 theme:
   name: 'material'
