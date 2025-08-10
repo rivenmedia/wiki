@@ -39,6 +39,7 @@ Overseerr is a request management and media discovery tool. It helps you manage 
 - Toggle `Enable Agent` so that it's enabled
 - For the Webhook URL:
   - Enter the FQDN, IP or `localhost` to your Riven instance, and then be sure to add `/api/v1/webhook/overseerr` at the end of it
+- Authorization Header should look like `Berear <YOUR_RIVEN_API_KEY>`
 - Leave the rest of the settings default, however you'll want to enable these Notification types:
   - `Request Automatically Approved`
   - `Request Approved`
@@ -121,7 +122,7 @@ Trakt is a service that helps you keep track of what you're watching and discove
     - Example: `false`
 - **update_interval** (integer): The interval in seconds at which the service will check for updates. Default is 60 seconds.
     - Example: `60`
-- **api_key** (string): The API key for accessing Trakt.
+- **api_key** (string): Use your `Client Secret` as API key.
     - Example: `"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"`
 - **watchlist** (list of strings): A list of Trakt usernames.
     - Example: `["username1", "username2"]`
