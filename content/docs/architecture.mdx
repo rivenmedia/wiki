@@ -1,0 +1,413 @@
+---
+title: Architecture
+description: Understanding how Riven works under the hood
+---
+
+import { Callout } from "fumadocs-ui/components/callout"
+
+# Architecture Overview
+
+Riven is a comprehensive media management and streaming solution that automates the entire process of discovering, acquiring, and organizing media content for streaming through your media server.
+
+---
+
+## System Components
+
+Riven consists of several key components that work together:
+
+### 1. **Backend (Python)**
+- Built with FastAPI
+- PostgreSQL database for state management
+- Service-oriented architecture
+- RESTful API for frontend communication
+- Scheduler for automated tasks
+
+### 2. **Frontend (Next.js)**
+- Modern React-based web interface
+- Real-time updates and status tracking
+- Configuration management
+- Media browsing and search
+
+### 3. **RivenVFS (FUSE Filesystem)**
+- Virtual filesystem for media streaming
+- Built-in caching and prefetching
+- Direct integration with debrid services
+- No external dependencies (replaces rclone/Zurg)
+
+### 4. **Database (PostgreSQL)**
+- Media item state tracking
+- Filesystem entry management
+- Settings storage
+- Stream metadata
+
+---
+
+## Workflow Architecture
+
+Here's how Riven processes media from request to streaming:
+
+```
+┌─────────────────┐
+│  Content        │
+│  Services       │  (Overseerr, Trakt, Plex Watchlist, etc.)
+└────────┬────────┘
+         │ 1. Request new content
+         ▼
+┌─────────────────┐
+│  Indexer        │  (Trakt API)
+│  (Metadata)     │  Fetch metadata, create MediaItem
+└────────┬────────┘
+         │ 2. Enrich with IMDB/TMDB data
+         ▼
+┌─────────────────┐
+│  Scrapers       │  (Torrentio, Jackett, Prowlarr, etc.)
+│                 │  Search for torrents matching criteria
+└────────┬────────┘
+         │ 3. Find torrents
+         ▼
+┌─────────────────┐
+│  Ranking        │  (RTN - Rank Torrent Name)
+│  System         │  Score and rank torrents based on quality
+└────────┬────────┘
+         │ 4. Select best torrent
+         ▼
+┌─────────────────┐
+│  Downloaders    │  (Real-Debrid, AllDebrid, TorBox)
+│  (Debrid)       │  Add torrent to debrid service
+└────────┬────────┘
+         │ 5. Debrid service downloads
+         ▼
+┌─────────────────┐
+│  Post-          │  (Subtitle fetching, media analysis)
+│  Processing     │  Optional processing steps
+└────────┬────────┘
+         │ 6. Enhance media
+         ▼
+┌─────────────────┐
+│  Filesystem     │  (RivenVFS)
+│  Service        │  Register file in virtual filesystem
+└────────┬────────┘
+         │ 7. File appears in /mount
+         ▼
+┌─────────────────┐
+│  Updaters       │  (Plex, Jellyfin, Emby)
+│                 │  Notify media server of new content
+└────────┬────────┘
+         │ 8. Trigger library scan
+         ▼
+┌─────────────────┐
+│  Media Server   │  (Plex, Jellyfin, Emby)
+│                 │  Content available for streaming
+└─────────────────┘
+```
+
+---
+
+## State Machine
+
+Media items in Riven follow a state machine pattern:
+
+```
+Unknown → Requested → Indexed → Scraped → Downloaded →
+Completed → Symlinked (legacy) → Completed
+
+States can transition back on failures:
+- Scraped → Failed (if no suitable torrents found)
+- Failed → Scraped (on retry)
+- Completed → Scraped (if file deleted from debrid)
+```
+
+### State Descriptions
+
+| State | Description |
+|-------|-------------|
+| **Unknown** | Initial state when item is created |
+| **Requested** | Item has been requested from content service |
+| **Indexed** | Metadata has been fetched from Trakt/IMDB |
+| **Scraped** | Torrents have been found and ranked |
+| **Downloaded** | Torrent added to debrid service |
+| **Completed** | File available and registered in VFS |
+| **Failed** | Processing failed (will retry) |
+| **Blacklisted** | Item manually blacklisted by user |
+| **Partial** | Show/season with some episodes missing |
+
+---
+
+## Service Architecture
+
+Riven uses a modular service-oriented architecture. Each service is independent and can be enabled/disabled individually.
+
+### Content Services
+Discover new media to add to your library:
+- **Overseerr**: Request management system
+- **Plex Watchlist**: RSS-based watchlist integration
+- **Mdblist**: Curated media lists
+- **Listrr**: Trakt list manager
+- **Trakt**: Watchlists, collections, trending, popular
+
+### Scraper Services
+Find torrents for requested media:
+- **Torrentio**: Popular Stremio addon
+- **Jackett**: Torrent indexer aggregator
+- **Prowlarr**: Indexer manager
+- **Zilean**: DMM hash lookup
+- **Comet**: Debrid-optimized scraper
+- **Mediafusion**: Multi-source aggregator
+- **Orionoid**: Premium torrent search
+- **Rarbg**: Torrent database search
+
+### Downloader Services
+Add torrents to debrid services:
+- **Real-Debrid**: Premium downloader
+- **AllDebrid**: Alternative debrid service
+- **TorBox**: Torrent cloud storage
+
+### Updater Services
+Notify media servers of new content:
+- **Plex**: Plex Media Server integration
+- **Jellyfin**: Open-source media server
+- **Emby**: Feature-rich media server
+
+### Post-Processing Services
+Enhance downloaded media:
+- **Subtitle Service**: Fetch subtitles from various providers
+- **Media Analysis**: Analyze media files for metadata
+
+---
+
+## Database Schema (Simplified)
+
+### MediaItem
+Core entity representing a movie, show, season, or episode:
+```python
+MediaItem:
+  - id (primary key)
+  - imdb_id
+  - tmdb_id
+  - trakt_id
+  - title
+  - type (movie, show, season, episode)
+  - state (requested, scraped, etc.)
+  - parent_id (for episodes/seasons)
+  - streams (list of torrents)
+  - filesystem_entry (reference)
+```
+
+### FilesystemEntry
+Represents a file in the VFS:
+```python
+FilesystemEntry:
+  - id (primary key)
+  - path (virtual path in VFS)
+  - size
+  - available_in_vfs (boolean)
+  - media_item_id (foreign key)
+```
+
+### Stream
+Represents a torrent/magnet link:
+```python
+Stream:
+  - id (primary key)
+  - infohash
+  - rank (quality score)
+  - cached (on debrid service)
+  - media_item_id (foreign key)
+```
+
+---
+
+## RivenVFS Architecture
+
+RivenVFS is a FUSE (Filesystem in Userspace) implementation that provides on-demand streaming.
+
+### Components
+
+1. **FUSE Operations**
+   - `getattr()`: Return file attributes
+   - `read()`: Stream file data
+   - `readdir()`: List directory contents
+   - `open()`: Handle file opens
+
+2. **Provider System**
+   - Manages debrid service URLs
+   - Handles URL expiration and refresh
+   - Supports multiple debrid services
+
+3. **HTTP Client**
+   - pycurl-based with connection pooling
+   - HTTP/2 support for multiplexing
+   - Range request support for seeking
+
+4. **Cache Manager**
+   - LRU or TTL eviction policies
+   - Configurable size limits
+   - Per-chunk caching (e.g., 8MB chunks)
+
+5. **Prefetch Scheduler**
+   - Fair multi-user scheduling
+   - Priority-based chunk fetching
+   - Automatic read-ahead
+
+### Streaming Flow
+
+```
+Media Server Request
+       ↓
+FUSE read() called
+       ↓
+Check cache for chunk
+       ↓
+Cache miss? → Fetch from debrid via HTTP range request
+       ↓
+Store in cache
+       ↓
+Return data to media server
+       ↓
+Schedule prefetch for next chunks
+```
+
+---
+
+## Configuration Management
+
+Riven supports multiple configuration methods:
+
+1. **Web Interface** (primary)
+   - User-friendly settings UI
+   - Real-time validation
+   - Stored in PostgreSQL
+
+2. **Environment Variables**
+   - Prefix: `RIVEN_`
+   - Format: `RIVEN_CATEGORY_SUBCATEGORY_SETTING`
+   - Example: `RIVEN_FILESYSTEM_MOUNT_PATH=/mount`
+
+3. **Settings File** (legacy)
+   - JSON-based configuration
+   - Used as fallback
+
+Priority: Environment Variables > Database Settings > Defaults
+
+---
+
+## Scaling & Performance
+
+### Multi-User Support
+- RivenVFS includes fair scheduling for concurrent streams
+- Each user gets proportional bandwidth allocation
+- No single stream monopolizes resources
+
+### Caching Strategy
+- **Hot Cache**: Frequently accessed chunks stay in cache (LRU)
+- **Prefetch**: Read-ahead prevents buffering
+- **Eviction**: Automatic cleanup when cache fills
+
+### Database Optimization
+- Indexed queries for fast lookups
+- Lazy loading of relationships
+- Periodic cleanup of old data
+
+### Resource Usage
+- **CPU**: Low (except during scraping)
+- **Memory**: Moderate (depends on cache size)
+- **Disk I/O**: Low (VFS streams, minimal writes)
+- **Network**: Variable (depends on streaming activity)
+
+---
+
+## Security Considerations
+
+1. **API Authentication**
+   - API key required for all requests
+   - 32-character secure keys
+
+2. **Container Isolation**
+   - FUSE runs in container with limited permissions
+   - No host filesystem access except mount point
+
+3. **Debrid Service Keys**
+   - Stored encrypted in database
+   - Never exposed in logs or API responses
+
+4. **Network Security**
+   - HTTPS recommended for reverse proxy
+   - CORS protection enabled
+
+---
+
+## Deployment Patterns
+
+### Single-User Home Setup
+```
+[User] → [Reverse Proxy] → [Riven Frontend] → [Riven Backend + VFS]
+                                                      ↓
+                                              [Media Server]
+```
+
+### Multi-User Shared Setup
+```
+[User 1] ┐
+[User 2] ├→ [Reverse Proxy] → [Riven] → [Shared Media Server]
+[User 3] ┘
+```
+
+### ElfHosted (Cloud)
+```
+[User] → [ElfHosted Infrastructure] → [Riven + Media Server]
+                                            ↓
+                                    [Shared Debrid Pool]
+```
+
+---
+
+## Development Architecture
+
+### Backend
+- **Language**: Python 3.11+
+- **Framework**: FastAPI
+- **ORM**: SQLAlchemy
+- **Database Migrations**: Alembic
+- **Task Scheduling**: APScheduler
+- **Async**: asyncio, trio (for FUSE)
+
+### Frontend
+- **Framework**: Next.js 15
+- **Language**: TypeScript
+- **UI Library**: Fumadocs UI
+- **State Management**: React hooks
+
+### Build & Deploy
+- **Backend**: Docker multi-stage builds
+- **Frontend**: Static export or SSR
+- **Database**: PostgreSQL 16+
+
+---
+
+## Monitoring & Logging
+
+### Logging Levels
+- **INFO**: Standard operations
+- **DEBUG**: Detailed debugging info
+- **WARNING**: Non-critical issues
+- **ERROR**: Critical failures
+
+### Metrics (via cache_metrics)
+- Cache hit rate
+- Bandwidth usage
+- Chunk fetch times
+- Concurrent streams
+
+### Health Checks
+- Database connectivity
+- VFS mount status
+- Debrid service availability
+- Media server connectivity
+
+---
+
+## See Also
+
+- [Filesystem (VFS)](/docs/services/filesystem) - Detailed VFS documentation
+- [Services](/docs/services) - Service configuration guides
+- [Troubleshooting](/docs/troubleshooting) - Common issues and solutions

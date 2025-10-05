@@ -1,0 +1,624 @@
+---
+title: Deployment Guide
+description: Deploy Riven in production with Docker, environment variables, and reverse proxies
+---
+
+import { Callout } from "fumadocs-ui/components/callout"
+
+# Deployment Guide
+
+This guide covers production deployment of Riven using Docker, environment variables, and reverse proxies.
+
+---
+
+## Prerequisites
+
+- **Operating System**: Linux (Ubuntu, Debian, Fedora, Arch, etc.) or Windows WSL2
+- **Docker**: Version 20.10+ with Docker Compose
+- **Hardware**:
+  - CPU: 2+ cores recommended
+  - RAM: 4GB minimum, 8GB+ recommended
+  - Disk: Fast SSD preferred for database and cache
+  - Network: Stable internet connection
+
+<Callout type="warn">
+**Linux Only**
+
+Riven only supports Linux-based systems. On Windows, use WSL2. MacOS is not officially supported due to FUSE limitations.
+</Callout>
+
+---
+
+## Docker Deployment
+
+### Complete docker-compose.yml
+
+Here's a complete production-ready docker-compose.yml:
+
+```yaml title="docker-compose.yml"
+services:
+  # Riven Frontend
+  riven-frontend:
+    image: spoked/riven-frontend:latest
+    container_name: riven-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+      - ORIGIN=http://localhost:3000  # Change to your domain
+      - BACKEND_URL=http://riven:8080
+      - DIALECT=postgres
+      - DATABASE_URL=postgres://postgres:postgres@riven-db/riven
+    depends_on:
+      riven:
+        condition: service_healthy
+    volumes:
+      - ./riven-frontend/config:/riven/config
+    networks:
+      - riven-network
+
+  # Riven Backend
+  riven:
+    image: spoked/riven:latest
+    container_name: riven
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    devices:
+      - /dev/fuse
+    shm_size: 2g  # Increase if using /dev/shm for cache
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+
+      # Database
+      - RIVEN_FORCE_ENV=true
+      - RIVEN_DATABASE_HOST=postgresql+psycopg2://postgres:postgres@riven-db/riven
+
+      # VFS Configuration
+      - RIVEN_FILESYSTEM_MOUNT_PATH=/mount
+      - RIVEN_FILESYSTEM_SEPARATE_ANIME_DIRS=false
+      - RIVEN_FILESYSTEM_CACHE_DIR=/dev/shm/riven-cache
+      - RIVEN_FILESYSTEM_CACHE_MAX_SIZE_MB=10240
+      - RIVEN_FILESYSTEM_CACHE_EVICTION=LRU
+      - RIVEN_FILESYSTEM_CACHE_TTL_SECONDS=7200
+      - RIVEN_FILESYSTEM_CACHE_METRICS=true
+      - RIVEN_FILESYSTEM_CHUNK_SIZE_MB=8
+      - RIVEN_FILESYSTEM_FETCH_AHEAD_CHUNKS=4
+
+      # Updaters
+      - RIVEN_UPDATER_INTERVAL=120
+      - RIVEN_LIBRARY_PATH=/mount
+
+      # Downloaders
+      - RIVEN_DOWNLOADERS_REAL_DEBRID_ENABLED=false
+      - RIVEN_DOWNLOADERS_REAL_DEBRID_API_KEY=
+
+      # Content Services (configure as needed)
+      - RIVEN_CONTENT_OVERSEERR_ENABLED=false
+
+      # Scrapers (configure as needed)
+      - RIVEN_SCRAPERS_TORRENTIO_ENABLED=true
+
+    healthcheck:
+      test: curl -s http://localhost:8080 >/dev/null || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 10
+    volumes:
+      - ./riven/data:/riven/data
+      - /path/to/riven/mount:/mount:rshared,z
+    depends_on:
+      riven-db:
+        condition: service_healthy
+    networks:
+      - riven-network
+
+  # Database
+  riven-db:
+    image: postgres:17-alpine
+    container_name: riven-db
+    restart: unless-stopped
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres  # Change in production!
+      - POSTGRES_DB=riven
+    volumes:
+      - ./riven-db:/var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - riven-network
+
+  # Optional: Media Server (Plex example)
+  plex:
+    image: plexinc/pms-docker:latest
+    container_name: plex
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+      - VERSION=docker
+    volumes:
+      - ./plex/config:/config
+      - /path/to/riven/mount:/mount:rslave,z
+    # networks:
+    #   - riven-network  # Can't use with network_mode: host
+
+networks:
+  riven-network:
+    driver: bridge
+```
+
+---
+
+## Environment Variables Reference
+
+### Core Settings
+
+```bash
+# Debug and Logging
+RIVEN_DEBUG=INFO  # DEBUG, INFO, WARNING, ERROR
+RIVEN_TRACEMALLOC=false
+
+# Database
+RIVEN_FORCE_ENV=true
+RIVEN_DATABASE_HOST=postgresql+psycopg2://user:password@host/database
+```
+
+---
+
+### Filesystem (VFS) Settings
+
+```bash
+# Mount Configuration
+RIVEN_FILESYSTEM_MOUNT_PATH=/mount
+RIVEN_FILESYSTEM_SEPARATE_ANIME_DIRS=false
+
+# Cache Configuration
+RIVEN_FILESYSTEM_CACHE_DIR=/dev/shm/riven-cache
+RIVEN_FILESYSTEM_CACHE_MAX_SIZE_MB=10240
+RIVEN_FILESYSTEM_CACHE_TTL_SECONDS=7200
+RIVEN_FILESYSTEM_CACHE_EVICTION=LRU  # or TTL
+RIVEN_FILESYSTEM_CACHE_METRICS=true
+
+# Streaming Configuration
+RIVEN_FILESYSTEM_CHUNK_SIZE_MB=8
+RIVEN_FILESYSTEM_FETCH_AHEAD_CHUNKS=4
+```
+
+See [Filesystem (VFS)](/docs/services/filesystem) for detailed explanations.
+
+---
+
+### Updater Settings
+
+```bash
+# General
+RIVEN_UPDATER_INTERVAL=120
+RIVEN_LIBRARY_PATH=/mount
+
+# Plex
+RIVEN_PLEX_ENABLED=true
+RIVEN_PLEX_TOKEN=your_plex_token
+RIVEN_PLEX_URL=http://plex:32400
+
+# Jellyfin
+RIVEN_JELLYFIN_ENABLED=false
+RIVEN_JELLYFIN_API_KEY=
+RIVEN_JELLYFIN_URL=http://jellyfin:8096
+
+# Emby
+RIVEN_EMBY_ENABLED=false
+RIVEN_EMBY_API_KEY=
+RIVEN_EMBY_URL=http://emby:8096
+```
+
+---
+
+### Downloader Settings
+
+```bash
+# Video Extensions
+RIVEN_DOWNLOADERS_VIDEO_EXTENSIONS=["mp4","mkv","avi"]
+
+# Proxy (optional)
+RIVEN_DOWNLOADERS_PROXY_URL=
+
+# Real-Debrid
+RIVEN_DOWNLOADERS_REAL_DEBRID_ENABLED=true
+RIVEN_DOWNLOADERS_REAL_DEBRID_API_KEY=your_api_key
+
+# AllDebrid
+RIVEN_DOWNLOADERS_ALL_DEBRID_ENABLED=false
+RIVEN_DOWNLOADERS_ALL_DEBRID_API_KEY=
+
+# TorBox
+RIVEN_DOWNLOADERS_TORBOX_ENABLED=false
+RIVEN_DOWNLOADERS_TORBOX_API_KEY=
+```
+
+---
+
+### Content Service Settings
+
+```bash
+# Overseerr
+RIVEN_CONTENT_OVERSEERR_ENABLED=true
+RIVEN_CONTENT_OVERSEERR_API_KEY=your_api_key
+RIVEN_CONTENT_OVERSEERR_URL=http://overseerr:5055
+RIVEN_CONTENT_OVERSEERR_USE_WEBHOOK=false
+RIVEN_CONTENT_OVERSEERR_UPDATE_INTERVAL=60
+
+# Plex Watchlist
+RIVEN_CONTENT_PLEX_WATCHLIST_ENABLED=false
+RIVEN_CONTENT_PLEX_WATCHLIST_RSS=["https://rss.plex.tv/..."]
+RIVEN_CONTENT_PLEX_WATCHLIST_UPDATE_INTERVAL=60
+
+# Mdblist
+RIVEN_CONTENT_MDBLIST_ENABLED=false
+RIVEN_CONTENT_MDBLIST_API_KEY=
+RIVEN_CONTENT_MDBLIST_LISTS=[]
+RIVEN_CONTENT_MDBLIST_UPDATE_INTERVAL=300
+
+# Trakt
+RIVEN_CONTENT_TRAKT_ENABLED=false
+RIVEN_CONTENT_TRAKT_API_KEY=
+RIVEN_CONTENT_TRAKT_UPDATE_INTERVAL=300
+```
+
+---
+
+### Scraper Settings
+
+```bash
+# Torrentio
+RIVEN_SCRAPERS_TORRENTIO_ENABLED=true
+RIVEN_SCRAPERS_TORRENTIO_URL=http://torrentio.strem.fun
+RIVEN_SCRAPERS_TORRENTIO_FILTER=sort=qualitysize%7Cqualityfilter=480p,scr,cam
+RIVEN_SCRAPERS_TORRENTIO_TIMEOUT=30
+RIVEN_SCRAPERS_TORRENTIO_RATELIMIT=true
+
+# Add similar patterns for:
+# - Jackett
+# - Prowlarr
+# - Zilean
+# - Comet
+# - Mediafusion
+```
+
+---
+
+## Host Mount Setup
+
+Before starting Docker containers, set up the host mount point:
+
+```bash
+# Create mount directory
+sudo mkdir -p /path/to/riven/mount
+
+# Make it a shared bind mount
+sudo mount --bind /path/to/riven/mount /path/to/riven/mount
+sudo mount --make-rshared /path/to/riven/mount
+
+# Verify
+findmnt -T /path/to/riven/mount -o TARGET,PROPAGATION
+# Should output: shared or rshared
+```
+
+### Make Persistent (systemd)
+
+Create `/etc/systemd/system/riven-mount.service`:
+
+```ini
+[Unit]
+Description=Riven VFS Mount Preparation
+After=local-fs.target
+Before=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/mount --bind /path/to/riven/mount /path/to/riven/mount
+ExecStart=/usr/bin/mount --make-rshared /path/to/riven/mount
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Enable it:
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now riven-mount.service
+```
+
+---
+
+## Reverse Proxy Configuration
+
+### Nginx
+
+```nginx
+server {
+    listen 80;
+    server_name riven.example.com;
+
+    # Redirect to HTTPS
+    return 301 https://$server_name$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name riven.example.com;
+
+    ssl_certificate /path/to/fullchain.pem;
+    ssl_certificate_key /path/to/privkey.pem;
+
+    # Frontend
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Backend API
+    location /api/ {
+        proxy_pass http://localhost:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+**Important**: Remove `ORIGIN` environment variable from frontend when using reverse proxy!
+
+---
+
+### Caddy
+
+```
+riven.example.com {
+    # Frontend
+    reverse_proxy /* localhost:3000
+
+    # Backend API
+    reverse_proxy /api/* localhost:8080
+}
+```
+
+Caddy handles SSL automatically with Let's Encrypt!
+
+---
+
+### Traefik
+
+```yaml
+# docker-compose.yml additions
+services:
+  riven-frontend:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.riven-frontend.rule=Host(`riven.example.com`)"
+      - "traefik.http.routers.riven-frontend.entrypoints=websecure"
+      - "traefik.http.routers.riven-frontend.tls.certresolver=letsencrypt"
+      - "traefik.http.services.riven-frontend.loadbalancer.server.port=3000"
+    # Remove ORIGIN env variable
+
+  riven:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.riven-api.rule=Host(`riven.example.com`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.riven-api.entrypoints=websecure"
+      - "traefik.http.routers.riven-api.tls.certresolver=letsencrypt"
+      - "traefik.http.services.riven-api.loadbalancer.server.port=8080"
+```
+
+---
+
+## Security Hardening
+
+### Change Default Passwords
+
+```yaml
+# In docker-compose.yml
+riven-db:
+  environment:
+    - POSTGRES_PASSWORD=your_secure_password_here
+
+riven:
+  environment:
+    - RIVEN_DATABASE_HOST=postgresql+psycopg2://postgres:your_secure_password_here@riven-db/riven
+```
+
+### Set Custom API Key
+
+```bash
+# Generate a secure 32-character key
+openssl rand -hex 16
+
+# Add to docker-compose.yml
+riven:
+  environment:
+    - API_KEY=your_generated_api_key_here
+```
+
+### Firewall Rules
+
+```bash
+# Only allow necessary ports
+sudo ufw allow 22/tcp    # SSH
+sudo ufw allow 80/tcp    # HTTP (redirect)
+sudo ufw allow 443/tcp   # HTTPS
+sudo ufw enable
+
+# Docker containers should NOT expose ports directly
+# Use reverse proxy as shown above
+```
+
+---
+
+## Backup & Recovery
+
+### Backup Script
+
+```bash
+#!/bin/bash
+# backup-riven.sh
+
+BACKUP_DIR="/path/to/backups"
+DATE=$(date +%Y%m%d-%H%M%S)
+
+# Stop containers (optional, for consistency)
+docker-compose stop riven riven-db
+
+# Backup database
+docker exec riven-db pg_dump -U postgres riven | gzip > "$BACKUP_DIR/riven-db-$DATE.sql.gz"
+
+# Backup Riven data
+tar czf "$BACKUP_DIR/riven-data-$DATE.tar.gz" ./riven/data
+
+# Start containers
+docker-compose start riven riven-db
+
+# Clean old backups (keep 7 days)
+find "$BACKUP_DIR" -name "riven-*" -mtime +7 -delete
+```
+
+### Restore from Backup
+
+```bash
+# Stop containers
+docker-compose stop riven riven-db
+
+# Restore database
+gunzip < riven-db-backup.sql.gz | docker exec -i riven-db psql -U postgres riven
+
+# Restore data
+tar xzf riven-data-backup.tar.gz
+
+# Start containers
+docker-compose up -d
+```
+
+---
+
+## Monitoring
+
+### Health Checks
+
+Riven includes built-in health checks:
+
+```bash
+# Check backend health
+curl http://localhost:8080/health
+
+# Check database
+docker exec riven-db pg_isready -U postgres
+```
+
+### Docker Logs
+
+```bash
+# Follow all logs
+docker-compose logs -f
+
+# Specific service
+docker logs -f riven
+
+# Last 100 lines
+docker logs --tail 100 riven
+```
+
+### Resource Usage
+
+```bash
+# Monitor container resources
+docker stats riven riven-db riven-frontend
+```
+
+---
+
+## Scaling & High Availability
+
+### Single Instance (Most Users)
+
+The standard docker-compose.yml is sufficient for most users.
+
+### Load Balancing (Advanced)
+
+For high-traffic deployments:
+
+1. **Multiple Riven instances**: Run multiple backend containers
+2. **Shared database**: All instances connect to same PostgreSQL
+3. **Load balancer**: Use Nginx/Traefik to distribute traffic
+4. **Shared storage**: VFS mount must be shared across instances
+
+<Callout type="warn">
+**Advanced Use Case**
+
+Most users don't need this. Only consider for large multi-user deployments.
+</Callout>
+
+---
+
+## Updating Riven
+
+### Pull Latest Images
+
+```bash
+# Pull new images
+docker-compose pull
+
+# Recreate containers
+docker-compose up -d
+
+# Clean old images
+docker image prune -f
+```
+
+### Check for Updates
+
+```bash
+# See what's changed
+docker-compose pull
+docker-compose up -d --no-deps riven
+```
+
+---
+
+## Troubleshooting Deployment
+
+See the main [Troubleshooting Guide](/docs/troubleshooting) for detailed solutions.
+
+**Common issues**:
+- FUSE not available → Install fuse3, load kernel module
+- Mount propagation → Follow host mount setup above
+- Database connection → Check credentials, network
+- API key errors → Generate proper 32-character key
+
+---
+
+## See Also
+
+- [Filesystem (VFS)](/docs/services/filesystem) - VFS configuration
+- [Troubleshooting](/docs/troubleshooting) - Common issues
+- [Architecture](/docs/architecture) - How it all works
+- [Performance Tuning](/docs/services/filesystem/performance) - Optimize your setup

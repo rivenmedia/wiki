@@ -117,10 +117,11 @@ description: All in one media management solution
 Riven streamlines your media consumption experience by:
 
 1. Automatically discovering new content based on your preferences and watchlists.
-2. Efficiently searching for and downloading high-quality media files.
-3. Organizing your media library using a smart symlink system.
-4. Seamlessly integrating with your chosen media server for immediate streaming access.
-5. Providing a user-friendly web interface for easy management and configuration.
+2. Efficiently searching for and downloading high-quality media files via debrid services.
+3. Organizing your media library using RivenVFS, a high-performance virtual filesystem.
+4. Streaming content on-demand with intelligent caching and prefetching.
+5. Seamlessly integrating with your chosen media server for immediate streaming access.
+6. Providing a user-friendly web interface for easy management and configuration.
 
 Whether you're a casual viewer or a media enthusiast, Riven offers a powerful, automated solution to keep your media library up-to-date and easily accessible.
 
@@ -167,17 +168,17 @@ Grab the `docker-compose.yml` file from the [installation guide](#installation) 
 
 ### Setup Directories
 
-For detailed information on the various services and configurations available in Riven, please refer to the [symlink](services/symlink/index.md) page. This page will help you understand how to configure and manage your media library using symlinks. It will help you understand why we map the Riven volumes to `/mnt` and how you can modify this in the `docker-compose.yml` file for the best outcome.
+For detailed information on the filesystem and VFS configuration, please refer to the [Filesystem (VFS)](services/filesystem/index.md) page. This page will help you understand how to configure and manage your media library using Riven's virtual filesystem. It will help you understand the mount path configuration and how to properly set up volume mounts in the `docker-compose.yml` file.
 
 ---
 
 ## Installation
 
-!!! danger "Setup Rclone & Symlink Paths First! :fire:"
+!!! danger "Setup VFS Mount Path First! :fire:"
 
-    This is incredibly important and must be setup first! When configuring the rclone mount path and library path, you need to make sure that the paths are correct for your system. More information can be found at the [symlink](services/symlink/index.md) page.
+    This is incredibly important and must be setup first! When configuring the mount path and library path, you need to make sure that the mount propagation is set up correctly for your system. More information can be found at the [Filesystem (VFS)](services/filesystem/index.md) page.
 
-    If your debrid files are found in your rclone path, and you can successfully `ls -lh /mnt/zurg` your rclone path, you can skip this step.
+    The VFS mount path should be set to the container path (e.g., `/mount`), and proper mount propagation must be configured on the host.
 
 `docker-compose.yml` file is used to run Riven in a containerized environment. It consists of three services:
 
@@ -215,12 +216,19 @@ services:
         ports:
             - "8080:8080"
         tty: true
+        cap_add:
+            - SYS_ADMIN
+        security_opt:
+            - apparmor:unconfined
+        devices:
+            - /dev/fuse
         environment:
             - PUID=1000
             - PGID=1000
             - TZ=America/New_York
             - RIVEN_FORCE_ENV=true
             - RIVEN_DATABASE_HOST=postgresql+psycopg2://postgres:postgres@riven-db/riven
+            - RIVEN_FILESYSTEM_MOUNT_PATH=/mount
         healthcheck:
             test: curl -s http://localhost:8080 >/dev/null || exit 1
             interval: 30s
@@ -228,7 +236,7 @@ services:
             retries: 10
         volumes:
             - ./data:/riven/data
-            - /mnt:/mnt
+            - /path/to/riven/mount:/mount:rshared,z
         depends_on:
             riven-db:
                 condition: service_healthy
@@ -258,7 +266,8 @@ Now this won't work as is, you need to modify the `docker-compose.yml` file to m
 3. Change `BACKEND_URL` to the URL where the frontend can access the backend. This is not required here as we are running both frontend and backend in the same network (stack).
 4. Change `RIVEN_DATABASE_HOST` to the URL where the backend can access the database. This is not required here as we are running both backend and database in the same network (stack).
 5. Change `DIALECT` and `DATABASE_URL` to use the same database as the backend. This is not required here as we are running both backend and database in the same network (stack).
-6. Change `volumes` to match your setup. Riven requires access to the library folder and rclone mount path.
+6. Change the mount volume path `/path/to/riven/mount` to your actual host path. **Important**: Keep the `:rshared,z` flags for proper mount propagation!
+7. Set up the host mount path with proper propagation as described in the [Filesystem (VFS)](services/filesystem/index.md) documentation.
 
 ---
 

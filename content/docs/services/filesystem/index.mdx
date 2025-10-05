@@ -1,0 +1,390 @@
+---
+title: Filesystem (VFS)
+description: Configure and understand Riven's Virtual File System for seamless media streaming
+---
+
+import { Callout } from "fumadocs-ui/components/callout"
+
+# Filesystem - RivenVFS
+
+Riven uses **RivenVFS** (Riven Virtual File System), a high-performance FUSE-based virtual filesystem designed for streaming media content directly from debrid services like Real-Debrid, AllDebrid, and TorBox.
+
+<Callout type="info">
+**What happened to symlinks?**
+
+RivenVFS replaces the old symlink-based system. Instead of creating symlinks to remote files, Riven now mounts a FUSE filesystem that streams content on-demand with intelligent caching and prefetching.
+</Callout>
+
+---
+
+## How RivenVFS Works
+
+RivenVFS creates a virtual filesystem that appears as regular files and directories to your media server (Plex, Jellyfin, Emby), but actually streams content directly from your debrid service when accessed.
+
+### Key Features
+
+- **HTTP Range Request Support**: Efficient streaming with support for seeking during playback
+- **Intelligent Caching**: On-disk cache with configurable size and eviction policies
+- **Prefetching**: Automatically fetches ahead to ensure smooth playback
+- **Multi-User Fair Scheduling**: Handles multiple concurrent streams efficiently
+- **Automatic URL Management**: Handles URL expiration and refresh from debrid providers
+- **HTTP/2 Support**: Uses HTTP/2 multiplexing for better performance
+
+### How It Works
+
+1. **Mounting**: Riven mounts a FUSE filesystem at your configured `mount_path` (e.g., `/mount`)
+2. **File Registration**: When media is downloaded via your debrid service, RivenVFS registers the file in the virtual filesystem
+3. **Directory Structure**: Files are organized in directories like `/mount/movies/`, `/mount/shows/`
+4. **Streaming**: When your media server accesses a file, RivenVFS:
+   - Checks the cache for requested data
+   - Fetches chunks from the debrid service if not cached
+   - Prefetches ahead for smooth playback
+   - Stores frequently accessed data in cache
+
+---
+
+## Configuration
+
+### Mount Path Settings
+
+<Callout type="warn">
+**Critical: Container vs Host Paths**
+
+The `mount_path` should be set to the **container path** (e.g., `/mount`), not the host path. Both Riven and your media server must use the same container path to access the VFS.
+</Callout>
+
+- **mount_path** (Path): The path where RivenVFS mounts the filesystem inside the container
+    - Example: `/mount`
+    - This is where your media files will appear
+    - Your media server should point to subdirectories like `/mount/movies`, `/mount/shows`
+
+- **separate_anime_dirs** (boolean): Create separate top-level directories for anime content
+    - Example: `false`
+    - When `true`: Creates `/mount/anime_movies` and `/mount/anime_shows`
+    - When `false`: Anime is mixed with regular content in `/mount/movies` and `/mount/shows`
+
+<Callout type="warn">
+**Set this during initial setup!**
+
+Changing `separate_anime_dirs` after you've already added content may require re-scanning your media libraries.
+</Callout>
+
+---
+
+## Cache Configuration
+
+RivenVFS uses an on-disk cache to improve performance and reduce bandwidth usage. The cache stores frequently accessed chunks of media files.
+
+### Cache Settings
+
+- **cache_dir** (Path): Directory to store cache files
+    - Example: `/dev/shm/riven-cache` (RAM-based tmpfs for best performance)
+    - Alternative: `/path/to/disk/cache` (persistent storage)
+    - Must be writable by the user running Riven
+
+- **cache_max_size_mb** (integer): Maximum cache size in megabytes
+    - Example: `10240` (10 GiB)
+    - Default: `10240` MB (10 GiB)
+    - Adjust based on available RAM/disk space
+
+- **cache_eviction** (string): Cache eviction policy
+    - Options: `"LRU"` or `"TTL"`
+    - Default: `"LRU"`
+    - **LRU** (Least Recently Used): Removes least recently accessed data when cache is full
+    - **TTL** (Time To Live): Removes data older than `cache_ttl_seconds`, then falls back to LRU if needed
+
+- **cache_ttl_seconds** (integer): Time-to-live for cached data when using TTL eviction
+    - Example: `7200` (2 hours)
+    - Default: `7200` seconds
+    - Only used when `cache_eviction = "TTL"`
+
+- **cache_metrics** (boolean): Enable cache performance metrics logging
+    - Example: `true`
+    - Default: `true`
+    - Useful for monitoring cache hit rates and performance
+
+---
+
+## Streaming & Prefetching Settings
+
+These settings control how RivenVFS fetches data from your debrid service.
+
+- **chunk_size_mb** (integer): Size of individual CDN requests in megabytes
+    - Example: `8`
+    - Default: `8` MB
+    - Smaller chunks: More frequent requests, better for seeking
+    - Larger chunks: Fewer requests, better for sequential playback
+    - Recommended range: 4-32 MB
+
+- **fetch_ahead_chunks** (integer): Number of chunks to prefetch ahead
+    - Example: `4`
+    - Default: `4` chunks
+    - Total prefetch = `chunk_size_mb` × `fetch_ahead_chunks`
+    - Example: 8 MB × 4 = 32 MB prefetched
+    - Higher values: Smoother playback, more bandwidth usage
+    - Lower values: Less bandwidth, possible buffering
+
+<Callout type="info">
+**Performance Tuning**
+
+For most users, the defaults work well. Adjust these if you experience:
+- **Buffering**: Increase `fetch_ahead_chunks` to 6-8
+- **High bandwidth usage**: Decrease `fetch_ahead_chunks` to 2-3
+- **Slow seeking**: Decrease `chunk_size_mb` to 4-8 MB
+</Callout>
+
+---
+
+## Mount Setup & Propagation
+
+For VFS to work correctly with Docker, you need to configure mount propagation properly.
+
+### Host Setup (One-time per boot)
+
+```bash
+# Create the mount directory
+sudo mkdir -p /path/to/riven/mount
+
+# Make it a bind mount
+sudo mount --bind /path/to/riven/mount /path/to/riven/mount
+
+# Make it shared (required for propagation to containers)
+sudo mount --make-rshared /path/to/riven/mount
+
+# Verify propagation
+findmnt -T /path/to/riven/mount -o TARGET,PROPAGATION
+# Should show: shared or rshared
+```
+
+### Automatic Mount on Boot
+
+**Option A - systemd unit:**
+
+Create `/etc/systemd/system/riven-bind-shared.service`:
+
+```ini
+[Unit]
+Description=Make Riven mount bind shared
+After=local-fs.target
+Before=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/mount --bind /path/to/riven/mount /path/to/riven/mount
+ExecStart=/usr/bin/mount --make-rshared /path/to/riven/mount
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Enable it:
+```bash
+sudo systemctl enable --now riven-bind-shared.service
+```
+
+**Option B - fstab entry:**
+
+Add to `/etc/fstab`:
+```
+/path/to/riven/mount  /path/to/riven/mount  none  bind,rshared  0  0
+```
+
+---
+
+## Docker Configuration
+
+### docker-compose.yml
+
+```yaml
+services:
+  riven:
+    image: spoked/riven:latest
+    container_name: riven
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    devices:
+      - /dev/fuse
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - RIVEN_FILESYSTEM_MOUNT_PATH=/mount
+      - RIVEN_FILESYSTEM_CACHE_DIR=/dev/shm/riven-cache
+      - RIVEN_FILESYSTEM_CACHE_MAX_SIZE_MB=10240
+    volumes:
+      - /path/to/riven/data:/riven/data
+      - /path/to/riven/mount:/mount:rshared,z
+    depends_on:
+      - riven_postgres
+
+  # Your media server (Plex/Jellyfin/Emby)
+  plex:
+    image: plexinc/pms-docker
+    container_name: plex
+    volumes:
+      - /path/to/riven/mount:/mount:rslave,z
+    # ... other config
+```
+
+<Callout type="warn">
+**Important Volume Flags**
+
+- **Riven container**: Use `:rshared,z` - Allows Riven to create mounts that propagate to other containers
+- **Media server container**: Use `:rslave,z` - Receives mount events from Riven
+- **`:z` flag**: Required on SELinux systems (like Fedora, RHEL, CentOS)
+</Callout>
+
+---
+
+## Troubleshooting
+
+### Plex/Jellyfin shows empty /mount after Riven restart
+
+This is usually a mount propagation issue.
+
+**1. Verify host path is shared:**
+```bash
+findmnt -T /path/to/riven/mount -o TARGET,PROPAGATION
+# Should show: shared or rshared
+```
+
+**2. Verify propagation inside media server container:**
+```bash
+docker exec -it plex sh -c 'findmnt -T /mount -o TARGET,PROPAGATION,FSTYPE'
+# PROPAGATION should be: rslave or rshared
+# FSTYPE should show: fuse when VFS is mounted
+```
+
+**3. Check Riven logs:**
+```bash
+docker logs riven | grep -i "vfs\|mount\|fuse"
+```
+
+**4. Clear stale FUSE mount (if Riven crashed):**
+```bash
+sudo fusermount -uz /path/to/riven/mount
+# or
+sudo umount -l /path/to/riven/mount
+# Then restart Riven
+```
+
+### Files not appearing in VFS
+
+- Check that items are in "Completed" state in Riven
+- Verify the filesystem entry exists in the database
+- Check Riven logs for VFS registration errors
+- Ensure the debrid service hasn't deleted the files
+
+### Poor streaming performance
+
+- Increase `fetch_ahead_chunks` to 6-8
+- Increase `cache_max_size_mb` if you have available RAM/disk
+- Use `/dev/shm` for cache (RAM-based) instead of disk
+- Check your debrid service's CDN speed
+- Verify no bandwidth limits on your network
+
+### Cache filling up too quickly
+
+- Decrease `cache_max_size_mb`
+- Switch to `cache_eviction = "TTL"` with shorter `cache_ttl_seconds`
+- The cache is meant to fill up - eviction policies handle this automatically
+
+---
+
+## Environment Variables
+
+You can configure VFS settings via environment variables in your docker-compose.yml:
+
+```bash
+# Mount configuration
+RIVEN_FILESYSTEM_MOUNT_PATH=/mount
+RIVEN_FILESYSTEM_SEPARATE_ANIME_DIRS=false
+
+# Cache configuration
+RIVEN_FILESYSTEM_CACHE_DIR=/dev/shm/riven-cache
+RIVEN_FILESYSTEM_CACHE_MAX_SIZE_MB=10240
+RIVEN_FILESYSTEM_CACHE_TTL_SECONDS=7200
+RIVEN_FILESYSTEM_CACHE_EVICTION=LRU
+RIVEN_FILESYSTEM_CACHE_METRICS=true
+
+# Streaming configuration
+RIVEN_FILESYSTEM_CHUNK_SIZE_MB=8
+RIVEN_FILESYSTEM_FETCH_AHEAD_CHUNKS=4
+```
+
+---
+
+## Media Server Configuration
+
+### Plex
+
+Your Plex libraries should point to the VFS mount:
+
+- **Movies Library**: `/mount/movies`
+- **Anime Movies Library**: `/mount/anime_movies` (if `separate_anime_dirs = true`)
+- **TV Shows Library**: `/mount/shows`
+- **Anime Shows Library**: `/mount/anime_shows` (if `separate_anime_dirs = true`)
+
+<Callout type="info">
+Enable "Scan my library automatically" in Plex settings to pick up new content as it's added to the VFS.
+</Callout>
+
+### Jellyfin / Emby
+
+Same paths as Plex:
+- Movies: `/mount/movies`
+- Shows: `/mount/shows`
+- Anime Movies: `/mount/anime_movies` (if enabled)
+- Anime Shows: `/mount/anime_shows` (if enabled)
+
+---
+
+## Performance Tips
+
+1. **Use tmpfs for cache**: Mount `/dev/shm/riven-cache` instead of disk-based cache
+2. **Increase cache size**: If you have RAM to spare, increase `cache_max_size_mb`
+3. **Prefetch aggressively**: Set `fetch_ahead_chunks` to 6-8 for smoother playback
+4. **Monitor metrics**: Enable `cache_metrics = true` to see cache performance in logs
+5. **Dedicated network**: If possible, use a fast, dedicated network connection for Riven
+6. **HTTP/2 support**: Ensure your debrid service supports HTTP/2 for better multiplexing
+
+---
+
+## Advanced: Multi-User Scenarios
+
+RivenVFS includes fair scheduling for concurrent streams:
+
+- Each file access gets a unique session ID
+- Chunks are scheduled with priority (first chunk = highest priority)
+- Multiple users share bandwidth fairly using round-robin scheduling
+- No single stream can monopolize the prefetch queue
+
+This means multiple users can stream different content simultaneously without one user causing buffering for others.
+
+---
+
+## Comparison: VFS vs Old Symlink System
+
+| Feature | Old Symlink System | RivenVFS |
+|---------|-------------------|----------|
+| **Technology** | Symlinks to rclone mount | FUSE virtual filesystem |
+| **Dependencies** | Rclone, Zurg (for RD) | None (built-in) |
+| **Caching** | Rclone vfs-cache | Native cache with LRU/TTL |
+| **Performance** | Good | Excellent |
+| **Setup Complexity** | High (systemd, rclone config) | Low (built-in) |
+| **Prefetching** | Basic | Advanced with fair scheduling |
+| **Repair Needed** | Yes (broken symlinks) | No |
+| **HTTP/2 Support** | Depends on rclone version | Native support |
+
+---
+
+## See Also
+
+- [Troubleshooting Guide](/docs/troubleshooting) - Common issues and solutions
+- [Performance Tuning](/docs/services/filesystem/performance) - Optimize VFS for your setup
+- [Updaters](/docs/services/updaters) - Configure media server integrations
