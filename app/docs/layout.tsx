@@ -6,8 +6,10 @@ import { source } from '@/lib/source';
 const tree: PageTree.Root = {
   name: 'docs',
   children: [
+    { name: 'Contribute to Wiki', url: '/docs/contribute', type: 'page' },
     { name: 'Services', type: 'separator' },
     { name: 'Content', url: '/docs/services/content', type: 'page' },
+    { name: 'Downloaders', url: '/docs/services/downloaders', type: 'page' },
   ]
 }
 
