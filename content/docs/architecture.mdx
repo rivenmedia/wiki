@@ -276,88 +276,17 @@ Riven supports multiple configuration methods:
 1. **Web Interface** (primary)
    - User-friendly settings UI
    - Real-time validation
-   - Stored in PostgreSQL
+   - Stored in settings file
 
 2. **Environment Variables**
    - Prefix: `RIVEN_`
    - Format: `RIVEN_CATEGORY_SUBCATEGORY_SETTING`
    - Example: `RIVEN_FILESYSTEM_MOUNT_PATH=/mount`
 
-3. **Settings File** (legacy)
+3. **Settings File**
    - JSON-based configuration
-   - Used as fallback
 
-Priority: Environment Variables > Database Settings > Defaults
-
----
-
-## Scaling & Performance
-
-### Multi-User Support
-- RivenVFS includes fair scheduling for concurrent streams
-- Each user gets proportional bandwidth allocation
-- No single stream monopolizes resources
-
-### Caching Strategy
-- **Hot Cache**: Frequently accessed chunks stay in cache (LRU)
-- **Prefetch**: Read-ahead prevents buffering
-- **Eviction**: Automatic cleanup when cache fills
-
-### Database Optimization
-- Indexed queries for fast lookups
-- Lazy loading of relationships
-- Periodic cleanup of old data
-
-### Resource Usage
-- **CPU**: Low (except during scraping)
-- **Memory**: Moderate (depends on cache size)
-- **Disk I/O**: Low (VFS streams, minimal writes)
-- **Network**: Variable (depends on streaming activity)
-
----
-
-## Security Considerations
-
-1. **API Authentication**
-   - API key required for all requests
-   - 32-character secure keys
-
-2. **Container Isolation**
-   - FUSE runs in container with limited permissions
-   - No host filesystem access except mount point
-
-3. **Debrid Service Keys**
-   - Stored encrypted in database
-   - Never exposed in logs or API responses
-
-4. **Network Security**
-   - HTTPS recommended for reverse proxy
-   - CORS protection enabled
-
----
-
-## Deployment Patterns
-
-### Single-User Home Setup
-```
-[User] → [Reverse Proxy] → [Riven Frontend] → [Riven Backend + VFS]
-                                                      ↓
-                                              [Media Server]
-```
-
-### Multi-User Shared Setup
-```
-[User 1] ┐
-[User 2] ├→ [Reverse Proxy] → [Riven] → [Shared Media Server]
-[User 3] ┘
-```
-
-### ElfHosted (Cloud)
-```
-[User] → [ElfHosted Infrastructure] → [Riven + Media Server]
-                                            ↓
-                                    [Shared Debrid Pool]
-```
+Priority: Environment Variables > Settings File > Defaults
 
 ---
 
@@ -372,10 +301,10 @@ Priority: Environment Variables > Database Settings > Defaults
 - **Async**: asyncio, trio (for FUSE)
 
 ### Frontend
-- **Framework**: Next.js 15
+- **Framework**: Svelte 5
 - **Language**: TypeScript
-- **UI Library**: Fumadocs UI
-- **State Management**: React hooks
+- **UI Library**: Shadcn/UI
+- **State Management**: Svelte stores
 
 ### Build & Deploy
 - **Backend**: Docker multi-stage builds
@@ -403,11 +332,3 @@ Priority: Environment Variables > Database Settings > Defaults
 - VFS mount status
 - Debrid service availability
 - Media server connectivity
-
----
-
-## See Also
-
-- [Filesystem (VFS)](/docs/services/filesystem) - Detailed VFS documentation
-- [Services](/docs/services) - Service configuration guides
-- [Troubleshooting](/docs/troubleshooting) - Common issues and solutions
