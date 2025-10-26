@@ -16,7 +16,7 @@ To reset the Postgres database by dropping and recreating the `riven` table, you
 This will cause **all of the data** in your database to be lost. To include metadata, scraped times, and other data that's needed to run Riven.
 </Callout>
 
-<Tabs items={['Docker', 'Env Variable', 'Local', 'ElfHosted']}>
+<Tabs items={['Docker', 'Env Variable', 'Local']}>
 <Tab value="Docker">
 Make sure you have the postgres container running, and you should `docker stop riven` before running the following commands.
 
@@ -44,14 +44,6 @@ rm -rf data/alembic/
 poetry run python src/main.py --hard_reset_db
 ```
 </Tab>
-
-<Tab value="ElfHosted">
-From the Riven backend (via the button on your Dashboard), press <kbd>Ctrl</kbd>+<kbd>C</kbd> **twice** to restart Riven. Once it does, you will see the following instructions:
-
-```
-💥 For the option to reset your database, press the X key within 10 seconds...
-```
-</Tab>
 </Tabs>
 
 After the database is reset, upon restarting Riven, we will load back in the symlinks and re-index your library.
@@ -62,19 +54,11 @@ After the database is reset, upon restarting Riven, we will load back in the sym
 
 To reset the Subtitles database by deleting the `subliminal.dbm*` files, you can use the following command:
 
-<Tabs items={['Self-Hosted', 'ElfHosted']}>
-<Tab value="Self-Hosted">
 ```bash
 rm -r data/subliminal.dbm*
 ```
 
 This needs to point to the `data` directory that the `settings.json` file is located in.
-</Tab>
-
-<Tab value="ElfHosted">
-Navigate to `config/riven` in FileBrowser, and delete all the `subliminal.dbm` files 👍
-</Tab>
-</Tabs>
 
 <Callout type="warn">
 This will delete all of your Subtitles database files, and you will lose all your Subtitles.

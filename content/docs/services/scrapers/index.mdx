@@ -10,7 +10,6 @@ Riven supports various scrapers to help you gather metadata and other informatio
 ### Available Scrapers
 
 - [Torrentio](#torrentio)
-- [Knightcrawler](#knightcrawler)
 - [Jackett](#jackett)
 - [Prowlarr](#prowlarr)
 - [Orionoid](#orionoid)
@@ -38,23 +37,6 @@ Torrentio is a scraper that provides high-quality torrent links.
     - Example: `"qualityfilter=other,scr,cam"`
 - **url** (string): The URL of the Torrentio instance. Default is "http://torrentio.strem.fun".
     - Example: `"http://torrentio.strem.fun"`
-- **timeout** (integer): The timeout in seconds for the scraper. Default is 30 seconds.
-    - Example: `30`
-- **ratelimit** (boolean): Boolean value to enable or disable rate limiting. Default is false.
-    - Example: `false`
-
----
-
-## Knightcrawler
-
-Knightcrawler is a scraper that provides high-quality torrent links.
-
-- **enabled** (boolean): Boolean value to enable or disable the service. Default is false.
-    - Example: `false`
-- **filter** (string): Filter to apply to the results. Default is "sort=qualitysize%7Cqualityfilter=480p,scr,cam,unknown".
-    - Example: `"sort=qualitysize%7Cqualityfilter=480p,scr,cam,unknown"`
-- **url** (string): The URL of the Knightcrawler instance. Default is "https://knightcrawler.elfhosted.com/".
-    - Example: `"https://knightcrawler.elfhosted.com/"`
 - **timeout** (integer): The timeout in seconds for the scraper. Default is 30 seconds.
     - Example: `30`
 - **ratelimit** (boolean): Boolean value to enable or disable rate limiting. Default is false.
@@ -119,23 +101,6 @@ Orionoid is a scraper that provides high-quality torrent links.
     - Example: `30`
 - **ratelimit** (boolean): Boolean value to enable or disable rate limiting. Default is true.
     - Example: `true`
-
----
-
-## Annatar
-
-Annatar is a scraper that provides high-quality torrent links.
-
-- **enabled** (boolean): Boolean value to enable or disable the service. Default is false.
-    - Example: `false`
-- **url** (string): The URL of the Annatar instance. Default is "https://annatar.elfhosted.com".
-    - Example: `"https://annatar.elfhosted.com"`
-- **limit** (integer): The maximum number of results to return. Default is 2000.
-    - Example: `2000`
-- **timeout** (integer): The timeout in seconds for the scraper. Default is 10 seconds.
-    - Example: `10`
-- **ratelimit** (boolean): Boolean value to enable or disable rate limiting. Default is false.
-    - Example: `false`
 
 ---
 
