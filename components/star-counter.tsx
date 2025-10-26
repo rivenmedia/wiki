@@ -25,7 +25,7 @@ export function StarCounter({ targetCount }: { targetCount: number }) {
   }, [targetCount]);
 
   return (
-    <div className="inline-flex items-center gap-2 rounded-lg border border-fd-border bg-fd-card px-4 py-3 text-sm">
+    <div className="inline-flex items-center justify-center gap-2 rounded-lg border border-fd-border bg-fd-card px-4 py-3 text-sm">
       <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" />
       <span className="font-semibold tabular-nums">{count.toLocaleString()}</span>
       <span className="text-fd-muted-foreground">stars</span>

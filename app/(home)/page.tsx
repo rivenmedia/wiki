@@ -48,14 +48,14 @@ export default async function HomePage() {
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <Link
                 href="/docs"
-                className="inline-flex items-center gap-2 rounded-lg bg-fd-primary px-6 py-3 font-semibold text-fd-primary-foreground transition-colors hover:bg-fd-primary/90"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-fd-primary px-6 py-3 font-semibold text-fd-primary-foreground transition-colors hover:bg-fd-primary/90"
               >
                 Get Started
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="https://github.com/rivenmedia/riven"
-                className="inline-flex items-center gap-2 rounded-lg border border-fd-border bg-fd-background px-6 py-3 font-semibold transition-colors hover:bg-fd-muted/50"
+                className="inline-flex items-center justify-center gap-2 rounded-lg border border-fd-border bg-fd-background px-6 py-3 font-semibold transition-colors hover:bg-fd-muted/50"
               >
                 <Download className="h-4 w-4" />
                 View on GitHub
@@ -158,9 +158,9 @@ export default async function HomePage() {
       {/* Quick Start Section */}
       <section className="px-4 py-20">
         <div className="mx-auto max-w-6xl">
-          <div className="rounded-2xl border border-fd-border bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 p-8 md:p-12">
+          <div className="rounded-2xl border border-fd-border bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 p-6 md:p-12">
             <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
-              <div>
+              <div className="min-w-0">
                 <h2 className="mb-4 text-3xl font-bold md:text-4xl">
                   Ready to get started?
                 </h2>
@@ -170,29 +170,29 @@ export default async function HomePage() {
                 <div className="flex flex-col gap-4 sm:flex-row">
                   <Link
                     href="/docs"
-                    className="inline-flex items-center gap-2 rounded-lg bg-fd-primary px-6 py-3 font-semibold text-fd-primary-foreground transition-colors hover:bg-fd-primary/90"
+                    className="inline-flex w-full items-center gap-2 rounded-lg bg-fd-primary px-6 py-3 font-semibold text-fd-primary-foreground transition-colors hover:bg-fd-primary/90 sm:w-auto"
                   >
                     Read Documentation
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                   <Link
                     href="https://github.com/rivenmedia/riven"
-                    className="inline-flex items-center gap-2 rounded-lg border border-fd-border bg-fd-background px-6 py-3 font-semibold transition-colors hover:bg-fd-muted/50"
+                    className="inline-flex w-full items-center gap-2 rounded-lg border border-fd-border bg-fd-background px-6 py-3 font-semibold transition-colors hover:bg-fd-muted/50 sm:w-auto"
                   >
                     View Source
                   </Link>
                 </div>
               </div>
 
-              <div className="rounded-lg border border-fd-border bg-fd-background/50 p-6">
+              <div className="min-w-0 rounded-lg border border-fd-border bg-fd-background/50 p-6">
                 <h3 className="mb-4 font-semibold">Quick Install</h3>
-                <pre className="overflow-x-auto rounded-lg bg-fd-muted/50 p-4 text-sm">
+                <pre className="max-w-full overflow-x-auto rounded-lg bg-fd-muted/50 p-4 text-sm">
                   <code className="text-fd-muted-foreground">
 {`docker run -d \\
   --name riven \\
   -p 8080:8080 \\
   -v ./data:/riven/data \\
-  ghcr.io/rivenmedia/riven:latest`}
+  spoked/riven:latest`}
                   </code>
                 </pre>
               </div>
