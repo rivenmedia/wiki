@@ -2,7 +2,7 @@ import '@/app/global.css';
 import { RootProvider } from 'fumadocs-ui/provider/next';
 import { Inter } from 'next/font/google';
 import SearchDialog from '@/components/search';
-import { FAQPage, WithContext } from 'schema-dts';
+import { FAQPage, Project, WithContext } from 'schema-dts';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -39,6 +39,35 @@ const jsonLd: WithContext<FAQPage> = {
   ]
 };
 
+const jsonLdProject: WithContext<Project> = {
+  "@context": "https://schema.org",
+  "@type": "Project",
+  "name": "Riven",
+  "brand": "Riven Media",
+  "url": "https://riven.tv",
+  "description": "Riven is the ultimate media management solution that helps you find, organize, stream, and enjoy your media effortlessly with debrid services.",
+  "sameAs": [
+    "https://github.com/rivenmedia",
+    "https://discord.riven.tv"
+  ],
+  "foundingDate": "2023-12-03",
+  "contactPoint": [
+    {
+      "@type": "ContactPoint",
+      "email": "contact@riven.tv",
+      "contactType": "customer support",
+      "url": "mailto:contact@riven.tv",
+      "name": "Email Support"
+    },
+    {
+      "@type": "ContactPoint",
+      "contactType": "customer support",
+      "url": "https://discord.riven.tv",
+      "name": "Discord Server"
+    }
+  ]
+};
+
 export default function Layout({ children }: LayoutProps<'/'>) {
   return (
     <html lang="en" className={inter.className} suppressHydrationWarning>
@@ -47,6 +76,12 @@ export default function Layout({ children }: LayoutProps<'/'>) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c'),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLdProject).replace(/</g, '\\u003c'),
         }}
       />
       </head>
