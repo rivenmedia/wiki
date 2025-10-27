@@ -12,6 +12,7 @@ const getFullUrl = (url: string) => {
   return baseUrl + url;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getAllPagesUrls(tree: any): string[] {
   let urls: string[] = [];
 

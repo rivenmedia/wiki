@@ -1,7 +1,6 @@
 import { DocsLayout } from 'fumadocs-ui/layouts/docs';
 import { baseOptions } from '@/lib/layout.shared';
 import { PageTree } from 'fumadocs-core/server';
-import { source } from '@/lib/source';
 
 const tree: PageTree.Root = {
   name: 'docs',
