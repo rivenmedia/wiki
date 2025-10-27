@@ -3,7 +3,7 @@ import { homeOptions } from '@/lib/layout.shared';
 
 export const metadata = {
   title: 'Riven',
-  description: 'Riven - The Ultimate Media Management Solution',
+  description: 'The Ultimate Media Management Solution. Find, Organize, Stream, and Enjoy Your Media Effortlessly with Riven.',
   manifest: '/manifest.webmanifest',
   keywords: ['Riven', 'Media', 'Debrid', 'Streaming'],
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL ?? "https://riven.tv"),
