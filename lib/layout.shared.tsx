@@ -30,3 +30,20 @@ export function baseOptions(): BaseLayoutProps {
     links: [],
   };
 }
+
+export function homeOptions(): BaseLayoutProps {
+  return {
+    nav: {
+      title: (
+        <>
+          <Image src="/logo.png" alt="Logo" width={24} height={24} />
+          Riven
+        </>
+      ),
+    },
+    // see https://fumadocs.dev/docs/ui/navigation/links
+    links: [
+      { url: '/docs', text: 'Docs', type: 'main' },
+    ],
+  };
+}
