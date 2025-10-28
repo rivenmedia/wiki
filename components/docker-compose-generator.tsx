@@ -274,7 +274,7 @@ export default function DockerComposeGenerator() {
                 className="w-full rounded-lg border border-fd-border bg-fd-background px-4 py-2 focus:outline-none focus:ring-2 focus:ring-fd-primary"
               />
               <p className="mt-1 text-xs text-fd-muted-foreground">
-                The URL where you'll access the frontend (remove if using reverse proxy)
+                The URL where you&apos;ll access the frontend (remove if using reverse proxy)
               </p>
             </div>
 
