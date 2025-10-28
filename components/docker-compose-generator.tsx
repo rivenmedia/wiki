@@ -195,7 +195,7 @@ export default function DockerComposeGenerator() {
   };
 
   return (
-    <div className="grid gap-8 lg:grid-cols-2">
+    <div className="grid gap-8 grid-cols-1 lg:grid-cols-2">
       {/* Configuration Form */}
       <div className="space-y-6">
         <div>
@@ -212,7 +212,7 @@ export default function DockerComposeGenerator() {
                 className="w-full rounded-lg border border-fd-border bg-fd-background px-4 py-2 focus:outline-none focus:ring-2 focus:ring-fd-primary"
               />
               <p className="mt-1 text-xs text-fd-muted-foreground">
-                e.g., America/New_York, Europe/London, Asia/Tokyo
+                e.g., America/New_York, Europe/Zurich, Asia/Tokyo
               </p>
             </div>
 
