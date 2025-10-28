@@ -1,10 +1,10 @@
 import { DocsLayout } from 'fumadocs-ui/layouts/docs';
 import { baseOptions } from '@/lib/layout.shared';
-import { PageTree } from 'fumadocs-core/server';
 import { source } from '@/lib/source';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getSubtree(tree: any): any {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const subTree: any = { name: tree.name, children: [] };
 
   if (tree.url) {

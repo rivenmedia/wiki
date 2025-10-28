@@ -62,7 +62,7 @@ export default function DockerComposeGenerator() {
       - PUID=${config.puid}
       - PGID=${config.pgid}
       - TZ=${config.timezone}
-      - ORIGIN=${config.originUrl} # Set to the frontend url. It's the url you will use to access the frontend. This is used by both auth & svelte csrf protection.
+      - ORIGIN=${config.originUrl} # Set to the frontend url. It&apos;s the url you will use to access the frontend. This is used by both auth & svelte csrf protection.
       - BACKEND_URL=http://riven:8080
       - BACKEND_API_KEY=CHANGE_ME_32_CHARACTER_API_KEY # IMPORTANT: Generate a secure 32-character API key
     depends_on:
