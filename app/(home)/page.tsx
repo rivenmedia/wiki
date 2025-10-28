@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, Zap, Shield, Puzzle, Cog, Bell, BarChart3, GitBranch, Download } from 'lucide-react';
+import { ArrowRight, Zap, Shield, Puzzle, Cog, Bell, BarChart3, GitBranch, Download, Settings } from 'lucide-react';
 import { StarCounter } from '@/components/star-counter';
 
 async function getGitHubStars() {
@@ -184,17 +184,38 @@ export default async function HomePage() {
                 </div>
               </div>
 
-              <div className="min-w-0 rounded-lg border border-fd-border bg-fd-background/50 p-6">
-                <h3 className="mb-4 font-semibold">Quick Install</h3>
-                <pre className="max-w-full overflow-x-auto rounded-lg bg-fd-muted/50 p-4 text-sm">
-                  <code className="text-fd-muted-foreground">
+              <div className="min-w-0 space-y-4">
+                <div className="rounded-lg border border-fd-border bg-fd-background/50 p-6">
+                  <h3 className="mb-4 font-semibold">Quick Install</h3>
+                  <pre className="max-w-full overflow-x-auto rounded-lg bg-fd-muted/50 p-4 text-sm">
+                    <code className="text-fd-muted-foreground">
 {`docker run -d \\
   --name riven \\
   -p 8080:8080 \\
   -v ./data:/riven/data \\
   spoked/riven:latest`}
-                  </code>
-                </pre>
+                    </code>
+                  </pre>
+                </div>
+
+                <div className="rounded-lg border border-purple-500/50 bg-purple-500/10 p-4">
+                  <div className="mb-3 flex items-center gap-2">
+                    <Settings className="h-5 w-5 text-purple-500" />
+                    <h4 className="font-semibold text-purple-600 dark:text-purple-400">
+                      Need a full configuration?
+                    </h4>
+                  </div>
+                  <p className="mb-4 text-sm text-fd-muted-foreground">
+                    Use our interactive generator to create a customized docker-compose.yml with media server integration.
+                  </p>
+                  <Link
+                    href="/generator"
+                    className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+                  >
+                    Generate Configuration
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

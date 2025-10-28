@@ -1,0 +1,435 @@
+---
+title: Getting Started
+description: Quick start guide for deploying and configuring Riven
+---
+
+import { Callout } from "fumadocs-ui/components/callout"
+import { Tabs, Tab } from "fumadocs-ui/components/tabs"
+
+# Getting Started with Riven
+
+Welcome to Riven! This guide will help you get up and running quickly with your all-in-one media management solution.
+
+<Callout type="info">
+**What is Riven?**
+
+Riven is a powerful media management and streaming solution that automates the entire process of discovering, downloading, and organizing media content. It integrates with debrid services and media servers to provide instant streaming access to your media library.
+</Callout>
+
+<Callout type="tip">
+**Quick Configuration**
+
+Want to skip manual editing? Use our [**Docker Compose Generator**](/generator) to create a customized configuration with your preferred media server in seconds!
+</Callout>
+
+---
+
+## What Riven Does
+
+Riven streamlines your media experience by:
+
+1. **Discovering Content** - Automatically finds new content from your watchlists and requests
+2. **Smart Searching** - Searches for high-quality torrents using multiple scrapers
+3. **Debrid Integration** - Downloads media instantly via debrid services (Real-Debrid, TorBox)
+4. **Virtual Filesystem** - Organizes media using RivenVFS for on-demand streaming
+5. **Media Server Integration** - Seamlessly integrates with Plex, Jellyfin, or Emby
+6. **Easy Management** - Provides a beautiful web interface for configuration and monitoring
+
+---
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+### Required Services
+
+- **Debrid Service**: Real-Debrid or TorBox account (required for downloading)
+- **Media Server**: Plex, Jellyfin, or Emby installed and configured
+- **Docker**: Docker and Docker Compose installed on your system
+
+### System Requirements
+
+<Callout type="warn">
+**Operating System Support**
+
+- **Linux**: Fully supported (Ubuntu, Debian, Fedora, Arch, etc.)
+- **Windows**: Only via WSL2 (Windows Subsystem for Linux)
+- **macOS**: Not officially supported due to FUSE limitations
+</Callout>
+
+**Hardware**:
+- CPU: 2+ cores recommended
+- RAM: 4GB minimum, 8GB+ recommended
+- Disk: Fast SSD preferred for database and cache
+- Network: Stable internet connection
+
+---
+
+## Quick Installation
+
+### Step 1: Prepare Your System
+
+Create a directory for Riven and the required mount point:
+
+```bash
+# Create and configure the mount point
+RIVEN_MOUNT_PATH=/mnt/riven
+sudo mkdir -p $RIVEN_MOUNT_PATH
+sudo mount --bind $RIVEN_MOUNT_PATH $RIVEN_MOUNT_PATH
+sudo mount --make-rshared $RIVEN_MOUNT_PATH
+
+# Verify mount propagation (should show "shared" or "rshared")
+findmnt -T $RIVEN_MOUNT_PATH -o TARGET,PROPAGATION
+```
+
+<Callout type="error" title="Important: Mount Propagation">
+Proper mount propagation is critical for Riven to work correctly! The mount path must be set to `rshared` to allow the VFS mount inside the container to be visible to your media server.
+
+For detailed information, see the [Filesystem (VFS) documentation](/docs/services/filesystem).
+</Callout>
+
+---
+
+### Step 2: Create docker-compose.yml
+
+Create a `docker-compose.yml` file with the following content:
+
+<Callout type="tip">
+**Prefer a Custom Configuration?**
+
+Use our [Docker Compose Generator](/generator) to customize values like timezone, ports, and media server selection. You can download or copy the generated configuration directly!
+</Callout>
+
+```yaml title="docker-compose.yml"
+services:
+  riven-frontend:
+    image: spoked/riven-frontend:latest
+    container_name: riven-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    tty: true
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/UTC
+      - ORIGIN=http://localhost:3000 # Set to the frontend url. It's the url you will use to access the frontend. This is used by both auth & svelte csrf protection.
+      - BACKEND_URL=http://riven:8080
+      - BACKEND_API_KEY=my32charapikey1234567890abcdefgh
+    depends_on:
+      riven:
+        condition: service_healthy
+    volumes:
+      - ./riven-frontend/data:/riven/data
+
+  riven:
+    image: spoked/riven:latest
+    container_name: riven
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    tty: true
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    devices:
+      - /dev/fuse
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/UTC
+      - RIVEN_FORCE_ENV=true
+      - RIVEN_DATABASE_HOST=postgresql+psycopg2://postgres:postgres@riven-db/riven
+      - RIVEN_FILESYSTEM_MOUNT_PATH=/mount
+    healthcheck:
+      test: curl -s http://localhost:8080 >/dev/null || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 10
+    volumes:
+      - ./riven/data:/riven/data
+      - /mnt/riven:/mount:rshared,z # Use your actual host mount path here
+    depends_on:
+      riven-db:
+        condition: service_healthy
+
+  riven-db:
+    image: postgres:16.3-alpine3.20
+    container_name: riven-db
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: riven
+    volumes:
+      - ./riven-db:/var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+```
+
+---
+
+### Step 3: Customize Configuration
+
+Edit the `docker-compose.yml` file to match your setup:
+
+1. **Timezone**: Change `TZ` to your timezone (e.g., `Europe/London`, `Asia/Tokyo`)
+2. **User IDs**: Set `PUID` and `PGID` to match your user (run `id` command to find yours)
+3. **Mount Path**: Change `/mnt/riven` to your actual host mount path (keep `:rshared,z` flags!)
+4. **Origin URL** (optional): If using a custom domain, update `ORIGIN` to your URL
+
+<Callout type="tip">
+If you're running Riven behind a reverse proxy (nginx, Caddy, Traefik), you can remove the `ORIGIN` environment variable from the frontend service. See the [Deployment Guide](/docs/deployment) for reverse proxy examples.
+</Callout>
+
+---
+
+### Step 4: Start Riven
+
+Launch the services:
+
+```bash
+docker-compose up -d
+```
+
+Monitor the logs to ensure everything starts correctly:
+
+```bash
+docker-compose logs -f
+```
+
+Wait until you see messages indicating that all services are healthy and running.
+
+---
+
+### Step 5: Access the Web Interface
+
+Open your browser and navigate to:
+
+```
+http://localhost:3000
+```
+
+Or use the custom URL you configured in the `ORIGIN` variable.
+
+---
+
+## Configuration & Onboarding
+
+When you first access Riven, you'll be guided through a 4-step onboarding process:
+
+### Step 1: General Settings
+
+Configure your core settings:
+
+- **Downloader**: Select your debrid service (Real-Debrid or TorBox) and enter your API key
+- **Mount Path**: Set to `/mount` (the container path, NOT the host path)
+- **Library Path**: Usually same as mount path (`/mount`)
+- **Subtitles**: Enable subtitle downloading if desired
+
+![General Settings](/images/onboard/step1.png)
+
+<Callout type="info">
+The mount path should always be the **container** path (`/mount`), not your host path (`/mnt/riven`). The docker-compose.yml handles the mapping between host and container.
+</Callout>
+
+---
+
+### Step 2: Media Server
+
+Configure your media server integration:
+
+- **Server Type**: Select Plex, Jellyfin, or Emby
+- **URL**: Enter your media server URL (e.g., `http://plex:32400`)
+- **API Token/Key**: Provide authentication credentials
+- **Update Interval**: How often to notify the media server of changes (default: 120 seconds)
+
+![Media Server Settings](/images/onboard/step2.png)
+
+<Callout type="tip">
+For detailed media server configuration, including how to obtain API tokens, see:
+- [Plex Updater Documentation](/docs/services/updaters)
+- [Jellyfin Updater Documentation](/docs/services/updaters)
+- [Emby Updater Documentation](/docs/services/updaters)
+</Callout>
+
+---
+
+### Step 3: Content Services
+
+Set up how Riven discovers new content:
+
+- **Overseerr**: Request management system (recommended for multi-user setups)
+- **Plex Watchlist**: Sync your Plex watchlist
+- **Trakt**: Track what you're watching and discover content
+- **Mdblist**: Use curated media lists
+- **Listrr**: Manage Trakt lists
+
+![Content Services](/images/onboard/step3.png)
+
+At least one content service should be enabled. For more details, see the [Content Services documentation](/docs/services/content).
+
+---
+
+### Step 4: Scraper Services
+
+Configure where Riven searches for torrents:
+
+- **Torrentio**: Popular Stremio addon (recommended, no setup required)
+- **Jackett**: Torrent indexer aggregator
+- **Prowlarr**: Advanced indexer manager
+- **Zilean**: DMM hash database
+- **Comet**: Debrid-optimized scraper
+
+![Scraper Services](/images/onboard/step4.png)
+
+<Callout type="tip">
+**Quick Start**: Enable Torrentio for immediate results without additional setup. You can add more scrapers later for better results.
+
+For detailed scraper configuration, see the [Scrapers documentation](/docs/services/scrapers).
+</Callout>
+
+---
+
+### Onboarding Complete!
+
+Once you've completed all steps, you'll see your Riven dashboard:
+
+![Riven Dashboard](/images/onboard/final.png)
+
+From here you can:
+- View your media library
+- Request new items
+- Monitor download status
+- Adjust settings
+- View system health
+
+---
+
+## Next Steps
+
+### Add Your First Media
+
+1. **Via Overseerr**: Request movies/shows through Overseerr's interface
+2. **Via Watchlist**: Add items to your Plex or Trakt watchlist
+3. **Via Web UI**: Use Riven's search and request features
+
+### Configure Advanced Features
+
+- **[Filesystem Settings](/docs/services/filesystem)**: Optimize VFS caching and streaming
+- **[Subtitle Services](/docs/services/subtitles)**: Automatic subtitle downloading
+- **[Post-Processing](/docs/services/post-processing)**: Media analysis and enhancement
+- **[Notifications](/docs/services/notifications)**: Get notified of new content
+
+### Integrate with Your Media Server
+
+Make sure your media server can access the Riven mount:
+
+<Tabs items={['Plex', 'Jellyfin', 'Emby']}>
+<Tab value="Plex">
+If running Plex in Docker, add this volume to your Plex container:
+
+```yaml
+volumes:
+  - /mnt/riven:/mount:rslave,z
+```
+
+Then add `/mount` as a library in Plex.
+
+**Note**: Use `:rslave` for Plex (not `:rshared`).
+</Tab>
+
+<Tab value="Jellyfin">
+If running Jellyfin in Docker, add this volume:
+
+```yaml
+volumes:
+  - /mnt/riven:/mount:rslave,z
+```
+
+Then add `/mount` as a library in Jellyfin.
+</Tab>
+
+<Tab value="Emby">
+If running Emby in Docker, add this volume:
+
+```yaml
+volumes:
+  - /mnt/riven:/mount:rslave,z
+```
+
+Then add `/mount` as a library in Emby.
+</Tab>
+</Tabs>
+
+---
+
+## Common Issues
+
+### CORS Errors in Browser
+
+**Problem**: Seeing CORS errors in browser console
+
+**Solution**: Ensure `ORIGIN` environment variable matches the URL you're accessing. If behind a reverse proxy, remove the `ORIGIN` variable entirely.
+
+---
+
+### Stuck in Onboarding Loop
+
+**Problem**: Can't complete onboarding, keeps returning to setup
+
+**Solution**: Check your library path and mount path settings. Verify mount propagation is set correctly (`findmnt -T /mnt/riven`). Check Riven logs for specific errors.
+
+---
+
+### No Media Appearing
+
+**Problem**: Requested media but nothing shows up in media server
+
+**Solution**:
+1. Check Riven dashboard to see item status
+2. Verify VFS mount is working: `ls /mnt/riven`
+3. Check media server library path matches mount path
+4. Review Riven logs for errors
+
+---
+
+### Container Won't Start
+
+**Problem**: Riven container exits immediately
+
+**Solution**:
+1. Check logs: `docker logs riven`
+2. Verify `/dev/fuse` exists: `ls -l /dev/fuse`
+3. Load fuse module if missing: `sudo modprobe fuse`
+4. Check mount propagation is configured
+
+For more troubleshooting help, see the [Troubleshooting Guide](/docs/troubleshooting).
+
+---
+
+## Additional Resources
+
+- **[Architecture](/docs/architecture)**: Understand how Riven works under the hood
+- **[Deployment Guide](/docs/deployment)**: Production deployment with reverse proxies
+- **[Services Overview](/docs/services)**: Detailed documentation for all services
+- **[Contributing](/docs/contribute)**: Help improve Riven
+- **[Discord Community](https://discord.gg/rivenmedia)**: Get help and connect with other users
+
+---
+
+<Callout type="info">
+**Need Help?**
+
+If you encounter issues not covered in this guide:
+1. Check the [Troubleshooting Guide](/docs/troubleshooting)
+2. Review the logs: `docker-compose logs -f riven`
+3. Join the [Discord community](https://discord.gg/rivenmedia) for support
+4. Search or create an issue on [GitHub](https://github.com/rivenmedia/riven)
+</Callout>
+
+Happy streaming with Riven!
