@@ -52,7 +52,7 @@ export default function DockerComposeGenerator() {
   const generateDockerCompose = () => {
     const baseCompose = `services:
   riven-frontend:
-    image: spoked/riven-frontend:latest
+    image: spoked/riven-frontend:v1-beta
     container_name: riven-frontend
     restart: unless-stopped
     ports:
@@ -72,7 +72,7 @@ export default function DockerComposeGenerator() {
       - ./riven-frontend/data:/riven/data
 
   riven:
-    image: spoked/riven:latest
+    image: spoked/riven:dev
     container_name: riven
     restart: unless-stopped
     ports:
@@ -104,7 +104,7 @@ export default function DockerComposeGenerator() {
         condition: service_healthy
 
   riven-db:
-    image: postgres:16.3-alpine3.20
+    image: postgres:17-alpine
     container_name: riven-db
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
@@ -200,6 +200,12 @@ export default function DockerComposeGenerator() {
       <div className="space-y-6">
         <div>
           <h3 className="mb-4 text-xl font-semibold">Configuration</h3>
+          {/* Warning */}
+          <div className="rounded-lg border border-yellow-500/50 bg-yellow-500/10 p-4 mb-4">
+            <p className="text-sm font-medium text-yellow-600 dark:text-yellow-400">
+              ⚠️ Important: This generator creates config files for upcoming version of Riven (v1.0)
+            </p>
+          </div>
           <div className="space-y-4">
             {/* Timezone */}
             <div>
