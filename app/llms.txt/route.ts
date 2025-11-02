@@ -19,14 +19,14 @@ const treeToText = (tree: any, depth = 0): string => {
     let result = '#'.repeat(depth + 1) + ' ' + tree.name + '\n\n';
 
     if (depth > 0) {
-      result = "\n" + result;
+      result = '\n' + result;
     }
 
     for (const child of tree.children) {
       result += treeToText(child, depth + 1);
     }
 
-    return result;
+    return result + '\n';
   }
   
   if (tree.type === 'separator') {
