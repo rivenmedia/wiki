@@ -59,6 +59,20 @@
             "type": "image/png"
         }
     ],
+    "screenshots": [
+        {
+            "src": "/screenshots/wide-home.png",
+            "sizes": "1413x742",
+            "form_factor": "wide",
+            "type": "image/png"
+        },
+        {
+            "src": "/screenshots/narrow-home.png",
+            "sizes": "409x785",
+            "form_factor": "narrow",
+            "type": "image/png"
+        }
+    ],
     "shortcuts": [
         {
             "name": "Riven Docs",
