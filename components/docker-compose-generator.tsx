@@ -52,7 +52,7 @@ export default function DockerComposeGenerator() {
   const generateDockerCompose = () => {
     const baseCompose = `services:
   riven-frontend:
-    image: spoked/riven-frontend:v1-beta
+    image: spoked/riven-frontend:dev
     container_name: riven-frontend
     restart: unless-stopped
     ports:
