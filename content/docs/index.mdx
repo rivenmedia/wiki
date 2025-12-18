@@ -137,7 +137,7 @@ Grab the `docker-compose.yml` file from the [installation guide](#installation) 
 
 ### Setup Directories
 
-For detailed information on the filesystem and VFS configuration, please refer to the [Filesystem (VFS)](docs/services/filesystem/) page. This page will help you understand how to configure and manage your media library using Riven's virtual filesystem. It will help you understand the mount path configuration and how to properly set up volume mounts in the `docker-compose.yml` file.
+For detailed information on the filesystem and VFS configuration, please refer to the [Filesystem (VFS)](docs/services/filesystem) page. This page will help you understand how to configure and manage your media library using Riven's virtual filesystem. It will help you understand the mount path configuration and how to properly set up volume mounts in the `docker-compose.yml` file.
 
 ---
 
@@ -236,7 +236,7 @@ Now this won't work as is, you need to modify the `docker-compose.yml` file to m
 4. Change `RIVEN_DATABASE_HOST` to the URL where the backend can access the database. This is not required here as we are running both backend and database in the same network (stack).
 5. Change `DIALECT` and `DATABASE_URL` to use the same database as the backend. This is not required here as we are running both backend and database in the same network (stack).
 6. Change the mount volume path `/path/to/riven/mount` to your actual host path. **Important**: Keep the `:rshared,z` flags for proper mount propagation!
-7. Set up the host mount path with proper propagation as described in the [Filesystem (VFS)](services/filesystem/index.md) documentation.
+7. Set up the host mount path with proper propagation as described in the [Filesystem (VFS)](docs/services/filesystem) documentation.
 
 ---
 
@@ -312,7 +312,7 @@ Once you have completed the onboarding process, you will be greeted with a beaut
 
 ![step-5](/images/onboard/final.png)
 
-At this point you can take a look at the [services](services/index.md) page to learn more about the various services and how to configure them.
+At this point you can take a look at the [services](docs/services) page to learn more about the various services and how to configure them.
 
 ---
 
