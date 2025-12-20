@@ -104,7 +104,7 @@ services:
       riven:
         condition: service_healthy
     volumes:
-      - ./riven-frontend/data:/riven/data
+      - riven-frontend-data:/riven/data # Persistent data storage
 
   riven:
     image: spoked/riven:dev # See Docker Hub Tags in Installation Guide
