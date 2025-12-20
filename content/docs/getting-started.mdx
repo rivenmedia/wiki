@@ -82,6 +82,9 @@ Use our [Docker Compose Generator](/generator) to customize values like timezone
 </Callout>
 
 ```yaml title="docker-compose.yml"
+volumes:
+    riven-frontend-data:
+    
 services:
   riven-frontend:
     image: spoked/riven-frontend:dev # See Docker Hub Tags in Installation Guide

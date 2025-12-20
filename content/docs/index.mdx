@@ -158,7 +158,7 @@ See the [Filesystem (VFS)](docs/services/filesystem) page for detailed instructi
 ### Step 2: Docker Compose Configuration
 
 <Callout type="error" title="Did you set up the VFS mount path?">
-    Make sure you've completed the [Setup Directories](#setup-directories) step first! 
+    Make sure you've completed the [Setup Directories](#step-1-set-up-directories) step first! 
 
     **Mount propagation must be configured on the host before running Docker Compose.**
 </Callout>
@@ -187,6 +187,9 @@ Both `spoked/riven` (backend) and `spoked/riven-frontend` (frontend) repositorie
 </Callout>
 
 ```yml title="docker-compose.yml"
+volumes:
+    riven-frontend-data:
+
 services:
     riven-frontend:
         image: spoked/riven-frontend:dev # See Docker Hub Tags in Installation Guide
@@ -201,7 +204,7 @@ services:
             - TZ=America/New_York
             - ORIGIN=http://localhost:3000
             - BACKEND_URL=http://riven:8080
-            - BACKEND_API_KEY=[replace-with-riven-backend-url]
+            - BACKEND_API_KEY=[your-riven-backend-api-key-here]
             - DIALECT=postgres
             - DATABASE_URL=postgres://postgres:postgres@riven-db/riven
         depends_on:

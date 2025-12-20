@@ -36,6 +36,9 @@ Riven only supports Linux-based systems. On Windows, use WSL2. MacOS is not offi
 Here's a complete production-ready docker-compose.yml:
 
 ```yaml title="docker-compose.yml"
+volumes:
+    riven-frontend-data:
+
 services:
   # Riven Frontend
   riven-frontend:
