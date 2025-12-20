@@ -99,6 +99,14 @@ import { Tabs, Tab } from "fumadocs-ui/components/tabs"
 
 <Callout type="warning">
 Riven is under active development, we are constantly working on new features and fixing bugs.
+
+You may see different terms used in Discord and other documentation:
+    - **Legacy version**: Also referred to as v0, legacy, or old
+    - **Beta version**: Also referred to as v1, v1-beta, beta, new, or dev
+
+**This documentation covers the new Beta version.**
+
+If you still need the legacy (v0) documentation, see the [v0.23.6 README](https://github.com/rivenmedia/riven/tree/v0.23.6?tab=readme-ov-file).
 </Callout>
 
 Riven streamlines your media consumption experience by:
@@ -114,51 +122,74 @@ Whether you're a casual viewer or a media enthusiast, Riven offers a powerful, a
 
 ---
 
-## Setup
+## Prerequisites
 
-Before we begin, we need to set up the required folders and files for Riven.
+### Operating System
+Riven only supports Linux-based operating systems. For Windows, Windows Subsystem for Linux (WSL) is required.
 
-Grab the `docker-compose.yml` file from the [installation guide](#installation) and then `docker-compose up -d` to start the services.
+### Required Software
+- **Docker**: Required to run Riven in containers. [Learn more](https://www.docker.com/)
 
-<Callout type="info">
-    * **Linux**: Riven only supports Linux-based operating systems.
-    * **Windows**: Riven only supports Windows Subsystem for Linux (WSL) in Windows.
-    * **Rclone**: Required to mount debrid service. Additionally, Zurg is preferred for Real-Debrid users. [Learn more](https://rclone.org/)
-    * **Media Server**: Plex, Jellyfin, and Emby are supported.
-    * **Docker**: Required to run Riven in a containerized environment. [Learn more](https://www.docker.com/)
-</Callout>
+### Supported Services
 
-<Callout type="tip" title="Debrid Support">
-    Currently only **Real-Debrid** and **Torbox** are supported. More
-    services will be added in the future!
-</Callout>
+#### Media Servers
+- Plex
+- Jellyfin
+- Emby
 
----
-
-### Setup Directories
-
-For detailed information on the filesystem and VFS configuration, please refer to the [Filesystem (VFS)](docs/services/filesystem) page. This page will help you understand how to configure and manage your media library using Riven's virtual filesystem. It will help you understand the mount path configuration and how to properly set up volume mounts in the `docker-compose.yml` file.
+#### Debrid Services
+- Real-Debrid
+- Torbox
+- More debrid services coming soon!
 
 ---
 
 ## Installation
 
-<Callout type="error" title="Setup VFS Mount Path First! 🔥">
-    This is incredibly important and must be setup first! When configuring the mount path and library path, you need to make sure that the mount propagation is set up correctly for your system. More information can be found at the [Filesystem (VFS)](docs/services/filesystem) page.
+### Step 1: Set Up Directories
 
-    The VFS mount path should be set to the container path (e.g., `/mount`), and proper mount propagation must be configured on the host.
+Before installing Riven, you must configure your filesystem and mount paths. This includes setting up mount propagation on the host for the VFS to work correctly.
+
+See the [Filesystem (VFS)](docs/services/filesystem) page for detailed instructions on:
+- Configuring mount propagation on the host
+- Setting up volume mounts in `docker-compose.yml`
+- Understanding the library path and mount path configuration
+
+### Step 2: Docker Compose Configuration
+
+<Callout type="error" title="Did you set up the VFS mount path?">
+    Make sure you've completed the [Setup Directories](#setup-directories) step first! 
+
+    **Mount propagation must be configured on the host before running Docker Compose.**
 </Callout>
 
-`docker-compose.yml` file is used to run Riven in a containerized environment. It consists of three services:
+
+#### Riven Services 
+The `docker-compose.yml` file is used to run Riven in a containerized environment. It consists of three services:
 
 1. `riven`: The main application (backend).
 2. `riven-frontend`: The web interface (frontend).
 3. `riven-db`: The database.
 
+#### Docker Hub Tags
+
+Both `spoked/riven` (backend) and `spoked/riven-frontend` (frontend) repositories use the same tagging conventions:
+
+| Tag | Version | Description |
+|-----|---------|-------------|
+| `latest` | v0 (Legacy) | The legacy version of Riven |
+| `dev` | v1 (Beta) | Latest development builds - **recommended for beta users** |
+| `main` | v1 (Beta) | Same as `dev` - latest development builds |
+| Other tags | Various | Branch names or temporarily assigned tags |
+
+<Callout type="tip" title="Which tag should I use?">
+    If you're a new user or want the latest features and bug fixes, use the `:dev` or `:main` tag. The `:latest` tag points to the legacy v0 version.
+</Callout>
+
 ```yml title="docker-compose.yml"
 services:
     riven-frontend:
-        image: spoked/riven-frontend:latest
+        image: spoked/riven-frontend:dev # See Docker Hub Tags in Installation Guide
         container_name: riven-frontend
         restart: unless-stopped
         ports:
@@ -170,16 +201,17 @@ services:
             - TZ=America/New_York
             - ORIGIN=http://localhost:3000
             - BACKEND_URL=http://riven:8080
+            - BACKEND_API_KEY=[replace-with-riven-backend-url]
             - DIALECT=postgres
             - DATABASE_URL=postgres://postgres:postgres@riven-db/riven
         depends_on:
             riven:
                 condition: service_healthy
         volumes:
-            - ./riven-frontend/config:/riven/config
+            - riven-frontend-data:/riven/data # Persistent data storage
 
     riven:
-        image: spoked/riven:latest
+        image: spoked/riven:dev # See Docker Hub Tags in Installation Guide
         container_name: riven
         restart: unless-stopped
         ports:
@@ -232,11 +264,13 @@ Now this won't work as is, you need to modify the `docker-compose.yml` file to m
 1. Change `TZ` to your timezone.
 2. Change `ORIGIN` to the URL you will be accessing the web interface from. For example, if you are planning to run Riven on `https://riven.example.com`,
    change it to `https://riven.example.com`. This is not required if you are running riven behind a reverse proxy like `nginx`, `caddy`, `cosmos` etc.
-3. Change `BACKEND_URL` to the URL where the frontend can access the backend. This is not required here as we are running both frontend and backend in the same network (stack).
-4. Change `RIVEN_DATABASE_HOST` to the URL where the backend can access the database. This is not required here as we are running both backend and database in the same network (stack).
-5. Change `DIALECT` and `DATABASE_URL` to use the same database as the backend. This is not required here as we are running both backend and database in the same network (stack).
-6. Change the mount volume path `/path/to/riven/mount` to your actual host path. **Important**: Keep the `:rshared,z` flags for proper mount propagation!
-7. Set up the host mount path with proper propagation as described in the [Filesystem (VFS)](docs/services/filesystem) documentation.
+3. Change `BACKEND_URL` to the URL where the frontend can access the backend.
+4. Change `BACKEND_API_KEY` to the Riven backend API key.
+5. Change `RIVEN_DATABASE_HOST` to the URL where the backend can access the database. This is not required here as we are running both backend and database in the same network (stack).
+6. Change `DIALECT` and `DATABASE_URL` to use the same database as the backend. This is not required here as we are running both backend and database in the same network (stack).
+7. Change the mount volume path `/path/to/riven/mount` to your actual host path. **Important**: Keep the `:rshared,z` flags for proper mount propagation!
+8. Set up the host mount path with proper propagation as described in the [Filesystem (VFS)](docs/services/filesystem) documentation.
+
 
 ---
 

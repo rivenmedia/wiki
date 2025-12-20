@@ -39,7 +39,7 @@ Here's a complete production-ready docker-compose.yml:
 services:
   # Riven Frontend
   riven-frontend:
-    image: spoked/riven-frontend:latest
+    image: spoked/riven-frontend:dev # See Docker Hub Tags in Installation Guide
     container_name: riven-frontend
     restart: unless-stopped
     ports:
@@ -56,13 +56,13 @@ services:
       riven:
         condition: service_healthy
     volumes:
-      - ./riven-frontend/config:/riven/config
+      - riven-frontend-data:/riven/data # Persistent data storage
     networks:
       - riven-network
 
   # Riven Backend
   riven:
-    image: spoked/riven:latest
+    image: spoked/riven:dev # See Docker Hub Tags in Installation Guide
     container_name: riven
     restart: unless-stopped
     ports:
