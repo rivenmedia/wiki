@@ -99,7 +99,7 @@ services:
 
       # Updaters
       - RIVEN_UPDATER_INTERVAL=120
-      - RIVEN_LIBRARY_PATH=/mount
+      - RIVEN_UPDATERS_LIBRARY_PATH=/mount
 
       # Downloaders
       - RIVEN_DOWNLOADERS_REAL_DEBRID_ENABLED=false
@@ -213,7 +213,7 @@ See [Filesystem (VFS)](/docs/services/filesystem) for detailed explanations.
 ```bash
 # General
 RIVEN_UPDATER_INTERVAL=120
-RIVEN_LIBRARY_PATH=/mount
+RIVEN_UPDATERS_LIBRARY_PATH=/mount
 
 # Plex
 RIVEN_PLEX_ENABLED=true
