@@ -52,11 +52,17 @@ services:
       - BACKEND_URL=http://riven:8080
       - DIALECT=postgres
       - DATABASE_URL=postgres://postgres:postgres@riven-db/riven
+      - DIALECT=postgres
+      - DATABASE_URL=/riven/data/riven.db
+      - AUTH_SECRET=CHANGE_ME_32_CHARACTER_HEX_KEY
+      - BETTER_AUTH_SECRET=CHANGE_ME_32_CHARACTER_HEX_KEY
+      - BACKEND_API_KEY=IN_SETTINGS.JSON_FILE
+
     depends_on:
       riven:
         condition: service_healthy
     volumes:
-      - ./riven-frontend/config:/riven/config
+      - ./riven-frontend/config:/riven/data
     networks:
       - riven-network
 
