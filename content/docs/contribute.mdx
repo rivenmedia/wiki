@@ -6,6 +6,7 @@ description: A guide on how to contribute to the Riven Wiki
 Thank you for considering contributing to Riven Media! We welcome contributions from the community to help improve and expand the project. This guide will help you get started with the process of contributing.
 
 ## Table of Contents
+
 1. [How to Contribute](#how-to-contribute)
 2. [Setting Up Your Development Environment](#setting-up-your-development-environment)
 3. [Submitting Changes](#submitting-changes)
@@ -36,22 +37,24 @@ We welcome feature suggestions! To suggest a new feature, please create an issue
 To set up your development environment, follow these steps:
 
 1. Clone the repository:
+
     ```md
     git clone https://github.com/rivenmedia/wiki riven-wiki && cd riven-wiki
     ```
 
-2. Install the required dependencies:
+2. Install the required dependencies using [`bun`](https://bun.sh/):
+
     ```md
-    npm install
+    bun install
     ```
 
-3. Start the development server:
+3. Start the development server using [`bun`](https://bun.sh/):
     ```md
-    npm run dev
+    bun run dev
     ```
 
 !!! note "Alternatively.."
-    You can also use `make install` to install the dependencies, followed by `make dev` to start the development server.
+You can also use `make install` to install the dependencies, followed by `make dev` to start the development server.
 
 ## Submitting Changes
 

@@ -3,8 +3,8 @@ title: Management Commands
 description: Database management and maintenance commands for Riven
 ---
 
-import { Callout } from "fumadocs-ui/components/callout"
-import { Tabs, Tab } from "fumadocs-ui/components/tabs"
+import { Callout } from "fumadocs-ui/components/callout";
+import { Tabs, Tab } from "fumadocs-ui/components/tabs";
 
 # Management Commands
 
@@ -13,7 +13,8 @@ import { Tabs, Tab } from "fumadocs-ui/components/tabs"
 To reset the Postgres database by dropping and recreating the `riven` table, you can use the following commands:
 
 <Callout type="error">
-This will cause **all of the data** in your database to be lost. To include metadata, scraped times, and other data that's needed to run Riven.
+    This will cause **all of the data** in your database to be lost. To include
+    metadata, scraped times, and other data that's needed to run Riven.
 </Callout>
 
 <Tabs items={['Docker', 'Env Variable', 'Local']}>
@@ -24,6 +25,7 @@ Make sure you have the postgres container running, and you should `docker stop r
 docker exec -it postgres psql -U postgres -c "DROP DATABASE IF EXISTS riven;"
 docker exec -it postgres psql -U postgres -c "CREATE DATABASE riven;"
 ```
+
 </Tab>
 
 <Tab value="Env Variable">
@@ -34,6 +36,7 @@ HARD_RESET=true
 ```
 
 Then, restart Riven. Be sure to set `HARD_RESET` back to `false` after the reset is complete.
+
 </Tab>
 
 <Tab value="Local">
@@ -43,6 +46,7 @@ Make sure you have the postgres container running, before running the following 
 rm -rf data/alembic/
 poetry run python src/main.py --hard_reset_db
 ```
+
 </Tab>
 </Tabs>
 
@@ -61,11 +65,13 @@ rm -r data/subliminal.dbm*
 This needs to point to the `data` directory that the `settings.json` file is located in.
 
 <Callout type="warn">
-This will delete all of your Subtitles database files, and you will lose all your Subtitles.
+    This will delete all of your Subtitles database files, and you will lose all
+    your Subtitles.
 </Callout>
 
 <Callout>
-This is not necessary and only needed if you're experiencing issues with the Subtitles specifically.
+    This is not necessary and only needed if you're experiencing issues with the
+    Subtitles specifically.
 </Callout>
 
 ---
@@ -89,6 +95,7 @@ FIX_SYMLINKS=true
 ```
 
 Then, restart Riven. Be sure to set `FIX_SYMLINKS` back to `false` after the repair is complete.
+
 </Tab>
 </Tabs>
 

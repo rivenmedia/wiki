@@ -3,7 +3,7 @@ title: Architecture
 description: Understanding how Riven works under the hood
 ---
 
-import { Callout } from "fumadocs-ui/components/callout"
+import { Callout } from "fumadocs-ui/components/callout";
 
 # Architecture Overview
 
@@ -16,29 +16,34 @@ Riven is a comprehensive media management and streaming solution that automates 
 Riven consists of several key components that work together:
 
 ### 1. **Backend (Python)**
-- Built with FastAPI
-- PostgreSQL database for state management
-- Service-oriented architecture
-- RESTful API for frontend communication
-- Scheduler for automated tasks
 
-### 2. **Frontend (Next.js)**
-- Modern React-based web interface
-- Real-time updates and status tracking
-- Configuration management
-- Media browsing and search
+-   Built with FastAPI
+-   PostgreSQL database for state management
+-   Service-oriented architecture
+-   RESTful API for frontend communication
+-   Scheduler for automated tasks
+
+### 2. **Frontend (SvelteKit)**
+
+-   Modern Svelte-based web interface
+-   Configuration management
+-   Media browsing and search
+-   Role based access control (in development)
+-   Sqlite database for user management (different from backend database)
 
 ### 3. **RivenVFS (FUSE Filesystem)**
-- Virtual filesystem for media streaming
-- Built-in caching and prefetching
-- Direct integration with debrid services
-- No external dependencies (replaces rclone/Zurg)
+
+-   Virtual filesystem for media streaming
+-   Built-in caching and prefetching
+-   Direct integration with debrid services
+-   No external dependencies (replaces rclone/zurg/decypharr)
 
 ### 4. **Database (PostgreSQL)**
-- Media item state tracking
-- Filesystem entry management
-- Settings storage
-- Stream metadata
+
+-   Media item state tracking
+-   Filesystem entry management
+-   Settings storage
+-   Stream metadata
 
 ---
 
@@ -46,90 +51,95 @@ Riven consists of several key components that work together:
 
 Here's how Riven processes media from request to streaming:
 
-```
-┌─────────────────┐
-│  Content        │
-│  Services       │  (Overseerr, Trakt, Plex Watchlist, etc.)
-└────────┬────────┘
-         │ 1. Request new content
-         ▼
-┌─────────────────┐
-│  Indexer        │  (Trakt API)
-│  (Metadata)     │  Fetch metadata, create MediaItem
-└────────┬────────┘
-         │ 2. Enrich with IMDB/TMDB data
-         ▼
-┌─────────────────┐
-│  Scrapers       │  (Torrentio, Jackett, Prowlarr, etc.)
-│                 │  Search for torrents matching criteria
-└────────┬────────┘
-         │ 3. Find torrents
-         ▼
-┌─────────────────┐
-│  Ranking        │  (RTN - Rank Torrent Name)
-│  System         │  Score and rank torrents based on quality
-└────────┬────────┘
-         │ 4. Select best torrent
-         ▼
-┌─────────────────┐
-│  Downloaders    │  (Real-Debrid, AllDebrid, TorBox)
-│  (Debrid)       │  Add torrent to debrid service
-└────────┬────────┘
-         │ 5. Debrid service downloads
-         ▼
-┌─────────────────┐
-│  Post-          │  (Subtitle fetching, media analysis)
-│  Processing     │  Optional processing steps
-└────────┬────────┘
-         │ 6. Enhance media
-         ▼
-┌─────────────────┐
-│  Filesystem     │  (RivenVFS)
-│  Service        │  Register file in virtual filesystem
-└────────┬────────┘
-         │ 7. File appears in /mount
-         ▼
-┌─────────────────┐
-│  Updaters       │  (Plex, Jellyfin, Emby)
-│                 │  Notify media server of new content
-└────────┬────────┘
-         │ 8. Trigger library scan
-         ▼
-┌─────────────────┐
-│  Media Server   │  (Plex, Jellyfin, Emby)
-│                 │  Content available for streaming
-└─────────────────┘
+```mermaid
+flowchart TD
+    subgraph Content["Content Services"]
+        CS[("Overseerr, Trakt,<br/>Plex Watchlist, Listrr, etc.")]
+    end
+
+    subgraph Indexer["Indexer (Metadata)"]
+        IDX["TMDB API for movies, TVDB API for shows<br/>Fetch metadata, create MediaItem"]
+    end
+
+    subgraph Scrapers["Scrapers"]
+        SCR["Torrentio, Jackett, Prowlarr, etc.<br/>Search for torrents matching criteria"]
+    end
+
+    subgraph Ranking["Ranking System"]
+        RTN["RTN - Rank Torrent Name<br/>Score and rank torrents based on quality"]
+    end
+
+    subgraph Downloaders["Downloaders (Debrid)"]
+        DEB["Real-Debrid, AllDebrid, Debrid-Link<br/>Add torrent to debrid service"]
+    end
+
+    subgraph PostProcessing["Post-Processing"]
+        PP["Subtitle fetching, media analysis<br/>Optional processing steps"]
+    end
+
+    subgraph Filesystem["Filesystem Service"]
+        VFS["RivenVFS<br/>Register file in virtual filesystem"]
+    end
+
+    subgraph Updaters["Updaters"]
+        UPD["Plex, Jellyfin, Emby<br/>Notify media server of new content"]
+    end
+
+    subgraph MediaServer["Media Server"]
+        MS["Plex, Jellyfin, Emby<br/>Content available for streaming"]
+    end
+
+    CS -->|"1. Request new content"| IDX
+    IDX -->|"2. Enrich with TMDB/TVDB data"| SCR
+    SCR -->|"3. Find torrents"| RTN
+    RTN -->|"4. Select best torrent"| DEB
+    DEB -->|"5. Debrid service downloads"| PP
+    PP -->|"6. Enhance media"| VFS
+    VFS -->|"7. File appears in /mount"| UPD
+    UPD -->|"8. Trigger library scan"| MS
 ```
 
 ---
 
 ## State Machine
 
-Media items in Riven follow a state machine pattern:
+Riven has a main `MediaItem` table and `Movie` and `Show` tables with foregin key relationship to `MediaItem`. There are 2 more tables `Episode` and `Season`.
+`Episode` has foregin key relationship to `Season` & `MediaItem` and `Season` has foregin key relationship to `Show` & `MediaItem`.
+
+`Movie`, `Show`, `Episode`, `Season` all just store the relationship & ids of the media item.
+
+Each media item has it's own state, so a specific season can be completed but the show can be in ongoing state. The states can be seen below:
+
+| State                  | Description                                      |
+| ---------------------- | ------------------------------------------------ |
+| **Unknown**            | Unknown state of the media                       |
+| **Unreleased**         | Item has not been released yet                   |
+| **Ongoing**            | Item is ongoing                                  |
+| **Requested**          | Item has been requested from content service     |
+| **Indexed**            | Metadata has been fetched from TMDB/TVDB         |
+| **Scraped**            | Torrents have been found and ranked              |
+| **Downloaded**         | Torrent added to debrid service                  |
+| **Symlinked**          | File available and registered in VFS             |
+| **Completed**          | Media servers have been notified                 |
+| **PartiallyCompleted** | All the sub-items are not completed              |
+| **Failed**             | Processing failed (requires manual intervention) |
+| **Paused**             | Processing paused by user.                       |
 
 ```
-Unknown → Requested → Indexed → Scraped → Downloaded →
-Completed → Symlinked (legacy) → Completed
+Requested → Indexed → Scraped → Downloaded → Completed → Symlinked → Completed
+```
+
+There are additional states like
+
+-   Unreleased - If item is not released it will go from Requested -> Indexed -> Unreleased
+-   Ongoing - If item is ongoing it will go from Requested -> Indexed -> .... -> Symlinked -> Ongoing
+-   PartiallyCompleted - If item is partially completed it will go from Requested -> Indexed -> .... -> Symlinked -> PartiallyCompleted
 
 States can transition back on failures:
-- Scraped → Failed (if no suitable torrents found)
-- Failed → Scraped (on retry)
-- Completed → Scraped (if file deleted from debrid)
-```
 
-### State Descriptions
-
-| State | Description |
-|-------|-------------|
-| **Unknown** | Initial state when item is created |
-| **Requested** | Item has been requested from content service |
-| **Indexed** | Metadata has been fetched from Trakt/IMDB |
-| **Scraped** | Torrents have been found and ranked |
-| **Downloaded** | Torrent added to debrid service |
-| **Completed** | File available and registered in VFS |
-| **Failed** | Processing failed (will retry) |
-| **Blacklisted** | Item manually blacklisted by user |
-| **Partial** | Show/season with some episodes missing |
+-   Scraped → Failed (if no suitable torrents found)
+-   Failed → Scraped (on manual retry)
+-   Completed → Scraped (if file deleted from debrid)
 
 ---
 
@@ -138,134 +148,223 @@ States can transition back on failures:
 Riven uses a modular service-oriented architecture. Each service is independent and can be enabled/disabled individually.
 
 ### Content Services
+
 Discover new media to add to your library:
-- **Overseerr**: Request management system
-- **Plex Watchlist**: RSS-based watchlist integration
-- **Mdblist**: Curated media lists
-- **Listrr**: Trakt list manager
-- **Trakt**: Watchlists, collections, trending, popular
+
+-   **Overseerr**: Request management system
+-   **Plex Watchlist**: RSS-based watchlist integration
+-   **Mdblist**: Curated media lists
+-   **Listrr**: Trakt list manager
+-   **Trakt**: Watchlists, collections, trending, popular
 
 ### Scraper Services
+
 Find torrents for requested media:
-- **Torrentio**: Popular Stremio addon
-- **Jackett**: Torrent indexer aggregator
-- **Prowlarr**: Indexer manager
-- **Zilean**: DMM hash lookup
-- **Comet**: Debrid-optimized scraper
-- **Mediafusion**: Multi-source aggregator
-- **Orionoid**: Premium torrent search
-- **Rarbg**: Torrent database search
+
+-   **Torrentio**: Popular Stremio addon
+-   **Jackett**: Torrent indexer aggregator
+-   **Prowlarr**: Indexer manager
+-   **Zilean**: DMM hash lookup
+-   **Comet**: Debrid-optimized scraper
+-   **Mediafusion**: Multi-source aggregator
+-   **Orionoid**: Premium torrent search
+-   **Rarbg**: Torrent database search
 
 ### Downloader Services
+
 Add torrents to debrid services:
-- **Real-Debrid**: Premium downloader
-- **AllDebrid**: Alternative debrid service
-- **TorBox**: Torrent cloud storage
+
+-   **Real-Debrid**
+-   **AllDebrid**
+-   **Debrid-Link**
 
 ### Updater Services
+
 Notify media servers of new content:
-- **Plex**: Plex Media Server integration
-- **Jellyfin**: Open-source media server
-- **Emby**: Feature-rich media server
+
+-   **Plex**: Plex Media Server integration
+-   **Jellyfin**: Open-source media server
+-   **Emby**: Feature-rich media server
 
 ### Post-Processing Services
+
 Enhance downloaded media:
-- **Subtitle Service**: Fetch subtitles from various providers
-- **Media Analysis**: Analyze media files for metadata
+
+-   **Subtitle Service**: Fetch subtitles from various providers
+-   **Media Analysis**: Analyze media files for metadata
 
 ---
 
 ## Database Schema (Simplified)
 
 ### MediaItem
+
 Core entity representing a movie, show, season, or episode:
-```python
-MediaItem:
-  - id (primary key)
-  - imdb_id
-  - tmdb_id
-  - trakt_id
-  - title
-  - type (movie, show, season, episode)
-  - state (requested, scraped, etc.)
-  - parent_id (for episodes/seasons)
-  - streams (list of torrents)
-  - filesystem_entry (reference)
-```
+
+| Column          | Data Type                   |
+| --------------- | --------------------------- |
+| id              | integer                     |
+| imdb_id         | character varying           |
+| tvdb_id         | character varying           |
+| tmdb_id         | character varying           |
+| title           | character varying           |
+| poster_path     | character varying           |
+| type            | character varying           |
+| requested_at    | timestamp without time zone |
+| requested_by    | character varying           |
+| requested_id    | integer                     |
+| indexed_at      | timestamp without time zone |
+| scraped_at      | timestamp without time zone |
+| scraped_times   | integer                     |
+| active_stream   | json                        |
+| aliases         | json                        |
+| is_anime        | boolean                     |
+| network         | character varying           |
+| country         | character varying           |
+| language        | character varying           |
+| aired_at        | timestamp without time zone |
+| year            | integer                     |
+| genres          | json                        |
+| rating          | double precision            |
+| content_rating  | character varying           |
+| updated         | boolean                     |
+| guid            | character varying           |
+| overseerr_id    | integer                     |
+| last_state      | USER-DEFINED (States enum)  |
+| failed_attempts | integer                     |
 
 ### FilesystemEntry
+
 Represents a file in the VFS:
-```python
-FilesystemEntry:
-  - id (primary key)
-  - path (virtual path in VFS)
-  - size
-  - available_in_vfs (boolean)
-  - media_item_id (foreign key)
-```
+
+| Column           | Data Type                   |
+| ---------------- | --------------------------- |
+| id               | integer                     |
+| entry_type       | character varying           |
+| file_size        | bigint                      |
+| is_directory     | boolean                     |
+| created_at       | timestamp without time zone |
+| updated_at       | timestamp without time zone |
+| available_in_vfs | boolean                     |
+| media_item_id    | integer (foreign key)       |
+
+### MediaEntry
+
+Represents a media file entry from a debrid service:
+
+| Column               | Data Type         |
+| -------------------- | ----------------- |
+| id                   | integer           |
+| original_filename    | character varying |
+| download_url         | character varying |
+| unrestricted_url     | character varying |
+| provider             | character varying |
+| provider_download_id | character varying |
+| library_profiles     | json              |
+| media_metadata       | json              |
+
+### Show
+
+Represents a TV show:
+
+| Column       | Data Type         |
+| ------------ | ----------------- |
+| id           | integer           |
+| tvdb_status  | character varying |
+| release_data | json              |
+
+### Season
+
+Represents a season of a TV show:
+
+| Column    | Data Type |
+| --------- | --------- |
+| id        | integer   |
+| number    | integer   |
+| parent_id | integer   |
+
+### Episode
+
+Represents an episode of a TV show:
+
+| Column          | Data Type |
+| --------------- | --------- |
+| id              | integer   |
+| number          | integer   |
+| parent_id       | integer   |
+| absolute_number | integer   |
 
 ### Stream
+
 Represents a torrent/magnet link:
-```python
-Stream:
-  - id (primary key)
-  - infohash
-  - rank (quality score)
-  - cached (on debrid service)
-  - media_item_id (foreign key)
-```
+
+| Column       | Data Type         |
+| ------------ | ----------------- |
+| id           | integer           |
+| infohash     | character varying |
+| raw_title    | character varying |
+| parsed_title | character varying |
+| rank         | integer           |
+| lev_ratio    | double precision  |
+| resolution   | character varying |
+
+### StreamBlacklistRelation
+
+Represents a blacklisted stream for a media item:
+
+| Column        | Data Type |
+| ------------- | --------- |
+| id            | integer   |
+| media_item_id | integer   |
+| stream_id     | integer   |
+
+### StreamRelation
+
+Represents parent-child relationship between streams:
+
+| Column    | Data Type |
+| --------- | --------- |
+| id        | integer   |
+| parent_id | integer   |
+| child_id  | integer   |
+
+### ScheduledTask
+
+Represents a scheduled task for media item:
+
+| Column         | Data Type                   |
+| -------------- | --------------------------- |
+| id             | integer                     |
+| item_id        | integer                     |
+| task_type      | character varying           |
+| scheduled_for  | timestamp without time zone |
+| status         | USER-DEFINED                |
+| created_at     | timestamp without time zone |
+| executed_at    | timestamp without time zone |
+| reason         | character varying           |
+| offset_seconds | integer                     |
+
+### SubtitleEntry
+
+Represents a subtitle file:
+
+| Column                   | Data Type         |
+| ------------------------ | ----------------- |
+| id                       | integer           |
+| language                 | character varying |
+| parent_original_filename | character varying |
+| content                  | text              |
+| file_hash                | character varying |
+| video_file_size          | bigint            |
+| opensubtitles_id         | character varying |
 
 ---
 
 ## RivenVFS Architecture
 
-RivenVFS is a FUSE (Filesystem in Userspace) implementation that provides on-demand streaming.
+RivenVFS is a FUSE (Filesystem in Userspace) implementation that acts as a virtual filesystem for media files.
 
-### Components
-
-1. **FUSE Operations**
-   - `getattr()`: Return file attributes
-   - `read()`: Stream file data
-   - `readdir()`: List directory contents
-   - `open()`: Handle file opens
-
-2. **Provider System**
-   - Manages debrid service URLs
-   - Handles URL expiration and refresh
-   - Supports multiple debrid services
-
-3. **HTTP Client**
-   - pycurl-based with connection pooling
-   - HTTP/2 support for multiplexing
-   - Range request support for seeking
-
-4. **Cache Manager**
-   - LRU or TTL eviction policies
-   - Configurable size limits
-   - Per-chunk caching (e.g., 8MB chunks)
-
-5. **Prefetch Scheduler**
-   - Fair multi-user scheduling
-   - Priority-based chunk fetching
-   - Automatic read-ahead
-
-### Streaming Flow
-
-```
-Media Server Request
-       ↓
-FUSE read() called
-       ↓
-Check cache for chunk
-       ↓
-Cache miss? → Fetch from debrid via HTTP range request
-       ↓
-Store in cache
-       ↓
-Return data to media server
-       ↓
-Schedule prefetch for next chunks
-```
+_This is under continuous development and rapid changes are expected._
 
 ---
 
@@ -274,17 +373,19 @@ Schedule prefetch for next chunks
 Riven supports multiple configuration methods:
 
 1. **Web Interface** (primary)
-   - User-friendly settings UI
-   - Real-time validation
-   - Stored in settings file
+
+    - User-friendly settings UI
+    - Real-time validation
+    - Stored in settings file
 
 2. **Environment Variables**
-   - Prefix: `RIVEN_`
-   - Format: `RIVEN_CATEGORY_SUBCATEGORY_SETTING`
-   - Example: `RIVEN_FILESYSTEM_MOUNT_PATH=/mount`
+
+    - Prefix: `RIVEN_`
+    - Format: `RIVEN_CATEGORY_SUBCATEGORY_SETTING`
+    - Example: `RIVEN_FILESYSTEM_MOUNT_PATH=/mount`
 
 3. **Settings File**
-   - JSON-based configuration
+    - JSON-based configuration
 
 Priority: Environment Variables > Settings File > Defaults
 
@@ -293,42 +394,42 @@ Priority: Environment Variables > Settings File > Defaults
 ## Development Architecture
 
 ### Backend
-- **Language**: Python 3.11+
-- **Framework**: FastAPI
-- **ORM**: SQLAlchemy
-- **Database Migrations**: Alembic
-- **Task Scheduling**: APScheduler
-- **Async**: asyncio, trio (for FUSE)
+
+-   **Language**: Python 3.12+
+-   **Framework**: FastAPI
+-   **ORM**: SQLAlchemy
+-   **Database Migrations**: Alembic
+-   **Task Scheduling**: APScheduler
+-   **Async**: asyncio, trio (for FUSE)
 
 ### Frontend
-- **Framework**: Svelte 5
-- **Language**: TypeScript
-- **UI Library**: Shadcn/UI
-- **State Management**: Svelte stores
+
+-   **Framework**: Sveltekit 2 & Svelte 5
+-   **Language**: TypeScript
+-   **UI Library**: Shadcn/UI
 
 ### Build & Deploy
-- **Backend**: Docker multi-stage builds
-- **Frontend**: Static export or SSR
-- **Database**: PostgreSQL 16+
+
+-   **Backend & Frontend**: Docker multi-stage builds
+-   **Database**: PostgreSQL 17
 
 ---
 
 ## Monitoring & Logging
 
 ### Logging Levels
-- **INFO**: Standard operations
-- **DEBUG**: Detailed debugging info
-- **WARNING**: Non-critical issues
-- **ERROR**: Critical failures
 
-### Metrics (via cache_metrics)
-- Cache hit rate
-- Bandwidth usage
-- Chunk fetch times
-- Concurrent streams
+-   **INFO**: Standard operations
+-   **DEBUG**: Detailed debugging info
+-   **WARNING**: Non-critical issues
+-   **ERROR**: Critical failures
+-   **CRITICAL**: Critical failures
+-   **TRACE**: Tracing info
 
 ### Health Checks
-- Database connectivity
-- VFS mount status
-- Debrid service availability
-- Media server connectivity
+
+-   Database connectivity
+-   VFS mount status
+-   Debrid service availability
+-   Media server connectivity
+

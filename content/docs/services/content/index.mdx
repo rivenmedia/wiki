@@ -3,7 +3,7 @@ title: Content Services
 description: Configuration options for content services
 ---
 
-import { Callout } from "fumadocs-ui/components/callout"
+import { Callout } from "fumadocs-ui/components/callout";
 
 Riven supports various content services to help you manage and update your media library. Below is a list of the supported services, their configuration options, and examples of what to enter for each field.
 
@@ -43,18 +43,18 @@ Overseerr is a request management and media discovery tool. It helps you manage 
 - Click on `Webhook` on the end
 - Toggle `Enable Agent` so that it's enabled
 - For the Webhook URL:
-  - Enter the FQDN, IP or `localhost` to your Riven instance, and then be sure to add `/api/v1/webhook/overseerr` at the end of it
+    - Enter the FQDN, IP or `localhost` to your Riven instance, and then be sure to add `/api/v1/webhook/overseerr` at the end of it
 - Authorization Header should look like `Bearer <YOUR_RIVEN_API_KEY>`
 - Leave the rest of the settings default, however you'll want to enable these Notification types:
-  - `Request Automatically Approved`
-  - `Request Approved`
+    - `Request Automatically Approved`
+    - `Request Approved`
 
 So that only approved requests will get sent from the webhook from Overseerr. Adjust this based on your needs. Any of the following examples might be correct depending on your setup.
 
 - Example 1: `http://localhost:8080/api/v1/webhook/overseerr`
 - Example 2: `http://riven:8080/api/v1/webhook/overseerr`
 
-After all that's setup, you should be good to go. If you experience any issues, double check the ip/port you're using to access the backend of Riven is correct. The backend port of Riven is `8080` by default. 
+After all that's setup, you should be good to go. If you experience any issues, double check the ip/port you're using to access the backend of Riven is correct. The backend port of Riven is `8080` by default.
 
 ![overseerr](/images/overseerr-notifications.png)
 
@@ -86,8 +86,7 @@ Mdblist is a service that provides curated lists of media content.
 - **lists** (list of strings): A list of Mdblist URLs for curated media lists.
     - Example: `["https://mdblist.com/lists/xxxxxxx/xxxxxxxxxx"]`
 
-!!! note "lists also accept a list of ids"
-    - Example: `["123456", "654321"]`
+!!! note "lists also accept a list of ids" - Example: `["123456", "654321"]`
 
 ---
 

@@ -1,7 +1,7 @@
 .PHONY: install dev
 
 install:
-	npm install
+	bun install
 
 dev:
-	npm run dev
+	bun run dev

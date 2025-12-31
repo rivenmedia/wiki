@@ -86,7 +86,7 @@ export default function Layout({ children }: LayoutProps<"/">) {
                     dangerouslySetInnerHTML={{
                         __html: JSON.stringify(jsonLdProject).replace(
                             /</g,
-                            "\\u003c"
+                            "\\u003c",
                         ),
                     }}
                 />

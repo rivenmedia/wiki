@@ -1,44 +1,51 @@
-import { DocsLayout } from 'fumadocs-ui/layouts/docs';
-import { baseOptions } from '@/lib/layout.shared';
-import { source } from '@/lib/source';
+import { DocsLayout } from "fumadocs-ui/layouts/docs";
+import { baseOptions } from "@/lib/layout.shared";
+import { source } from "@/lib/source";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getSubtree(tree: any): any {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const subTree: any = { name: tree.name, children: [] };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const subTree: any = { name: tree.name, children: [] };
 
-  if (tree.url) {
-    subTree.url = tree.url;
-  }
+    if (tree.url) {
+        subTree.url = tree.url;
+    }
 
-  if (!subTree.url && tree.index && tree.index.url) {
+    if (!subTree.url && tree.index && tree.index.url) {
+        if (tree.children?.length > 0) {
+            subTree.children.push({
+                name: "Overview",
+                url: tree.index.url,
+                type: "page",
+            });
+        } else {
+            subTree.url = tree.index.url;
+        }
+    }
+
     if (tree.children?.length > 0) {
-      subTree.children.push({ name: 'Overview', url: tree.index.url, type: 'page' });
+        for (const child of tree.children) {
+            const subTreeChildren = getSubtree(child);
+            if (subTreeChildren) {
+                subTree.children.push(subTreeChildren);
+            }
+        }
+    }
+
+    if (
+        tree.type === "page" ||
+        (tree.type === "folder" && !(subTree.children?.length > 0))
+    ) {
+        subTree.type = "page";
     } else {
-      subTree.url = tree.index.url;
+        subTree.type = "folder";
     }
-  }
 
-  if (tree.children?.length > 0) {
-    for (const child of tree.children) {
-      const subTreeChildren = getSubtree(child);
-      if (subTreeChildren) {
-        subTree.children.push(subTreeChildren);
-      }
-    }
-  }
-  
-  if (tree.type === 'page' || tree.type === "folder" && !(subTree.children?.length > 0)) {
-    subTree.type = 'page';
-  } else {
-    subTree.type = 'folder';
-  }
+    // if (!subTree.url && !(subTree.children?.length > 0)) {
+    //   return null;
+    // }
 
-  // if (!subTree.url && !(subTree.children?.length > 0)) {
-  //   return null;
-  // }
-
-  return subTree;
+    return subTree;
 }
 
 // const origTree: PageTree.Root = {
@@ -81,17 +88,16 @@ function getSubtree(tree: any): any {
 //   ]
 // }
 
-export default function Layout({ children }: LayoutProps<'/docs'>) {
+export default function Layout({ children }: LayoutProps<"/docs">) {
+    const tree = source.getPageTree();
+    const subTree = getSubtree(tree);
+    // console.log('Orig tree:', origTree);
+    // console.log('Gen tree:', subTree);
+    // console.log("Is subtree same as original tree?", JSON.stringify(subTree) === JSON.stringify(origTree));
 
-  const tree = source.getPageTree();
-  const subTree = getSubtree(tree);
-  // console.log('Orig tree:', origTree);
-  // console.log('Gen tree:', subTree);
-  // console.log("Is subtree same as original tree?", JSON.stringify(subTree) === JSON.stringify(origTree));
-
-  return (
-    <DocsLayout tree={subTree} {...baseOptions()}>
-      {children}
-    </DocsLayout>
-  );
+    return (
+        <DocsLayout tree={subTree} {...baseOptions()}>
+            {children}
+        </DocsLayout>
+    );
 }

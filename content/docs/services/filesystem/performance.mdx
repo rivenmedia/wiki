@@ -3,7 +3,7 @@ title: VFS Performance Tuning
 description: Optimize RivenVFS for your specific use case
 ---
 
-import { Callout } from "fumadocs-ui/components/callout"
+import { Callout } from "fumadocs-ui/components/callout";
 
 # VFS Performance Tuning
 
@@ -37,6 +37,7 @@ RIVEN_FILESYSTEM_FETCH_AHEAD_CHUNKS=8
 ```
 
 **Why**:
+
 - Large cache (20GB) minimizes re-fetching
 - Large chunks (32MB) reduce HTTP requests
 - Aggressive prefetch (8 chunks = 256MB) prevents buffering
@@ -60,6 +61,7 @@ RIVEN_FILESYSTEM_FETCH_AHEAD_CHUNKS=4
 ```
 
 **Why**:
+
 - Moderate cache prevents RAM exhaustion
 - TTL eviction ensures fresh content for new users
 - Smaller chunks allow fair bandwidth sharing
@@ -82,6 +84,7 @@ RIVEN_FILESYSTEM_FETCH_AHEAD_CHUNKS=6
 ```
 
 **Why**:
+
 - Disk cache preserves RAM
 - Larger total cache compensates for slower disk speed
 - Smaller chunks reduce memory overhead per request
@@ -104,6 +107,7 @@ RIVEN_FILESYSTEM_FETCH_AHEAD_CHUNKS=2
 ```
 
 **Why**:
+
 - Smaller cache prevents over-fetching
 - Small chunks minimize wasted bandwidth on seeks
 - Minimal prefetch reduces background bandwidth usage
@@ -126,6 +130,7 @@ RIVEN_FILESYSTEM_FETCH_AHEAD_CHUNKS=4
 ```
 
 **Why**:
+
 - Conservative cache size for shared resources
 - TTL eviction prevents cache from growing indefinitely
 - Balanced settings for variable network conditions
@@ -138,15 +143,16 @@ RIVEN_FILESYSTEM_FETCH_AHEAD_CHUNKS=4
 
 ### Cache Directory Selection
 
-| Location | Speed | Capacity | Persistence | Best For |
-|----------|-------|----------|-------------|----------|
-| `/dev/shm` | Fastest | Limited by RAM | Lost on reboot | Performance-critical |
-| `/tmp` | Fast | Varies | Lost on reboot | Temporary, less critical |
-| SSD | Fast | Large | Persistent | RAM-constrained systems |
-| HDD | Slow | Very Large | Persistent | Archival, low priority |
+| Location   | Speed   | Capacity       | Persistence    | Best For                 |
+| ---------- | ------- | -------------- | -------------- | ------------------------ |
+| `/dev/shm` | Fastest | Limited by RAM | Lost on reboot | Performance-critical     |
+| `/tmp`     | Fast    | Varies         | Lost on reboot | Temporary, less critical |
+| SSD        | Fast    | Large          | Persistent     | RAM-constrained systems  |
+| HDD        | Slow    | Very Large     | Persistent     | Archival, low priority   |
 
 <Callout type="info">
-**Recommendation**: Use `/dev/shm` unless you have RAM constraints or need persistence across reboots.
+    **Recommendation**: Use `/dev/shm` unless you have RAM constraints or need
+    persistence across reboots.
 </Callout>
 
 ---
@@ -156,6 +162,7 @@ RIVEN_FILESYSTEM_FETCH_AHEAD_CHUNKS=4
 **How much cache do you need?**
 
 Calculate based on:
+
 - Average movie size: ~5-15 GB
 - Average episode size: ~500 MB - 2 GB
 - Cache hit rate target: 30-50% is good
@@ -167,30 +174,35 @@ Calculate based on:
 - **Large cache (50+ GB)**: Caches multiple movies, high hit rate
 
 <Callout type="warn">
-**Don't over-allocate**: Leaving RAM for other services is important. VFS will function with a small cache, just with more network requests.
+    **Don't over-allocate**: Leaving RAM for other services is important. VFS
+    will function with a small cache, just with more network requests.
 </Callout>
 
 ---
 
 ### Eviction Policy Comparison
 
-| Policy | When to Use | Pros | Cons |
-|--------|-------------|------|------|
-| **LRU** | Single user, predictable usage | Simple, effective | May keep old data too long |
-| **TTL** | Multi-user, variable content | Fresh data, predictable memory | May evict useful data early |
+| Policy  | When to Use                    | Pros                           | Cons                        |
+| ------- | ------------------------------ | ------------------------------ | --------------------------- |
+| **LRU** | Single user, predictable usage | Simple, effective              | May keep old data too long  |
+| **TTL** | Multi-user, variable content   | Fresh data, predictable memory | May evict useful data early |
 
 **LRU (Least Recently Used)**:
+
 - Keeps frequently accessed data
 - Good for re-watching or binge-watching
 - Example: Binge-watching a TV series
 
 **TTL (Time To Live)**:
+
 - Removes data after idle time
 - Good for one-time viewing
 - Example: Watching different movies each night
 
 <Callout type="info">
-You can use **both**: Set `cache_eviction=TTL` with a generous `cache_ttl_seconds`. Old data gets removed by TTL, and if cache is still full, LRU kicks in.
+    You can use **both**: Set `cache_eviction=TTL` with a generous
+    `cache_ttl_seconds`. Old data gets removed by TTL, and if cache is still
+    full, LRU kicks in.
 </Callout>
 
 ---
@@ -202,13 +214,14 @@ You can use **both**: Set `cache_eviction=TTL` with a generous `cache_ttl_second
 Chunk size controls the granularity of HTTP requests to the debrid CDN.
 
 | Chunk Size | HTTP Requests (for 10GB file) | Seek Speed | Bandwidth Efficiency |
-|------------|------------------------------|------------|---------------------|
-| 4 MB | ~2500 requests | Fast | Lower (overhead) |
-| 8 MB | ~1250 requests | Good | Good |
-| 16 MB | ~625 requests | Good | Better |
-| 32 MB | ~312 requests | Slower | Best |
+| ---------- | ----------------------------- | ---------- | -------------------- |
+| 4 MB       | ~2500 requests                | Fast       | Lower (overhead)     |
+| 8 MB       | ~1250 requests                | Good       | Good                 |
+| 16 MB      | ~625 requests                 | Good       | Better               |
+| 32 MB      | ~312 requests                 | Slower     | Best                 |
 
 **Recommendations**:
+
 - **4-8 MB**: Frequent seeking (e.g., scrubbing through timelines)
 - **16 MB**: Balanced (default for most users)
 - **32 MB**: Sequential playback, minimize CDN requests
@@ -223,20 +236,23 @@ Prefetch determines how far ahead RivenVFS fetches while streaming.
 
 **Examples**:
 
-| Chunk Size | Fetch Ahead | Total Prefetch | Use Case |
-|------------|-------------|----------------|----------|
-| 8 MB | 2 | 16 MB | Slow connections |
-| 8 MB | 4 | 32 MB | Standard (default) |
-| 16 MB | 4 | 64 MB | Smooth 1080p |
-| 32 MB | 8 | 256 MB | 4K, aggressive prefetch |
+| Chunk Size | Fetch Ahead | Total Prefetch | Use Case                |
+| ---------- | ----------- | -------------- | ----------------------- |
+| 8 MB       | 2           | 16 MB          | Slow connections        |
+| 8 MB       | 4           | 32 MB          | Standard (default)      |
+| 16 MB      | 4           | 64 MB          | Smooth 1080p            |
+| 32 MB      | 8           | 256 MB         | 4K, aggressive prefetch |
 
 **Considerations**:
+
 - **Network speed**: Need enough bandwidth to prefetch in real-time
 - **Bitrate**: 4K movies (~50 Mbps) need more prefetch than 1080p (~10 Mbps)
 - **Multi-user**: Lower prefetch prevents bandwidth monopolization
 
 <Callout type="info">
-**Rule of thumb**: Prefetch should cover ~10-30 seconds of playback. For a 50 Mbps 4K stream, 30 seconds = ~187 MB. Set `fetch_ahead_chunks` accordingly.
+    **Rule of thumb**: Prefetch should cover ~10-30 seconds of playback. For a
+    50 Mbps 4K stream, 30 seconds = ~187 MB. Set `fetch_ahead_chunks`
+    accordingly.
 </Callout>
 
 ---
@@ -263,19 +279,19 @@ Bandwidth: 125 Mbps
 **Interpreting Metrics**:
 
 - **Cache hit rate**:
-  - < 10%: Cache too small or eviction too aggressive
-  - 10-30%: Normal for diverse content
-  - 30-50%: Good balance
-  - > 50%: Cache may be over-sized (or great re-watch rate!)
+    - < 10%: Cache too small or eviction too aggressive
+    - 10-30%: Normal for diverse content
+    - 30-50%: Good balance
+    - > 50%: Cache may be over-sized (or great re-watch rate!)
 
 - **Prefetch queue depth**:
-  - 0: Not streaming or prefetch completed
-  - 1-5: Normal
-  - > 10: Possible bandwidth bottleneck
+    - 0: Not streaming or prefetch completed
+    - 1-5: Normal
+    - > 10: Possible bandwidth bottleneck
 
 - **Bandwidth**:
-  - Spikes during prefetch are normal
-  - Sustained high usage may indicate over-prefetching
+    - Spikes during prefetch are normal
+    - Sustained high usage may indicate over-prefetching
 
 ---
 
@@ -286,6 +302,7 @@ Bandwidth: 125 Mbps
 **Challenges**: Large file sizes (20-50 GB), high bitrates (50-100 Mbps)
 
 **Recommended Settings**:
+
 ```bash
 RIVEN_FILESYSTEM_CACHE_MAX_SIZE_MB=30720  # 30 GB
 RIVEN_FILESYSTEM_CHUNK_SIZE_MB=32
@@ -293,6 +310,7 @@ RIVEN_FILESYSTEM_FETCH_AHEAD_CHUNKS=8
 ```
 
 **Tips**:
+
 - Ensure your network can sustain 100+ Mbps
 - Use wired connection, not WiFi
 - Consider pre-caching by starting playback and pausing
@@ -304,6 +322,7 @@ RIVEN_FILESYSTEM_FETCH_AHEAD_CHUNKS=8
 **Challenges**: Many files, sequential access, potential re-watching
 
 **Recommended Settings**:
+
 ```bash
 RIVEN_FILESYSTEM_CACHE_MAX_SIZE_MB=15360  # 15 GB (multiple episodes)
 RIVEN_FILESYSTEM_CACHE_EVICTION=LRU       # Keep recent episodes
@@ -312,6 +331,7 @@ RIVEN_FILESYSTEM_FETCH_AHEAD_CHUNKS=4
 ```
 
 **Tips**:
+
 - LRU cache keeps recently watched episodes
 - Cache should fit 5-10 episodes
 - Prefetch prevents buffering during intro skipping
@@ -323,6 +343,7 @@ RIVEN_FILESYSTEM_FETCH_AHEAD_CHUNKS=4
 **Challenges**: Fair bandwidth allocation, variable content access
 
 **Recommended Settings**:
+
 ```bash
 RIVEN_FILESYSTEM_CACHE_MAX_SIZE_MB=10240  # Shared cache
 RIVEN_FILESYSTEM_CACHE_EVICTION=TTL
@@ -332,6 +353,7 @@ RIVEN_FILESYSTEM_FETCH_AHEAD_CHUNKS=3
 ```
 
 **Tips**:
+
 - RivenVFS includes fair scheduling (no config needed)
 - Smaller chunks allow more granular bandwidth sharing
 - TTL prevents one user's cache from dominating
@@ -343,6 +365,7 @@ RIVEN_FILESYSTEM_FETCH_AHEAD_CHUNKS=3
 **Challenges**: Frequent timeline scrubbing, chapter skipping
 
 **Recommended Settings**:
+
 ```bash
 RIVEN_FILESYSTEM_CHUNK_SIZE_MB=4          # Small chunks for fast seeks
 RIVEN_FILESYSTEM_FETCH_AHEAD_CHUNKS=2     # Don't waste on prefetch
@@ -350,6 +373,7 @@ RIVEN_FILESYSTEM_CACHE_MAX_SIZE_MB=5120   # Moderate cache
 ```
 
 **Tips**:
+
 - Small chunks minimize waste when seeking
 - Lower prefetch reduces unnecessary fetching
 - Cache still helps with repeated seeks to same area
@@ -363,11 +387,13 @@ RIVEN_FILESYSTEM_CACHE_MAX_SIZE_MB=5120   # Moderate cache
 RivenVFS automatically uses HTTP/2 if your debrid CDN supports it.
 
 **Benefits**:
+
 - Multiple chunk requests over single connection
 - Lower latency
 - Better performance on high-latency networks
 
 **How to verify**:
+
 ```bash
 docker logs riven | grep "HTTP/2"
 # Should see: "HTTP/2 support detected"
@@ -383,9 +409,9 @@ If using SSD for cache:
 
 1. **Use XFS or ext4** (better than BTRFS for this workload)
 2. **Disable atime**:
-   ```bash
-   mount -o remount,noatime /path/to/cache
-   ```
+    ```bash
+    mount -o remount,noatime /path/to/cache
+    ```
 3. **Use SSD-optimized filesystem options**
 
 ---
@@ -393,18 +419,20 @@ If using SSD for cache:
 ### Network Optimization
 
 1. **MTU Size**: Ensure MTU is 1500 (standard) or higher
-   ```bash
-   ip link show eth0 | grep mtu
-   ```
+
+    ```bash
+    ip link show eth0 | grep mtu
+    ```
 
 2. **TCP Buffer Sizes**: Linux auto-tuning usually works, but can be tweaked
-   ```bash
-   sysctl -w net.ipv4.tcp_rmem="4096 87380 16777216"
-   sysctl -w net.ipv4.tcp_wmem="4096 65536 16777216"
-   ```
+
+    ```bash
+    sysctl -w net.ipv4.tcp_rmem="4096 87380 16777216"
+    sysctl -w net.ipv4.tcp_wmem="4096 65536 16777216"
+    ```
 
 3. **DNS Resolution**: Fast DNS helps with CDN URL resolution
-   - Use Cloudflare (1.1.1.1) or Google (8.8.8.8) DNS
+    - Use Cloudflare (1.1.1.1) or Google (8.8.8.8) DNS
 
 ---
 
@@ -483,6 +511,7 @@ If using SSD for cache:
 ## Recommended Combinations
 
 ### Best Overall (if unsure)
+
 ```bash
 cache_dir = /dev/shm/riven-cache
 cache_max_size_mb = 10240
@@ -492,6 +521,7 @@ fetch_ahead_chunks = 4
 ```
 
 ### Maximum Performance (RAM available)
+
 ```bash
 cache_dir = /dev/shm/riven-cache
 cache_max_size_mb = 30720
@@ -501,6 +531,7 @@ fetch_ahead_chunks = 8
 ```
 
 ### Minimum Resources
+
 ```bash
 cache_dir = /path/to/disk
 cache_max_size_mb = 2048
@@ -517,11 +548,13 @@ fetch_ahead_chunks = 2
 ### Symptom: Frequent buffering
 
 **Possible causes**:
+
 - Insufficient prefetch
 - Slow network to debrid CDN
 - Cache evicting too aggressively
 
 **Solutions**:
+
 1. Increase `fetch_ahead_chunks` to 6-8
 2. Test network speed to debrid CDN
 3. Increase `cache_max_size_mb`
@@ -532,10 +565,12 @@ fetch_ahead_chunks = 2
 ### Symptom: Slow seeking
 
 **Possible causes**:
+
 - Large chunk size
 - Slow disk (if using disk cache)
 
 **Solutions**:
+
 1. Decrease `chunk_size_mb` to 4-8 MB
 2. Switch to tmpfs cache (`/dev/shm`)
 
@@ -544,10 +579,12 @@ fetch_ahead_chunks = 2
 ### Symptom: High memory usage
 
 **Possible causes**:
+
 - Cache too large
 - Memory leak (rare)
 
 **Solutions**:
+
 1. Decrease `cache_max_size_mb`
 2. Switch to disk cache
 3. Update Riven to latest version

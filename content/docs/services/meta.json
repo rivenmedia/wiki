@@ -1,0 +1,15 @@
+{
+  "title": "Services",
+  "pages": [
+    "index",
+    "filesystem",
+    "content",
+    "scrapers",
+    "downloaders",
+    "post-processing",
+    "subtitles",
+    "updaters",
+    "notifications",
+    "extras"
+  ]
+}

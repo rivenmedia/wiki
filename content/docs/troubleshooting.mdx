@@ -3,7 +3,7 @@ title: Troubleshooting
 description: Common issues and solutions for Riven
 ---
 
-import { Callout } from "fumadocs-ui/components/callout"
+import { Callout } from "fumadocs-ui/components/callout";
 
 # Troubleshooting Guide
 
@@ -20,27 +20,29 @@ This guide covers common issues you might encounter with Riven and their solutio
 **Solutions**:
 
 1. **Check logs**:
-   ```bash
-   docker logs riven
-   ```
+
+    ```bash
+    docker logs riven
+    ```
 
 2. **Database connection issues**:
-   - Verify PostgreSQL container is running and healthy
-   - Check `RIVEN_DATABASE_HOST` environment variable
-   - Ensure database credentials are correct
+    - Verify PostgreSQL container is running and healthy
+    - Check `RIVEN_DATABASE_HOST` environment variable
+    - Ensure database credentials are correct
 
 3. **FUSE device not available**:
-   ```bash
-   # Check if /dev/fuse exists
-   ls -l /dev/fuse
 
-   # If missing, load fuse module
-   sudo modprobe fuse
-   ```
+    ```bash
+    # Check if /dev/fuse exists
+    ls -l /dev/fuse
+
+    # If missing, load fuse module
+    sudo modprobe fuse
+    ```
 
 4. **Permission issues**:
-   - Verify `PUID` and `PGID` match your user
-   - Check ownership of data and mount directories
+    - Verify `PUID` and `PGID` match your user
+    - Check ownership of data and mount directories
 
 ---
 
@@ -51,15 +53,15 @@ This guide covers common issues you might encounter with Riven and their solutio
 **Solutions**:
 
 1. **Check ORIGIN environment variable**:
-   - Must match the URL you're accessing the frontend from
-   - Example: If accessing via `http://192.168.1.100:3000`, set `ORIGIN=http://192.168.1.100:3000`
+    - Must match the URL you're accessing the frontend from
+    - Example: If accessing via `http://192.168.1.100:3000`, set `ORIGIN=http://192.168.1.100:3000`
 
 2. **Behind reverse proxy**:
-   - Remove the `ORIGIN` variable entirely
-   - Your reverse proxy should handle CORS headers
+    - Remove the `ORIGIN` variable entirely
+    - Your reverse proxy should handle CORS headers
 
 3. **Using HTTPS**:
-   - Ensure `ORIGIN` uses `https://` not `http://`
+    - Ensure `ORIGIN` uses `https://` not `http://`
 
 ---
 
@@ -74,43 +76,47 @@ This guide covers common issues you might encounter with Riven and their solutio
 **Solutions**:
 
 1. **Verify host mount is shared**:
-   ```bash
-   findmnt -T /path/to/riven/mount -o TARGET,PROPAGATION
-   # Should show: shared or rshared
-   ```
 
-   If not shared:
-   ```bash
-   sudo mount --bind /path/to/riven/mount /path/to/riven/mount
-   sudo mount --make-rshared /path/to/riven/mount
-   ```
+    ```bash
+    findmnt -T /path/to/riven/mount -o TARGET,PROPAGATION
+    # Should show: shared or rshared
+    ```
+
+    If not shared:
+
+    ```bash
+    sudo mount --bind /path/to/riven/mount /path/to/riven/mount
+    sudo mount --make-rshared /path/to/riven/mount
+    ```
 
 2. **Check container mount propagation**:
-   ```bash
-   # Inside media server container
-   docker exec -it plex sh -c 'findmnt -T /mount -o TARGET,PROPAGATION,FSTYPE'
-   # Should show:
-   # PROPAGATION: rslave or rshared
-   # FSTYPE: fuse (when VFS is mounted)
-   ```
+
+    ```bash
+    # Inside media server container
+    docker exec -it plex sh -c 'findmnt -T /mount -o TARGET,PROPAGATION,FSTYPE'
+    # Should show:
+    # PROPAGATION: rslave or rshared
+    # FSTYPE: fuse (when VFS is mounted)
+    ```
 
 3. **Verify docker-compose.yml**:
-   - Riven container: `/path/to/riven/mount:/mount:rshared,z`
-   - Media server: `/path/to/riven/mount:/mount:rslave,z`
+    - Riven container: `/path/to/riven/mount:/mount:rshared,z`
+    - Media server: `/path/to/riven/mount:/mount:rslave,z`
 
 4. **Check Riven logs**:
-   ```bash
-   docker logs riven | grep -i "vfs\|mount\|fuse"
-   ```
+
+    ```bash
+    docker logs riven | grep -i "vfs\|mount\|fuse"
+    ```
 
 5. **Clear stale FUSE mount**:
-   ```bash
-   # If Riven crashed and left a stale mount
-   sudo fusermount -uz /path/to/riven/mount
-   # or
-   sudo umount -l /path/to/riven/mount
-   # Then restart Riven
-   ```
+    ```bash
+    # If Riven crashed and left a stale mount
+    sudo fusermount -uz /path/to/riven/mount
+    # or
+    sudo umount -l /path/to/riven/mount
+    # Then restart Riven
+    ```
 
 ---
 
@@ -121,30 +127,32 @@ This guide covers common issues you might encounter with Riven and their solutio
 **Solutions**:
 
 1. **Check item state**:
-   - Open the item in Riven web UI
-   - Verify state is "Completed"
-   - Check if filesystem_entry exists
+    - Open the item in Riven web UI
+    - Verify state is "Completed"
+    - Check if filesystem_entry exists
 
 2. **Check Riven logs**:
-   ```bash
-   docker logs riven | grep -i "filesystem\|vfs"
-   ```
+
+    ```bash
+    docker logs riven | grep -i "filesystem\|vfs"
+    ```
 
 3. **Verify debrid service**:
-   - Log into your debrid service web UI
-   - Confirm the torrent/files still exist
-   - Check if files were deleted due to inactivity
+    - Log into your debrid service web UI
+    - Confirm the torrent/files still exist
+    - Check if files were deleted due to inactivity
 
 4. **Check VFS mount**:
-   ```bash
-   # Inside Riven container
-   docker exec -it riven ls -la /mount
-   # Should show movies/, shows/, etc.
-   ```
+
+    ```bash
+    # Inside Riven container
+    docker exec -it riven ls -la /mount
+    # Should show movies/, shows/, etc.
+    ```
 
 5. **Re-register files**:
-   - In Riven UI, try removing and re-adding the item
-   - Or trigger a library re-scan
+    - In Riven UI, try removing and re-adding the item
+    - Or trigger a library re-scan
 
 ---
 
@@ -155,32 +163,34 @@ This guide covers common issues you might encounter with Riven and their solutio
 **Solutions**:
 
 1. **Check FUSE is available**:
-   ```bash
-   # On host
-   ls -l /dev/fuse
-   modprobe fuse
-   ```
+
+    ```bash
+    # On host
+    ls -l /dev/fuse
+    modprobe fuse
+    ```
 
 2. **Verify container capabilities**:
-   - docker-compose.yml must include:
-     ```yaml
-     cap_add:
-       - SYS_ADMIN
-     security_opt:
-       - apparmor:unconfined
-     devices:
-       - /dev/fuse
-     ```
+    - docker-compose.yml must include:
+        ```yaml
+        cap_add:
+            - SYS_ADMIN
+        security_opt:
+            - apparmor:unconfined
+        devices:
+            - /dev/fuse
+        ```
 
 3. **Check mount path permissions**:
-   ```bash
-   # Mount path should be writable
-   docker exec -it riven touch /mount/test
-   ```
+
+    ```bash
+    # Mount path should be writable
+    docker exec -it riven touch /mount/test
+    ```
 
 4. **SELinux systems**:
-   - Ensure `:z` flag is present in volume mount
-   - May need to adjust SELinux policies
+    - Ensure `:z` flag is present in volume mount
+    - May need to adjust SELinux policies
 
 ---
 
@@ -193,26 +203,27 @@ This guide covers common issues you might encounter with Riven and their solutio
 **Solutions**:
 
 1. **Check scraper configuration**:
-   - Verify at least one scraper is enabled
-   - Check API keys for Jackett/Prowlarr/etc.
-   - Test scraper URLs manually
+    - Verify at least one scraper is enabled
+    - Check API keys for Jackett/Prowlarr/etc.
+    - Test scraper URLs manually
 
 2. **Check scraper logs**:
-   ```bash
-   docker logs riven | grep -i "scraper\|torrent"
-   ```
+
+    ```bash
+    docker logs riven | grep -i "scraper\|torrent"
+    ```
 
 3. **Verify ranking settings**:
-   - Settings might be too restrictive
-   - Try relaxing quality filters temporarily
+    - Settings might be too restrictive
+    - Try relaxing quality filters temporarily
 
 4. **Check debrid service**:
-   - Some torrents may not be cached
-   - Try different scrapers
+    - Some torrents may not be cached
+    - Try different scrapers
 
 5. **Manually scrape**:
-   - Use the manual scrape feature in the web UI
-   - Select torrents directly
+    - Use the manual scrape feature in the web UI
+    - Select torrents directly
 
 ---
 
@@ -223,22 +234,22 @@ This guide covers common issues you might encounter with Riven and their solutio
 **Solutions**:
 
 1. **Check debrid service**:
-   - Log into debrid web UI
-   - Verify torrent is actually downloaded (100%)
-   - Check if files are still available
+    - Log into debrid web UI
+    - Verify torrent is actually downloaded (100%)
+    - Check if files are still available
 
 2. **Check file size filters**:
-   - Settings → Downloaders
-   - Verify `movie_filesize_mb_min/max` and `episode_filesize_mb_min/max`
-   - Ensure files aren't being filtered out
+    - Settings → Downloaders
+    - Verify `movie_filesize_mb_min/max` and `episode_filesize_mb_min/max`
+    - Ensure files aren't being filtered out
 
 3. **Check video extensions**:
-   - Settings → Downloaders → `video_extensions`
-   - Ensure file types are included (mp4, mkv, avi)
+    - Settings → Downloaders → `video_extensions`
+    - Ensure file types are included (mp4, mkv, avi)
 
 4. **Force refresh**:
-   - Remove the item and re-add it
-   - Or use the "Retry" button in the UI
+    - Remove the item and re-add it
+    - Or use the "Retry" button in the UI
 
 ---
 
@@ -249,21 +260,21 @@ This guide covers common issues you might encounter with Riven and their solutio
 **Solutions**:
 
 1. **Verify API key**:
-   - Check the API key in Settings
-   - Generate a new key from your debrid service
-   - Ensure no extra spaces or quotes
+    - Check the API key in Settings
+    - Generate a new key from your debrid service
+    - Ensure no extra spaces or quotes
 
 2. **Rate limiting**:
-   - Real-Debrid has API rate limits
-   - Riven includes built-in rate limiting
-   - Wait a few minutes and try again
+    - Real-Debrid has API rate limits
+    - Riven includes built-in rate limiting
+    - Wait a few minutes and try again
 
 3. **Proxy settings**:
-   - If behind VPN/proxy, set `proxy_url` in downloader settings
+    - If behind VPN/proxy, set `proxy_url` in downloader settings
 
 4. **Service status**:
-   - Check if debrid service is down: https://status.real-debrid.com/
-   - Try a different debrid service temporarily
+    - Check if debrid service is down: https://status.real-debrid.com/
+    - Try a different debrid service temporarily
 
 ---
 
@@ -276,20 +287,20 @@ This guide covers common issues you might encounter with Riven and their solutio
 **Solutions**:
 
 1. **Verify webhook URL**:
-   - Should be: `http://riven:8080/api/v1/webhook/overseerr`
-   - Or: `http://<riven-ip>:8080/api/v1/webhook/overseerr`
+    - Should be: `http://riven:8080/api/v1/webhook/overseerr`
+    - Or: `http://<riven-ip>:8080/api/v1/webhook/overseerr`
 
 2. **Check authorization header**:
-   - Format: `Bearer <YOUR_RIVEN_API_KEY>`
-   - Get API key from Riven settings
+    - Format: `Bearer <YOUR_RIVEN_API_KEY>`
+    - Get API key from Riven settings
 
 3. **Test webhook**:
-   - Approve a test request in Overseerr
-   - Check Riven logs for webhook receipt
+    - Approve a test request in Overseerr
+    - Check Riven logs for webhook receipt
 
 4. **Network connectivity**:
-   - Ensure Overseerr can reach Riven
-   - Try pinging from Overseerr container
+    - Ensure Overseerr can reach Riven
+    - Try pinging from Overseerr container
 
 ---
 
@@ -300,21 +311,21 @@ This guide covers common issues you might encounter with Riven and their solutio
 **Solutions**:
 
 1. **Check API key**:
-   - Verify Trakt API key is correct
-   - May need to re-authorize OAuth if using
+    - Verify Trakt API key is correct
+    - May need to re-authorize OAuth if using
 
 2. **Check update interval**:
-   - Default is 86400 seconds (24 hours)
-   - Lower it temporarily to test
+    - Default is 86400 seconds (24 hours)
+    - Lower it temporarily to test
 
 3. **Manual trigger**:
-   - Restart Riven to force immediate sync
-   - Or wait for next update cycle
+    - Restart Riven to force immediate sync
+    - Or wait for next update cycle
 
 4. **Check logs**:
-   ```bash
-   docker logs riven | grep -i "trakt"
-   ```
+    ```bash
+    docker logs riven | grep -i "trakt"
+    ```
 
 ---
 
@@ -327,24 +338,24 @@ This guide covers common issues you might encounter with Riven and their solutio
 **Solutions**:
 
 1. **Enable auto-scan**:
-   - Plex Settings → Library
-   - Enable "Scan my library automatically"
+    - Plex Settings → Library
+    - Enable "Scan my library automatically"
 
 2. **Manual scan**:
-   - Hover over library → "Scan Library Files"
+    - Hover over library → "Scan Library Files"
 
 3. **Check updater settings**:
-   - Riven Settings → Updaters → Plex
-   - Verify enabled and configured
-   - Check Plex URL and token
+    - Riven Settings → Updaters → Plex
+    - Verify enabled and configured
+    - Check Plex URL and token
 
 4. **Verify library paths**:
-   - Plex libraries should point to:
-     - `/mount/movies` for movies
-     - `/mount/shows` for TV shows
+    - Plex libraries should point to:
+        - `/mount/movies` for movies
+        - `/mount/shows` for TV shows
 
 5. **Check Plex logs**:
-   - Look for filesystem access errors
+    - Look for filesystem access errors
 
 ---
 
@@ -355,22 +366,23 @@ This guide covers common issues you might encounter with Riven and their solutio
 **Solutions**:
 
 1. **Check updater configuration**:
-   - Settings → Updaters
-   - Verify API key and URL
+    - Settings → Updaters
+    - Verify API key and URL
 
 2. **Test API connection**:
-   ```bash
-   curl -H "X-Emby-Token: YOUR_API_KEY" http://jellyfin:8096/System/Info
-   ```
+
+    ```bash
+    curl -H "X-Emby-Token: YOUR_API_KEY" http://jellyfin:8096/System/Info
+    ```
 
 3. **Manual library scan**:
-   - Use Jellyfin/Emby web UI
-   - Dashboard → Libraries → Scan Library
+    - Use Jellyfin/Emby web UI
+    - Dashboard → Libraries → Scan Library
 
 4. **Check logs**:
-   ```bash
-   docker logs riven | grep -i "jellyfin\|emby"
-   ```
+    ```bash
+    docker logs riven | grep -i "jellyfin\|emby"
+    ```
 
 ---
 
@@ -383,16 +395,16 @@ See the [Performance Tuning](/docs/services/filesystem/performance) guide for de
 **Quick fixes**:
 
 1. **Increase prefetch**:
-   - `fetch_ahead_chunks = 6-8`
+    - `fetch_ahead_chunks = 6-8`
 
 2. **Increase cache**:
-   - `cache_max_size_mb = 20480` (20 GB)
+    - `cache_max_size_mb = 20480` (20 GB)
 
 3. **Use tmpfs for cache**:
-   - `cache_dir = /dev/shm/riven-cache`
+    - `cache_dir = /dev/shm/riven-cache`
 
 4. **Check network speed**:
-   - Test connection to debrid CDN
+    - Test connection to debrid CDN
 
 ---
 
@@ -403,15 +415,15 @@ See the [Performance Tuning](/docs/services/filesystem/performance) guide for de
 **Solutions**:
 
 1. **Check concurrent operations**:
-   - Multiple scraping sessions
-   - Reduce concurrent scraper requests
+    - Multiple scraping sessions
+    - Reduce concurrent scraper requests
 
 2. **Database optimization**:
-   - Older installations may have large databases
-   - Consider periodic cleanup
+    - Older installations may have large databases
+    - Consider periodic cleanup
 
 3. **Disable cache metrics**:
-   - `cache_metrics = false` (reduces logging overhead)
+    - `cache_metrics = false` (reduces logging overhead)
 
 ---
 
@@ -422,14 +434,14 @@ See the [Performance Tuning](/docs/services/filesystem/performance) guide for de
 **Solutions**:
 
 1. **Reduce cache size**:
-   - Lower `cache_max_size_mb`
+    - Lower `cache_max_size_mb`
 
 2. **Use disk-based cache**:
-   - Instead of `/dev/shm`, use a disk path
+    - Instead of `/dev/shm`, use a disk path
 
 3. **Check for memory leaks**:
-   - Restart Riven periodically
-   - Update to latest version
+    - Restart Riven periodically
+    - Update to latest version
 
 ---
 
@@ -440,19 +452,20 @@ See the [Performance Tuning](/docs/services/filesystem/performance) guide for de
 **Symptoms**: SQLite locked database errors
 
 <Callout type="warn">
-Riven should use PostgreSQL, not SQLite. SQLite is not recommended for production.
+    Riven should use PostgreSQL, not SQLite. SQLite is not recommended for
+    production.
 </Callout>
 
 **Solutions**:
 
 1. **Switch to PostgreSQL**:
-   - Follow the docker-compose.yml in the installation guide
-   - PostgreSQL handles concurrent access better
+    - Follow the docker-compose.yml in the installation guide
+    - PostgreSQL handles concurrent access better
 
 2. **Backup and migrate**:
-   - Export your data
-   - Set up PostgreSQL
-   - Restart fresh
+    - Export your data
+    - Set up PostgreSQL
+    - Restart fresh
 
 ---
 
@@ -463,23 +476,26 @@ Riven should use PostgreSQL, not SQLite. SQLite is not recommended for productio
 **Solutions**:
 
 1. **Check logs**:
-   ```bash
-   docker logs riven | grep -i "alembic\|migration"
-   ```
+
+    ```bash
+    docker logs riven | grep -i "alembic\|migration"
+    ```
 
 2. **Manual migration**:
-   ```bash
-   docker exec -it riven alembic upgrade head
-   ```
+
+    ```bash
+    docker exec -it riven alembic upgrade head
+    ```
 
 3. **Backup first**:
-   ```bash
-   docker exec -it riven-db pg_dump -U postgres riven > backup.sql
-   ```
+
+    ```bash
+    docker exec -it riven-db pg_dump -U postgres riven > backup.sql
+    ```
 
 4. **Last resort - reset database**:
-   - ONLY if you're okay losing data
-   - Stop containers, delete database volume, restart
+    - ONLY if you're okay losing data
+    - Stop containers, delete database volume, restart
 
 ---
 
@@ -490,7 +506,7 @@ Riven should use PostgreSQL, not SQLite. SQLite is not recommended for productio
 ```bash
 # Set in docker-compose.yml
 RIVEN_LOG_LEVEL=DEBUG # DEBUG, INFO, WARNING, ERROR
-``` 
+```
 
 ### View specific logs
 
@@ -520,8 +536,8 @@ If none of these solutions work:
 1. **Check GitHub Issues**: https://github.com/rivenmedia/riven/issues
 2. **Join Discord**: https://discord.riven.tv
 3. **Provide Details**:
-   - Riven version
-   - Docker/OS version
-   - Full logs (use pastebin)
-   - Configuration (remove API keys!)
-   - Steps to reproduce
+    - Riven version
+    - Docker/OS version
+    - Full logs (use pastebin)
+    - Configuration (remove API keys!)
+    - Steps to reproduce

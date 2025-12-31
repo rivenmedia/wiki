@@ -3,7 +3,7 @@ title: Post-Processing
 description: Enhance your media with subtitles and metadata analysis
 ---
 
-import { Callout } from "fumadocs-ui/components/callout"
+import { Callout } from "fumadocs-ui/components/callout";
 
 # Post-Processing Services
 
@@ -51,6 +51,7 @@ Free subtitle database with extensive coverage.
 **API Key Recommended**
 
 While OpenSubtitles can work without an API key, having one provides higher rate limits and better reliability.
+
 </Callout>
 
 #### Subscene
@@ -92,11 +93,13 @@ Your media server should automatically detect and display these.
 #### No subtitles found
 
 **Possible causes**:
+
 - Movie/show too new (subtitles not available yet)
 - Incorrect language codes
 - Provider down or rate limited
 
 **Solutions**:
+
 1. Enable multiple providers for redundancy
 2. Check language codes are correct (ISO 639-1)
 3. Wait a few hours/days for new releases
@@ -105,10 +108,12 @@ Your media server should automatically detect and display these.
 #### Wrong subtitles
 
 **Possible causes**:
+
 - Multiple versions of the same release
 - Subtitle file matches wrong release
 
 **Solutions**:
+
 1. Manually download correct subtitles
 2. Check if using correct release group in torrent selection
 
@@ -136,6 +141,7 @@ The Media Analysis service analyzes downloaded media files to extract technical 
 **Performance Impact**
 
 Media analysis requires downloading file headers from your debrid service, which may use bandwidth and add processing time.
+
 </Callout>
 
 ---
@@ -220,5 +226,6 @@ Potential future post-processing features:
 - **Artwork Download**: Fetch posters, fanart, etc.
 
 <Callout type="info">
-These are potential features, not currently available. Check the [GitHub roadmap](https://github.com/rivenmedia/riven/issues) for updates.
+    These are potential features, not currently available. Check the [GitHub
+    roadmap](https://github.com/rivenmedia/riven/issues) for updates.
 </Callout>

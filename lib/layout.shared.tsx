@@ -1,5 +1,5 @@
-import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
-import Image from 'next/image';
+import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
+import Image from "next/image";
 
 /**
  * Shared layout configurations
@@ -9,11 +9,11 @@ import Image from 'next/image';
  * Docs Layout: app/docs/layout.tsx
  */
 export function baseOptions(): BaseLayoutProps {
-  return {
-    nav: {
-      title: (
-        <>
-          {/* <svg
+    return {
+        nav: {
+            title: (
+                <>
+                    {/* <svg
             width="24"
             height="24"
             xmlns="http://www.w3.org/2000/svg"
@@ -21,29 +21,27 @@ export function baseOptions(): BaseLayoutProps {
           >
             <circle cx={12} cy={12} r={12} fill="currentColor" />
           </svg> */}
-          <Image src="/logo.png" alt="Logo" width={24} height={24} />
-          Riven Wiki
-        </>
-      ),
-    },
-    // see https://fumadocs.dev/docs/ui/navigation/links
-    links: [],
-  };
+                    <Image src="/logo.png" alt="Logo" width={24} height={24} />
+                    Riven Wiki
+                </>
+            ),
+        },
+        // see https://fumadocs.dev/docs/ui/navigation/links
+        links: [],
+    };
 }
 
 export function homeOptions(): BaseLayoutProps {
-  return {
-    nav: {
-      title: (
-        <>
-          <Image src="/logo.png" alt="Logo" width={24} height={24} />
-          Riven
-        </>
-      ),
-    },
-    // see https://fumadocs.dev/docs/ui/navigation/links
-    links: [
-      { url: '/docs', text: 'Docs', type: 'main' },
-    ],
-  };
+    return {
+        nav: {
+            title: (
+                <>
+                    <Image src="/logo.png" alt="Logo" width={24} height={24} />
+                    Riven
+                </>
+            ),
+        },
+        // see https://fumadocs.dev/docs/ui/navigation/links
+        links: [{ url: "/docs", text: "Docs", type: "main" }],
+    };
 }

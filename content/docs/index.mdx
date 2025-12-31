@@ -1,10 +1,12 @@
 ---
-title: Riven
+title: Getting Started
 description: All in one media management solution
 ---
 
-import { Callout } from "fumadocs-ui/components/callout"
-import { Tabs, Tab } from "fumadocs-ui/components/tabs"
+import { Callout } from "fumadocs-ui/components/callout";
+import { Tabs, Tab } from "fumadocs-ui/components/tabs";
+import { Cards, Card } from "fumadocs-ui/components/card";
+import { Step, Steps } from 'fumadocs-ui/components/steps';
 
 <div align="center">
     <a href="https://github.com/rivenmedia/riven">
@@ -12,6 +14,9 @@ import { Tabs, Tab } from "fumadocs-ui/components/tabs"
             <img
                 alt="Riven"
                 src="/logo.png"
+                height={200}
+                width={200}
+                className="rounded-2xl"
             ></img>
         </picture>
     </a>
@@ -62,51 +67,41 @@ import { Tabs, Tab } from "fumadocs-ui/components/tabs"
     </a>
 </div>
 
-<Callout type="info">
-    **Riven** is a powerful media management and streaming solution designed to integrate with various media servers and third-party services. It automates the process of finding, downloading, and organizing media content, making it instantly available for streaming through your preferred media server.
+<Callout type="warn">
+    This documentation covers the new Beta version. If you still need the legacy (v0) documentation, see the [v0.23.6 README](https://github.com/rivenmedia/riven/tree/v0.23.6?tab=readme-ov-file).
 </Callout>
 
-<div className="grid grid-cols-2 gap-4 cards" markdown="1" style={{ justifyContent: "center" }} id="home-cards">
+**Riven** is a powerful media management and streaming solution designed to integrate with various media servers and third-party services. It automates the process of finding, downloading, and organizing media content, making it instantly available for streaming through your preferred media server.
 
-<div>
-   ⚙️ __Easy Installation__
-
-    Get Riven up and running quickly with our comprehensive installation guide. Whether you're using Docker or running natively, we've got you covered.
-
-    [⚙️ Installation Guide](#installation)
-</div>
-<div>
-   🔧 __Powerful Configuration__
-
-    Customize Riven to fit your media management needs. Configure debrid services, media servers, and more with our user-friendly interface.
-
-    [🔧 Configuration Options](#configuration)
-</div>
-<div>
-   __Active Community__
-
-    Join our vibrant community for support, updates, and contributions. Collaborate with other users and developers to make Riven even better.
-
-    [Join the Discord](https://discord.riven.tv)
-
-</div>
-</div>
+<Cards>
+  <Card 
+    title="⚙️ Easy Installation" 
+    description="Get Riven up and running quickly with our comprehensive installation guide. Whether you're using Docker or running natively, we've got you covered."
+    href="#installation"
+  />
+  <Card 
+    title="🔧 Powerful Configuration" 
+    description="Customize Riven to fit your media management needs. Configure debrid services, media servers, scrapers and more with our user-friendly interface."
+    href="#configuration"
+  />
+  <Card 
+    title="💬 Active Community" 
+    description="Join our vibrant community for support, updates, and contributions. Collaborate with other users and developers to make Riven even better."
+    href="https://discord.riven.tv"
+  />
+</Cards>
 ---
 
 # Getting Started
 
-![step-5](/images/onboard/final.png)
+![Homepage](/images/frontend/homepage.webp)
 
 <Callout type="warning">
 Riven is under active development, we are constantly working on new features and fixing bugs.
 
 You may see different terms used in Discord and other documentation:
     - **Legacy version**: Also referred to as v0, legacy, or old
-    - **Beta version**: Also referred to as v1, v1-beta, beta, new, or dev
-
-**This documentation covers the new Beta version.**
-
-If you still need the legacy (v0) documentation, see the [v0.23.6 README](https://github.com/rivenmedia/riven/tree/v0.23.6?tab=readme-ov-file).
+    - **Beta version**: Also referred to as v1, new, or dev
 </Callout>
 
 Riven streamlines your media consumption experience by:
@@ -127,24 +122,59 @@ Whether you're a casual viewer or a media enthusiast, Riven offers a powerful, a
 ### Operating System
 Riven only supports Linux-based operating systems. For Windows, Windows Subsystem for Linux (WSL) is required.
 
+<Callout type="warn">
+    If you are using WSL, it's recommended to install docker on WSL and not on Windows to avoid issues. 
+</Callout>
+
 ### Required Software
-- **Docker**: Required to run Riven in containers. [Learn more](https://www.docker.com/)
+- **Docker**: Required to run Riven. [Learn more](https://www.docker.com/)
 
 ### Supported Services
 
 #### Media Servers
-- Plex
-- Jellyfin
-- Emby
+
+<Cards>
+  <Card title="Plex" href="https://plex.tv" />
+  <Card title="Jellyfin" href="https://jellyfin.org" />
+  <Card title="Emby" href="https://emby.media" />
+</Cards>
 
 #### Debrid Services
-- Real-Debrid
-- Torbox
-- More debrid services coming soon!
+
+<Cards>
+  <Card title="Real-Debrid" href="https://real-debrid.com" />
+  <Card title="AllDebrid" href="https://alldebrid.com" />
+  <Card title="Debrid-Link" href="https://debrid-link.com" />
+</Cards>
+
+#### Content Services
+
+<Cards>
+  <Card title="Listrr" href="https://listrr.pro" />
+  <Card title="MDBList" href="https://mdblist.com" />
+  <Card title="Overseerr" href="https://overseerr.dev" />
+  <Card title="Trakt" href="https://trakt.tv" />
+</Cards>
+
+#### Scrapers
+
+<Cards>
+  <Card title="Comet" href="https://github.com/g0ldyy/comet" />
+  <Card title="Jackett" href="https://github.com/Jackett/Jackett" />
+  <Card title="MediaFusion" href="https://github.com/mhdzumair/MediaFusion" />
+  <Card title="Orionoid" href="https://orionoid.com" />
+  <Card title="Prowlarr" href="https://prowlarr.com" />
+  <Card title="Torrentio" href="https://torrentio.strem.fun" />
+  <Card title="Zilean" href="https://github.com/iPromKnight/zilean" />
+</Cards>
 
 ---
 
 ## Installation
+
+
+<Steps>
+<Step>
 
 ### Step 1: Set Up Directories
 
@@ -155,6 +185,9 @@ See the [Filesystem (VFS)](docs/services/filesystem) page for detailed instructi
 - Setting up volume mounts in `docker-compose.yml`
 - Understanding the library path and mount path configuration
 
+</Step>
+
+<Step>
 ### Step 2: Docker Compose Configuration
 
 <Callout type="error" title="Did you set up the VFS mount path?">
@@ -189,36 +222,41 @@ Both `spoked/riven` (backend) and `spoked/riven-frontend` (frontend) repositorie
 ```yml title="docker-compose.yml"
 volumes:
     riven-frontend-data:
+    riven-pg-data:
 
 services:
     riven-frontend:
-        image: spoked/riven-frontend:dev # See Docker Hub Tags in Installation Guide
+        image: spoked/riven-frontend:dev
         container_name: riven-frontend
         restart: unless-stopped
-        ports:
-            - "3000:3000"
-        tty: true
+        # If you want to expose the frontend to the host, uncomment the following line and remove the expose line
+        # ports:
+        #     - "3000:3000"
+        expose:
+            - 3000
         environment:
-            - PUID=1000
-            - PGID=1000
-            - TZ=America/New_York
-            - ORIGIN=http://localhost:3000
+            - TZ=Asia/Kolkata
+            - DATABASE_URL=/riven/data/riven.db
             - BACKEND_URL=http://riven:8080
-            - BACKEND_API_KEY=[your-riven-backend-api-key-here]
-            - DIALECT=postgres
-            - DATABASE_URL=postgres://postgres:postgres@riven-db/riven
+            - BACKEND_API_KEY=backend_api_key
+            - AUTH_SECRET="auth_secret" # Generate a random secret key (e.g., using `openssl rand -base64 32`)
+            - ORIGIN=http://localhost:3000 # Change this to the URL you will use to access frontend
         depends_on:
             riven:
                 condition: service_healthy
         volumes:
-            - riven-frontend-data:/riven/data # Persistent data storage
+            - riven-frontend-data:/riven/data # This is frontend data storage
 
     riven:
-        image: spoked/riven:dev # See Docker Hub Tags in Installation Guide
+        image: spoked/riven:dev
         container_name: riven
         restart: unless-stopped
-        ports:
-            - "8080:8080"
+        shm_size: 1024m # this is used for the VFS caching
+        # If you want to expose the backend to the host, uncomment the following line and remove the expose line
+        # ports:
+        #     - "8080:8080"
+        expose:
+            - 8080
         tty: true
         cap_add:
             - SYS_ADMIN
@@ -231,22 +269,23 @@ services:
             - PGID=1000
             - TZ=America/New_York
             - RIVEN_FORCE_ENV=true
-            - RIVEN_DATABASE_HOST=postgresql+psycopg2://postgres:postgres@riven-db/riven
+            - RIVEN_DATABASE_HOST=postgresql+psycopg2://postgres:postgres@riven-db:5432/riven
             - RIVEN_FILESYSTEM_MOUNT_PATH=/mount
+            - RIVEN_UPDATERS_LIBRARY_PATH=/path/to/library/mount # like /mnt/riven
         healthcheck:
             test: curl -s http://localhost:8080 >/dev/null || exit 1
             interval: 30s
             timeout: 10s
             retries: 10
         volumes:
-            - ./data:/riven/data
-            - /path/to/riven/mount:/mount:rshared,z
+            - ./data:/riven/data # This is backend data storage
+            - /path/to/library/mount:/mount:rshared,z # like /mnt/riven:/mount:rshared,z
         depends_on:
             riven-db:
                 condition: service_healthy
 
     riven-db:
-        image: postgres:16.3-alpine3.20
+        image: postgres:17-alpine
         container_name: riven-db
         environment:
             PGDATA: /var/lib/postgresql/data/pgdata
@@ -254,7 +293,7 @@ services:
             POSTGRES_PASSWORD: postgres
             POSTGRES_DB: riven
         volumes:
-            - ./riven-db:/var/lib/postgresql/data/pgdata
+            - riven-pg-data:/var/lib/postgresql/data/pgdata
         healthcheck:
             test: ["CMD-SHELL", "pg_isready -U postgres"]
             interval: 10s
@@ -264,18 +303,25 @@ services:
 
 Now this won't work as is, you need to modify the `docker-compose.yml` file to match your setup.
 
-1. Change `TZ` to your timezone.
-2. Change `ORIGIN` to the URL you will be accessing the web interface from. For example, if you are planning to run Riven on `https://riven.example.com`,
-   change it to `https://riven.example.com`. This is not required if you are running riven behind a reverse proxy like `nginx`, `caddy`, `cosmos` etc.
-3. Change `BACKEND_URL` to the URL where the frontend can access the backend.
-4. Change `BACKEND_API_KEY` to the Riven backend API key.
-5. Change `RIVEN_DATABASE_HOST` to the URL where the backend can access the database. This is not required here as we are running both backend and database in the same network (stack).
-6. Change `DIALECT` and `DATABASE_URL` to use the same database as the backend. This is not required here as we are running both backend and database in the same network (stack).
-7. Change the mount volume path `/path/to/riven/mount` to your actual host path. **Important**: Keep the `:rshared,z` flags for proper mount propagation!
-8. Set up the host mount path with proper propagation as described in the [Filesystem (VFS)](docs/services/filesystem) documentation.
+1. Change `TZ` to your timezone in both riven & riven-frontend.
 
+2. `riven-frontend` service:
+    - Change `ORIGIN` to the URL you will be accessing the web interface from. For example, if you are planning to run Riven on `https://riven.example.com`,
+      change it to `https://riven.example.com`.
+    - Change `BACKEND_URL` to the URL where the frontend can access the backend.
+    - Change `BACKEND_API_KEY` to the Riven backend API key. This can be found in the backend `settings.json` file which is generated on first run,
+      or you can set it using `RIVEN_API_KEY` environment variable in `riven` service.
+    - Generate a random secret key (e.g., using `openssl rand -base64 32`) and set it to `AUTH_SECRET` environment variable in `riven-frontend` service.
 
----
+3. `riven` service:
+    - Set `PUID` & `PGID` to your user ID & group ID. This is usually 1000 for both, but you can find it using `id -u` & `id -g` commands.
+    - `RIVEN_FILESYSTEM_MOUNT_PATH` is the path where the virtual filesystem will be mounted. `RIVEN_UPDATERS_LIBRARY_PATH` is the path where the media servers will
+      and see your library. Make sure you have setup the host mount path with proper propagation as described in the [Filesystem (VFS)](docs/services/filesystem) documentation.
+      These both environment variables are same path if you are running then locally (not using docker).
+
+</Step>
+
+<Step>
 
 ## Running Riven
 
@@ -289,12 +335,12 @@ Depending on how you installed Riven, execute the following command:
 </Tab>
 <Tab value="Local">
     <Callout type="warning" title="Python Version">
-        Riven requires Python 3.11 or higher and `poetry` to be installed.
+        Riven requires Python 3.12 or higher and `uv` to be installed.
     </Callout>
 
     ```bash
-    poetry install --without dev
-    poetry run python /src/main.py
+    make install
+    make run
     ```
 </Tab>
 </Tabs>
@@ -303,73 +349,13 @@ You can access the Riven web interface by navigating to the specified `ORIGIN` U
 
 - Example: `http://localhost:3000`
 
---- 
+</Step>
+</Steps>
 
 ## Configuration
 
-Once Riven is running, you can configure it by accessing the web interface. You will be prompted with onboarding steps to set up your debrid service, media server, content services and scraper services.
-
-There are 4 steps in the onboarding process.
-
-### **Step 1**: General Settings
-
-In this step you configure the downloaders (debrid services), rclone mount path, library path, subtitles, etc. See the image below for an example.
-
-![step-1](/images/onboard/step1.png)
-
----
-
-### **Step 2**: Media Server
-
-In this step you configure the media server and updater settings. See the image below for an example.
-
-![step-2](/images/onboard/step2.png)
-
----
-
-### **Step 3**: Content Services
-
-In this step you configure the content services like Trakt, Overseerr, etc. See the image below for an example.
-
-![step-3](/images/onboard/step3.png)
-
----
-
-### **Step 4**: Scraper Services
-
-In this step you configure the scraper services like Torrentio, Zilean, Prowlarr, Jackett, etc. See the image below for an example.
-
-![step-4](/images/onboard/step4.png)
-
----
-
-**Done!**
-
-Once you have completed the onboarding process, you will be greeted with a beautiful dashboard where you can manage your media library, request items, settings and many more in the future.
-
-![step-5](/images/onboard/final.png)
+Once Riven is running, you can configure it editing the `settings.json` file in the `data` directory attached to the `riven` container or through the web interface.
 
 At this point you can take a look at the [services](docs/services) page to learn more about the various services and how to configure them.
 
 ---
-
-## Frequently Asked Questions
-
-<Callout type="warn" title="I am seeing CORS errors in the browser console">
-    Make sure that the `ORIGIN` environment variable in the `riven-frontend` service is set to the correct URL you are accessing the web interface from. If you are running Riven behind a reverse proxy, you can remove the `ORIGIN` environment variable from the `riven-frontend` service.
-</Callout>
-
-<Callout type="warn" title="I am seeing an error when trying to save changes">
-    If you are seeing an error when trying to save changes, it is most likely due to incorrect configuration or backend failure. Please check the logs of the Riven service to see the error message. If you are unable to resolve the issue, feel free to ask for help in the Riven Discord server.
-</Callout>
-
-<Callout type="warn" title="I am stuck in an onboarding loop">
-    If you are stuck in the onboarding loop, it is most likely due to incorrect symlink settings. Check your library path and rclone mount path. If they are correct, check the logs of the Riven service. If you are unable to resolve the issue, feel free to ask for help in the Riven Discord server.
-</Callout>
-
-{/* ## What is Next?
-
-<Cards>
-  <Card title="Learn more about Next.js" href="https://nextjs.org/docs" />
-  <Card title="Learn more about Fumadocs" href="https://fumadocs.dev" />
-</Cards> */}
