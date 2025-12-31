@@ -39,6 +39,7 @@ Here's a complete production-ready docker-compose.yml:
 ```yaml title="docker-compose.yml"
 volumes:
     riven-frontend-data:
+    riven-pg-data:
 
 services:
     # Riven Frontend
@@ -49,19 +50,12 @@ services:
         ports:
             - "3000:3000"
         environment:
-            - PUID=1000
-            - PGID=1000
             - TZ=America/New_York
-            - ORIGIN=http://localhost:3000 # Change to your domain
-            - BACKEND_URL=http://riven:8080
-            - DIALECT=postgres
-            - DATABASE_URL=postgres://postgres:postgres@riven-db/riven
-            - DIALECT=postgres
             - DATABASE_URL=/riven/data/riven.db
-            - AUTH_SECRET=CHANGE_ME_32_CHARACTER_HEX_KEY
-            - BETTER_AUTH_SECRET=CHANGE_ME_32_CHARACTER_HEX_KEY
-            - BACKEND_API_KEY=IN_SETTINGS.JSON_FILE
-
+            - BACKEND_URL=http://riven:8080
+            - BACKEND_API_KEY=backend_api_key # Found in backend settings.json or set via RIVEN_API_KEY
+            - AUTH_SECRET=your_auth_secret # Generate using: openssl rand -base64 32
+            - ORIGIN=http://localhost:3000 # Change to your domain
         depends_on:
             riven:
                 condition: service_healthy
@@ -75,15 +69,16 @@ services:
         image: spoked/riven:dev # See Docker Hub Tags in Installation Guide
         container_name: riven
         restart: unless-stopped
+        shm_size: 1024m # Used for VFS caching
         ports:
             - "8080:8080"
+        tty: true
         cap_add:
             - SYS_ADMIN
         security_opt:
             - apparmor:unconfined
         devices:
             - /dev/fuse
-        shm_size: 2g # Increase if using /dev/shm for cache
         environment:
             - PUID=1000
             - PGID=1000
@@ -91,32 +86,21 @@ services:
 
             # Database
             - RIVEN_FORCE_ENV=true
-            - RIVEN_DATABASE_HOST=postgresql+psycopg2://postgres:postgres@riven-db/riven
+            - RIVEN_DATABASE_HOST=postgresql+psycopg2://postgres:postgres@riven-db:5432/riven
 
             # VFS Configuration
             - RIVEN_FILESYSTEM_MOUNT_PATH=/mount
-            - RIVEN_FILESYSTEM_SEPARATE_ANIME_DIRS=false
-            - RIVEN_FILESYSTEM_CACHE_DIR=/dev/shm/riven-cache
-            - RIVEN_FILESYSTEM_CACHE_MAX_SIZE_MB=10240
-            - RIVEN_FILESYSTEM_CACHE_EVICTION=LRU
-            - RIVEN_FILESYSTEM_CACHE_TTL_SECONDS=7200
-            - RIVEN_FILESYSTEM_CACHE_METRICS=true
-            - RIVEN_FILESYSTEM_CHUNK_SIZE_MB=8
-            - RIVEN_FILESYSTEM_FETCH_AHEAD_CHUNKS=4
+            - RIVEN_UPDATERS_LIBRARY_PATH=/path/to/library/mount # e.g., /mnt/riven
 
-            # Updaters
-            - RIVEN_UPDATER_INTERVAL=120
-            - RIVEN_UPDATERS_LIBRARY_PATH=/mount
-
-            # Downloaders
-            - RIVEN_DOWNLOADERS_REAL_DEBRID_ENABLED=false
-            - RIVEN_DOWNLOADERS_REAL_DEBRID_API_KEY=
+            # Downloaders (configure as needed)
+            # - RIVEN_DOWNLOADERS_REAL_DEBRID_ENABLED=false
+            # - RIVEN_DOWNLOADERS_REAL_DEBRID_API_KEY=
 
             # Content Services (configure as needed)
-            - RIVEN_CONTENT_OVERSEERR_ENABLED=false
+            # - RIVEN_CONTENT_OVERSEERR_ENABLED=false
 
             # Scrapers (configure as needed)
-            - RIVEN_SCRAPERS_TORRENTIO_ENABLED=true
+            # - RIVEN_SCRAPERS_TORRENTIO_ENABLED=true
 
         healthcheck:
             test: curl -s http://localhost:8080 >/dev/null || exit 1
@@ -124,8 +108,8 @@ services:
             timeout: 10s
             retries: 10
         volumes:
-            - ./riven/data:/riven/data
-            - /path/to/riven/mount:/mount:rshared,z
+            - ./data:/riven/data # Backend data storage
+            - /path/to/library/mount:/mount:rshared,z # e.g., /mnt/riven:/mount:rshared,z
         depends_on:
             riven-db:
                 condition: service_healthy
@@ -138,12 +122,12 @@ services:
         container_name: riven-db
         restart: unless-stopped
         environment:
-            - PGDATA=/var/lib/postgresql/data/pgdata
-            - POSTGRES_USER=postgres
-            - POSTGRES_PASSWORD=postgres # Change in production!
-            - POSTGRES_DB=riven
+            PGDATA: /var/lib/postgresql/data/pgdata
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres # Change in production!
+            POSTGRES_DB: riven
         volumes:
-            - ./riven-db:/var/lib/postgresql/data/pgdata
+            - riven-pg-data:/var/lib/postgresql/data/pgdata
         healthcheck:
             test: ["CMD-SHELL", "pg_isready -U postgres"]
             interval: 10s
@@ -165,7 +149,7 @@ services:
             - VERSION=docker
         volumes:
             - ./plex/config:/config
-            - /path/to/riven/mount:/mount:rslave,z
+            - /path/to/library/mount:/mount:rslave,z
         # networks:
         #   - riven-network  # Can't use with network_mode: host
 
@@ -256,10 +240,6 @@ RIVEN_DOWNLOADERS_REAL_DEBRID_API_KEY=your_api_key
 # AllDebrid
 RIVEN_DOWNLOADERS_ALL_DEBRID_ENABLED=false
 RIVEN_DOWNLOADERS_ALL_DEBRID_API_KEY=
-
-# TorBox
-RIVEN_DOWNLOADERS_TORBOX_ENABLED=false
-RIVEN_DOWNLOADERS_TORBOX_API_KEY=
 ```
 
 ---
@@ -399,8 +379,6 @@ server {
 }
 ```
 
-**Important**: Remove `ORIGIN` environment variable from frontend when using reverse proxy!
-
 ---
 
 ### Caddy
@@ -486,51 +464,6 @@ sudo ufw enable
 
 ---
 
-## Backup & Recovery
-
-### Backup Script
-
-```bash
-#!/bin/bash
-# backup-riven.sh
-
-BACKUP_DIR="/path/to/backups"
-DATE=$(date +%Y%m%d-%H%M%S)
-
-# Stop containers (optional, for consistency)
-docker-compose stop riven riven-db
-
-# Backup database
-docker exec riven-db pg_dump -U postgres riven | gzip > "$BACKUP_DIR/riven-db-$DATE.sql.gz"
-
-# Backup Riven data
-tar czf "$BACKUP_DIR/riven-data-$DATE.tar.gz" ./riven/data
-
-# Start containers
-docker-compose start riven riven-db
-
-# Clean old backups (keep 7 days)
-find "$BACKUP_DIR" -name "riven-*" -mtime +7 -delete
-```
-
-### Restore from Backup
-
-```bash
-# Stop containers
-docker-compose stop riven riven-db
-
-# Restore database
-gunzip < riven-db-backup.sql.gz | docker exec -i riven-db psql -U postgres riven
-
-# Restore data
-tar xzf riven-data-backup.tar.gz
-
-# Start containers
-docker-compose up -d
-```
-
----
-
 ## Monitoring
 
 ### Health Checks
@@ -567,40 +500,16 @@ docker stats riven riven-db riven-frontend
 
 ---
 
-## Scaling & High Availability
-
-### Single Instance (Most Users)
-
-The standard docker-compose.yml is sufficient for most users.
-
-### Load Balancing (Advanced)
-
-For high-traffic deployments:
-
-1. **Multiple Riven instances**: Run multiple backend containers
-2. **Shared database**: All instances connect to same PostgreSQL
-3. **Load balancer**: Use Nginx/Traefik to distribute traffic
-4. **Shared storage**: VFS mount must be shared across instances
-
-<Callout type="warn">
-**Advanced Use Case**
-
-Most users don't need this. Only consider for large multi-user deployments.
-
-</Callout>
-
----
-
 ## Updating Riven
 
 ### Pull Latest Images
 
 ```bash
 # Pull new images
-docker-compose pull
+docker compose pull
 
 # Recreate containers
-docker-compose up -d
+docker compose up -d
 
 # Clean old images
 docker image prune -f
@@ -610,8 +519,8 @@ docker image prune -f
 
 ```bash
 # See what's changed
-docker-compose pull
-docker-compose up -d --no-deps riven
+docker compose pull
+docker compose up -d --no-deps riven
 ```
 
 ---

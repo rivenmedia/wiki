@@ -27,7 +27,7 @@ export function baseOptions(): BaseLayoutProps {
             ),
         },
         // see https://fumadocs.dev/docs/ui/navigation/links
-        links: [],
+        links: [{ url: "/generator", text: "Docker Compose Generator", type: "main" }],
     };
 }
 
