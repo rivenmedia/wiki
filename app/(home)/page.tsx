@@ -18,7 +18,7 @@ function dedent(str: string): string {
     const lines = str.split("\n");
     const nonEmptyLines = lines.filter((line) => line.trim());
     const indent = Math.min(
-        ...nonEmptyLines.map((line) => line.match(/^\s*/)?.[0].length ?? 0),
+        ...nonEmptyLines.map((line) => line.match(/^\s*/)?.[0].length ?? 0)
     );
     return lines
         .map((line) => line.slice(indent))
@@ -84,8 +84,6 @@ const integrations = [
     { name: "Overseerr", url: "https://overseerr.dev" },
     { name: "Trakt", url: "https://trakt.tv" },
     { name: "Apprise", url: "https://github.com/caronc/apprise" },
-    { name: "TMDB", url: "https://www.themoviedb.org" },
-    { name: "TVDB", url: "https://thetvdb.com" },
 ];
 
 const statusIndicators = [
@@ -106,7 +104,7 @@ async function getGitHubStars() {
             "https://api.github.com/repos/rivenmedia/riven",
             {
                 next: { revalidate: 3600 },
-            },
+            }
         );
         if (!res.ok) return null;
         const data = await res.json();
@@ -238,7 +236,7 @@ export default async function HomePage() {
             {/* Quick Start Section */}
             <section className="px-4 py-20">
                 <div className="mx-auto max-w-6xl">
-                    <div className="rounded-2xl border border-fd-border bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 p-6 md:p-12">
+                    <div className="rounded-2xl border border-fd-border bg-linear-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 p-6 md:p-12">
                         <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
                             <div className="min-w-0">
                                 <h2 className="mb-4 text-3xl font-bold md:text-4xl">
@@ -299,7 +297,7 @@ export default async function HomePage() {
                                     </p>
                                     <Link
                                         href="/generator"
-                                        className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+                                        className="inline-flex items-center gap-2 rounded-lg bg-linear-to-r from-purple-500 to-pink-500 px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
                                     >
                                         Generate Configuration
                                         <ArrowRight className="h-4 w-4" />
@@ -364,3 +362,4 @@ function IntegrationBadge({ name, url }: { name: string; url: string }) {
         </a>
     );
 }
+
