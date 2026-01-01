@@ -88,6 +88,7 @@ const createBackendService = (cfg: GeneratorConfig): DockerService => ({
         `PGID=${cfg.pgid}`,
         `TZ=${cfg.timezone}`,
         "RIVEN_FORCE_ENV=true",
+        `RIVEN_API_KEY=${cfg.backendApiKey || "CHANGE_ME_32_CHARACTER_API_KEY"}`,
         `RIVEN_DATABASE_HOST=postgresql+psycopg2://postgres:${
             cfg.dbPassword || "CHANGE_ME_DB_PASSWORD"
         }@riven-db:5432/riven`,
