@@ -1,5 +1,8 @@
 # riven-wiki
 
+> [!IMPORTANT]
+> # Maintenance of the wiki has moved to [Riven TS](https://github.com/rivenmedia/riven-ts/) 
+
 This is a Next.js application generated with
 [Create Fumadocs](https://github.com/fuma-nama/fumadocs).
 
